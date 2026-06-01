@@ -1,0 +1,64 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "ds:vein_outline",
+      "materials": {
+        "default": "glow_in_walls"
+      },
+      "textures": {
+        "default": "textures/particles/selected_block"
+      },
+      "geometry": {
+        "default": "geometry.selected_block"
+      },
+      "animations": {
+        "offset": "animation.selected_block.offset"
+      },
+      "scripts": {
+        "scale": "1.00",
+        "pre_animation": [
+          "v.north = !q.property('ds:north');",
+          "v.south = !q.property('ds:south');",
+          "v.east  = !q.property('ds:east');",
+          "v.west  = !q.property('ds:west');",
+          "v.up    = !q.property('ds:up');",
+          "v.down  = !q.property('ds:down');",
+          "v.ne = !q.property('ds:ne');",
+          "v.nw = !q.property('ds:nw');",
+          "v.se = !q.property('ds:se');",
+          "v.sw = !q.property('ds:sw');",
+          "v.bn = !q.property('ds:bn');",
+          "v.bs = !q.property('ds:bs');",
+          "v.tn = !q.property('ds:tn');",
+          "v.ts = !q.property('ds:ts');",
+          "v.be = !q.property('ds:be');",
+          "v.bw = !q.property('ds:bw');",
+          "v.te = !q.property('ds:te');",
+          "v.tw = !q.property('ds:tw');",
+          "v.visible_ne = ( (!v.north && !v.east) || (v.north && v.east && !v.ne) || (!v.north && v.east && v.ne) || (v.north && !v.east && v.ne) );",
+          "v.visible_nw = ( (!v.north && !v.west) || (v.north && v.west && !v.nw) || (!v.north && v.west && v.nw) || (v.north && !v.west && v.nw) );",
+          "v.visible_se = ( (!v.south && !v.east) || (v.south && v.east && !v.se) || (!v.south && v.east && v.se) || (v.south && !v.east && v.se) );",
+          "v.visible_sw = ( (!v.south && !v.west) || (v.south && v.west && !v.sw) || (!v.south && v.west && v.sw) || (v.south && !v.west && v.sw) );",
+          "v.visible_bn = ( (!v.north && !v.down) || (v.down && v.bn && !v.north) || (!v.down && v.bn && v.north) );",
+          "v.visible_bs = ( (!v.south && !v.down) || (v.down && v.bs && !v.south) || (!v.down && v.bs && v.south) );",
+          "v.visible_tn = ( (!v.north && !v.up)   || (v.up && v.tn && !v.north)   || (!v.up && v.tn && v.north) );",
+          "v.visible_ts = ( (!v.south && !v.up)   || (v.up && v.ts && !v.south)   || (!v.up && v.ts && v.south) );",
+          "v.visible_be = ( (!v.down && !v.east) || (v.down && v.be && !v.east) || (!v.down && v.be) );",
+          "v.visible_bw = ( (!v.down && !v.west) || (v.down && v.bw && !v.west) || (!v.down && v.bw) );",
+          "v.visible_te = ( (!v.up   && !v.east) || (v.up   && v.te && !v.east) || (!v.up   && v.te) );",
+          "v.visible_tw = ( (!v.up   && !v.west) || (v.up   && v.tw && !v.west) || (!v.up   && v.tw) );",
+          "v.r = 1.0; v.g = 1.0; v.b = 1.0;",
+          "v.opacity = q.property('ds:opacity') / 100.0;",
+          "v.a = v.opacity;"
+        ],
+        "animate": [
+          "offset"
+        ]
+      },
+      "render_controllers": [
+        "controller.render.ds.vein_outline"
+      ]
+    }
+  }
+}

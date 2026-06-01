@@ -1,0 +1,37 @@
+{
+	"format_version" : "1.8.0",
+	"animations" : {
+		"animation.bow.rotate" : {
+			"loop" : true,
+			"bones" : {
+				"rightitem" : {
+					"rotation" : [ 180, 8.595, 180 ],
+					"position" : [ 3,  -1.5, -2 ]
+				}
+			}
+		},
+		"animation.negate_sneak": {
+			"loop" : true,
+			"bones" : {
+				"body" : {
+					"rotation" : [ "query.is_sneaking * -(0.5 - this)", 0.0, 0.0 ]
+				},
+				"head" : {
+					"position" : [ 0.0, "query.is_sneaking * -1.0", 0.0 ]
+				},
+				"leftarm" : {
+					"rotation" : [ "query.is_sneaking * -72.0", 0.0, 0.0 ]
+				},
+				"leftleg" : {
+					"position" : [ 0.0, "query.is_sneaking * 3.1", "query.is_sneaking * -3.9" ]
+				},
+				"rightarm" : {
+					"rotation" : [ "query.is_sneaking * -72.0", 0.0, 0.0 ]
+				},
+				"rightleg" : {
+					"position" : [ 0.0, "query.is_sneaking * 2.9", "query.is_sneaking * -4.1" ]
+				}
+			}
+		}
+	}
+}

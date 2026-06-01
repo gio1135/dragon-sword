@@ -1,0 +1,156 @@
+
+chat.claim.permission:hurting_entities=§cYou don't have permission to hurt entities here.
+
+ui.manage.permissions:hurt_animals=Hurt animals
+ui.manage.permissions:hurt_villagers=Hurt villagers
+ui.manage.permissions:break_inanimate=Break inanimate
+ui.manage.permissions:hurt_players=Hurt players
+ui.manage.permissions.tooltip:hurt_animals=Allow other players to hurt passive animals
+ui.manage.permissions.tooltip:hurt_villagers=Allow other players to hurt villagers
+ui.manage.permissions.tooltip:break_inanimate=Allow other players to break boats, minecarts, etc.
+
+## Statistics Pack
+gui.stats=Statistics
+stat.generalButton=General
+stat.itemsButton=Items
+stat.mobsButton=Mobs
+menu.settings=Settings
+store.createdBy=By %s
+book.pageIndicator=Page %1 of %2
+createWorld.customize.custom.prev=Previous
+createWorld.customize.custom.next=Next
+gui.back=Back
+gui.close=Close
+
+## Stats
+stat.minecraft.clean_armor=Clean Armor
+stat.minecraft.clean_banner=Clean Banner
+stat.minecraft.open_barrel=Barrels Opened
+stat.minecraft.bell_ring=Bells Rung
+stat.minecraft.eat_cake_slice=Cake Slices Eaten
+stat.minecraft.fill_cauldron=Cauldrons Filled
+stat.minecraft.open_chest=Chests Opened
+stat.minecraft.damage_dealt=Damage Dealt
+stat.minecraft.damage_taken=Damage Taken
+stat.minecraft.inspect_dispenser=Dispensers Inspected
+stat.minecraft.climb_one_cm=Distance Climbed
+stat.minecraft.crouch_one_cm=Distance Crouched
+stat.minecraft.fall_one_cm=Distance Fallen
+stat.minecraft.fly_one_cm=Distance Flown
+stat.minecraft.sprint_one_cm=Distance Sprinted
+stat.minecraft.swim_one_cm=Distance Swum
+stat.minecraft.walk_one_cm=Distance Walked
+stat.minecraft.walk_on_water_one_cm=Distance Walked on Water
+stat.minecraft.walk_under_water_one_cm=Distance Walked Under Water
+stat.minecraft.boat_one_cm=Distance by Boat
+stat.minecraft.aviate_one_cm=Distance by Elytra
+stat.minecraft.happy_ghast_one_cm=Distance by Ghast (Happy)
+stat.minecraft.horse_one_cm=Distance by Horse
+stat.minecraft.minecart_one_cm=Distance by Minecart
+stat.minecraft.pig_one_cm=Distance by Pig
+stat.minecraft.strider_one_cm=Distance by Strider
+stat.minecraft.inspect_dropper=Droppers Inspected
+stat.minecraft.open_enderchest=Ender Chests Opened
+stat.minecraft.leave_game=Games Quitted
+stat.minecraft.inspect_hopper=Hoppers Inspected
+stat.minecraft.interact_with_anvil=Interactions with Anvil
+stat.minecraft.interact_with_beacon=Interactions with Beacon
+stat.minecraft.interact_with_blast_furnace=Interactions with Blast Furnace
+stat.minecraft.interact_with_brewingstand=Interactions with Brewing Stand
+stat.minecraft.interact_with_campfire=Interactions with Campfire
+stat.minecraft.interact_with_cartography_table=Interactions with Cartography Table
+stat.minecraft.interact_with_crafting_table=Interactions with Crafting Table
+stat.minecraft.interact_with_furnace=Interactions with Furnace
+stat.minecraft.interact_with_grindstone=Interactions with Grindstone
+stat.minecraft.interact_with_lectern=Interactions with Lectern
+stat.minecraft.interact_with_loom=Interactions with Loom
+stat.minecraft.interact_with_smithing_table=Interactions with Smithing Table
+stat.minecraft.interact_with_smoker=Interactions with Smoker
+stat.minecraft.interact_with_stonecutter=Interactions with Stonecutter
+stat.minecraft.drop=Items Dropped
+stat.minecraft.jump=Jumps
+stat.minecraft.mob_kills=Mob Kills
+stat.minecraft.play_record=Music Discs Played
+stat.minecraft.play_noteblock=Note Blocks Played
+stat.minecraft.tune_noteblock=Note Blocks Tuned
+stat.minecraft.deaths=Number of Deaths
+stat.minecraft.pot_flower=Plants Potted
+stat.minecraft.player_kills=Player Kills
+stat.minecraft.raid_trigger=Raids Triggered
+stat.minecraft.raid_win=Raids Won
+stat.minecraft.clean_shulker_box=Shulker Boxes Cleaned
+stat.minecraft.open_shulker_box=Shulker Boxes Opened
+stat.minecraft.sneak_time=Time Sneaked
+stat.minecraft.talked_to_villager=Talked to Villagers
+stat.minecraft.target_hit=Targets Hit
+stat.minecraft.play_time=Play Time
+stat.minecraft.time_since_death=Time Since Death
+stat.minecraft.time_since_rest=Time Since Rest
+stat.minecraft.total_world_time=Time with World Open
+stat.minecraft.traded_with_villager=Traded with Villagers
+stat.minecraft.sleep_in_bed=Times Slept in Bed
+stat.minecraft.trigger_trapped_chest=Trapped Chests Triggered
+stat.minecraft.use_cauldron=Water Taken from Cauldron
+
+## Settings
+stat.settings.itemSort.label=Item Sorting
+stat.settings.mobsSort.label=Mob Sorting
+stat.settings.itemSort.blocksMined=Blocks Mined
+stat.settings.itemSort.itemsBroken=Items Broken
+stat.settings.itemSort.itemsUsed=Items Used
+stat.settings.itemsSort.itemsUsed=Items Used
+stat.settings.itemSort.itemsPicked=Items Picked Up
+stat.settings.itemSort.itemsDropped=Items Dropped
+stat.settings.mobsSort.killed=Killed
+stat.settings.mobsSort.killedBy=Killed By
+stat.settings.mobssSort.killedBy=Killed By
+
+## Statistics Types
+stat_type.minecraft.mined=Blocks Mined
+stat_type.minecraft.broken=Items Broken
+stat_type.minecraft.used=Items Used
+stat_type.minecraft.picked_up=Items Picked Up
+stat_type.minecraft.dropped=Items Dropped
+stat_type.minecraft.killed=Mob Kills
+stat_type.minecraft.killed.none=No Kills
+stat_type.minecraft.killed_by=Killed By
+stat_type.minecraft.killed_by.none=Never Killed By
+stat.settings.saved=Settings Saved
+
+stat.duelsButton=Duels
+stat_type.minecraft.mined=Blocks mined
+stat_type.minecraft.broken=Items broken
+stat_type.minecraft.used=Items used
+stat_type.minecraft.picked_up=Items picked up
+stat_type.minecraft.dropped=Items dropped
+stat_type.minecraft.killed=Mob kills
+stat_type.minecraft.killed.none=No kills
+stat_type.minecraft.killed_by=Killed by
+stat_type.minecraft.killed_by.none=Never killed by
+
+stat_type.minecraft.killed=%s %s kills
+stat_type.minecraft.killed.none=No kills (%s)
+stat_type.minecraft.killed_by=Killed by %s %s times
+stat_type.minecraft.killed_by.none=Never killed by %s
+
+stat_type.minecraft.killed_by=Killed by %s %s times
+stat_type.minecraft.killed_by.none=Never killed by %s
+stat.duelsButton=§lDuels
+
+stat.duelsButton=Duels
+stat.minecraft.xp_collected=XP collected
+stat.minecraft.highest_level=Highest level
+
+stat_type.minecraft.mined=Mined
+stat_type.minecraft.broken=Broken
+stat_type.minecraft.used=Used
+stat_type.minecraft.picked_up=Picked Up
+stat_type.minecraft.dropped=Dropped
+stat.duelsButton=Duels
+
+item.standing_sign=Sign
+item.powder_snow=Powder Snow
+item.frame=Item Frame
+item.flower_pot=Flower Pot
+
+item.written_book=Written Book

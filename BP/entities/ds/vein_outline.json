@@ -1,0 +1,92 @@
+{
+  "format_version": "1.20.0",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "ds:vein_outline",
+      "is_spawnable": false,
+      "is_summonable": true,
+      "is_experimental": false,
+      "properties": {
+        "ds:style_id": {
+          "type": "int",
+          "default": 0,
+          "range": [0, 15],
+          "client_sync": true
+        },
+        "ds:opacity": {
+          "type": "int",
+          "default": 100,
+          "range": [0, 100],
+          "client_sync": true
+        },
+        "ds:north": { "type": "bool", "default": true, "client_sync": true },
+        "ds:south": { "type": "bool", "default": true, "client_sync": true },
+        "ds:east":  { "type": "bool", "default": true, "client_sync": true },
+        "ds:west":  { "type": "bool", "default": true, "client_sync": true },
+        "ds:up":    { "type": "bool", "default": true, "client_sync": true },
+        "ds:down":  { "type": "bool", "default": true, "client_sync": true },
+        "ds:ne":    { "type": "bool", "default": true, "client_sync": true },
+        "ds:nw":    { "type": "bool", "default": true, "client_sync": true },
+        "ds:se":    { "type": "bool", "default": true, "client_sync": true },
+        "ds:sw":    { "type": "bool", "default": true, "client_sync": true },
+        "ds:bn":    { "type": "bool", "default": true, "client_sync": true },
+        "ds:bs":    { "type": "bool", "default": true, "client_sync": true },
+        "ds:be":    { "type": "bool", "default": true, "client_sync": true },
+        "ds:bw":    { "type": "bool", "default": true, "client_sync": true },
+        "ds:tn":    { "type": "bool", "default": true, "client_sync": true },
+        "ds:ts":    { "type": "bool", "default": true, "client_sync": true },
+        "ds:te":    { "type": "bool", "default": true, "client_sync": true },
+        "ds:tw":    { "type": "bool", "default": true, "client_sync": true }
+      }
+    },
+    "component_groups": {
+      "ds:despawn": {
+        "minecraft:instant_despawn": {}
+      }
+    },
+    "components": {
+      "minecraft:type_family": {
+        "family": ["vein_outline"]
+      },
+      "minecraft:timer": {
+        "looping": false,
+        "time": 30,
+        "time_down_event": {
+          "event": "ds:despawn"
+        }
+      },
+      "minecraft:physics": {
+        "has_collision": false,
+        "has_gravity": false
+      },
+      "minecraft:collision_box": {
+        "width": 0,
+        "height": 0
+      },
+      "minecraft:pushable": {
+        "is_pushable": false,
+        "is_pushable_by_piston": false
+      },
+      "minecraft:movement": {
+        "value": 0.0
+      },
+      "minecraft:damage_sensor": {
+        "triggers": {
+          "cause": "all",
+          "deals_damage": false
+        }
+      },
+      "minecraft:fire_immune": true,
+      "minecraft:water_movement": {
+        "drag_factor": 0
+      }
+    },
+    "events": {
+      "ds:despawn": {
+        "add": {
+          "component_groups": ["ds:despawn"]
+        }
+      }
+    }
+  }
+}

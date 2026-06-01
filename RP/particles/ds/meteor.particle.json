@@ -1,0 +1,51 @@
+{
+	"format_version": "1.10.0",
+	"particle_effect": {
+		"description": {
+			"identifier": "ds:sweet_meteor",
+			"basic_render_parameters": {
+				"material": "particles_blend",
+				"texture": "textures/ds/common/particles/sw/meteor"
+			}
+		},
+		"components": {
+			"minecraft:emitter_rate_steady": {
+				"spawn_rate": 50,
+				"max_particles": 100
+			},
+			"minecraft:emitter_lifetime_once": {
+				"active_time": 0.5
+			},
+			"minecraft:emitter_shape_sphere": {
+				"radius": 0.1,
+				"direction": "inwards"
+			},
+			"minecraft:particle_lifetime_expression": {
+				"max_lifetime": 1
+			},
+			"minecraft:particle_initial_speed": 1,
+			"minecraft:particle_motion_dynamic": {},
+			"minecraft:particle_appearance_billboard": {
+				"size": [1, 1],
+				"facing_camera_mode": "rotate_xyz",
+				"uv": {
+					"texture_width": 64,
+					"texture_height": 64,
+					"uv": [0, 0],
+					"uv_size": [64, 64]
+				}
+			},
+			"minecraft:particle_appearance_tinting": {
+				"color": {
+					"interpolant": "v.particle_age / v.particle_lifetime",
+					"gradient": {
+						"0.0": "#2BFFEAEA",
+						"0.35": "#82FFBC0B",
+						"0.66": "#47FF0000",
+						"1.0": "#00FF0000"
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,10 @@
+
+chat.claim.permission:hurting_entities=§cYou don't have permission to hurt entities here.
+
+ui.manage.permissions:hurt_animals=Hurt animals
+ui.manage.permissions:hurt_villagers=Hurt villagers
+ui.manage.permissions:break_inanimate=Break inanimate
+ui.manage.permissions:hurt_players=Hurt players
+ui.manage.permissions.tooltip:hurt_animals=Allow other players to hurt passive animals
+ui.manage.permissions.tooltip:hurt_villagers=Allow other players to hurt villagers
+ui.manage.permissions.tooltip:break_inanimate=Allow other players to break boats, minecarts, etc.

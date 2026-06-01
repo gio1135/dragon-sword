@@ -1,0 +1,55 @@
+{
+  "resource_pack_name": "dragon-sword-rp",
+  "texture_name": "atlas.terrain",
+  "padding": 8,
+  "num_mip_levels": 4,
+  "texture_data": {
+    "wheat": {
+      "textures": [
+        "textures/blocks/wheat_stage_0",
+        "textures/blocks/wheat_stage_1",
+        "textures/blocks/wheat_stage_2",
+        "textures/blocks/wheat_stage_3",
+        "textures/blocks/wheat_stage_4",
+        "textures/blocks/wheat_stage_5",
+        "textures/blocks/wheat_stage_6",
+        "textures/blocks/wheat_stage_7"
+      ]
+    },
+    "carrots": {
+        "textures": [
+            "textures/blocks/carrots_stage_0",
+            "textures/blocks/carrots_stage_1",
+            "textures/blocks/carrots_stage_2",
+            "textures/blocks/carrots_stage_3"
+        ]
+    },
+    "potatoes": {
+        "textures": [
+            "textures/blocks/potatoes_stage_0",
+            "textures/blocks/potatoes_stage_1",
+            "textures/blocks/potatoes_stage_2",
+            "textures/blocks/potatoes_stage_3"
+        ]
+    },
+    "beetroot": {
+        "textures": [
+            "textures/blocks/beetroots_stage_0",
+            "textures/blocks/beetroots_stage_1",
+            "textures/blocks/beetroots_stage_2",
+            "textures/blocks/beetroots_stage_3"
+        ]
+    },
+    "reeds": {
+      "textures": "textures/blocks/reeds"
+    },
+    "nether_wart": {
+      "textures": [
+        "textures/blocks/nether_wart_stage_0",
+        "textures/blocks/nether_wart_stage_1",
+        "textures/blocks/nether_wart_stage_1",
+        "textures/blocks/nether_wart_stage_2"
+      ]
+    }
+  }
+}

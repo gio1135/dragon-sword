@@ -1,0 +1,21 @@
+{
+  "id": "land_claims",
+  "name": "Land claims",
+  "featureToggle": {
+    "defaultEnabled": true
+  },
+  "adminUI": [
+    {
+      "label": "Manage players",
+      "exportName": "ClaimUI",
+      "importPath": "./ui.js",
+      "method": "openOpPlayerList"
+    },
+    {
+      "label": "Land claim settings",
+      "exportName": "ClaimUI",
+      "importPath": "./ui.js",
+      "method": "openAdminMenu"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "id": "outlaw",
+  "name": "Outlaw system",
+  "featureToggle": {
+    "defaultEnabled": true
+  }
+}

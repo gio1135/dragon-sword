@@ -1,0 +1,13 @@
+{
+  "id": "world_border",
+  "name": "World border",
+  "featureToggle": {
+    "defaultEnabled": true
+  },
+  "adminUI": {
+    "label": "World border",
+    "exportName": "BedrockBorderUI",
+    "importPath": "./ui.js",
+    "method": "openMenu"
+  }
+}

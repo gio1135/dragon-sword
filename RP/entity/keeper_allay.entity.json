@@ -1,0 +1,28 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "civ:keeper_allay",
+      "materials": { "default": "allay" },
+      "textures": { "default": "textures/entity/allay/allay" },
+      "geometry": { "default": "geometry.allay" },
+      "render_controllers": [ "controller.render.allay" ],
+      "scripts": {
+        "animate": [
+          "bob",
+          "fly",
+          "look_at_target"
+        ]
+      },
+      "animations": {
+        "bob": "animation.allay.idle",
+        "fly": "animation.allay.fly",
+        "look_at_target": "animation.common.look_at_target"
+      },
+      "spawn_egg": {
+        "base_color": "#5600FF",
+        "overlay_color": "#00FFFF"
+      }
+    }
+  }
+}

@@ -1,0 +1,180 @@
+{
+	"format_version": "1.10.0",
+	"animations": {
+		"animation.s7d_parkour.smart_watch.main_hand_first_person": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.0417,
+			"bones": {
+				"s7d_parkour_ledge_grab_skill": {
+					"scale": "1 - v.ledge_grab_skill"
+				},
+				"s7d_parkour_dropkick_skill": {
+					"scale": "1 - v.dropkick_skill"
+				},
+				"s7d_parkour_wallrun_skill": {
+					"scale": "1 - v.wallrun_skill"
+				},
+				"s7d_parkour_aqua_dash_skill": {
+					"scale": "1 - v.aqua_dash_skill"
+				},
+				"s7d_parkour_vault_skill": {
+					"scale": "1 - v.vault_skill"
+				},
+				"s7d_parkour_dodge_skill": {
+					"scale": "1 - v.dodge_skill"
+				},
+				"s7d_parkour_roll_skill": {
+					"scale": "1 - v.roll_skill"
+				},
+				"s7d_parkour_slide_skill": {
+					"scale": "1 - v.slide_skill"
+				},
+				"s7d_parkour_crawl_skill": {
+					"scale": "1 - v.crawl_skill"
+				},
+				"s7d_parkour_smart_watch_first_person_root": {
+					"rotation": [0, "q.target_y_rotation", 0]
+				},
+				"s7d_parkour_display_first_person_root": {
+					"rotation": ["c.is_first_person ? 0 : 0", "c.is_first_person ? 0 : 0", "c.is_first_person ? 0 : 0"],
+					"position": ["c.is_first_person ? 0.5 : 0", "c.is_first_person ? 20 : 0", "c.is_first_person ? 46 : 0"],
+					"scale": 5.7
+				}
+			}
+		},
+		"animation.s7d_parkour.smart_watch.main_hand_button_press": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.0417,
+			"bones": {
+				"s7d_parkour_button": {
+					"position": {
+						"0.0": [0, 0, 0],
+						"0.0417": [-1.2, 0, 0]
+					},
+					"scale": {
+						"0.0": [1, 1, 1],
+						"0.0417": [0.4, 1, 1]
+					}
+				}
+			}
+		},
+		"animation.s7d_parkour.smart_watch.main_hand_button_release": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.1667,
+			"bones": {
+				"s7d_parkour_button": {
+					"position": {
+						"0.0": [-1.2, 0, 0],
+						"0.0833": [0, 0, 0],
+						"0.125": [-0.4, 0, 0],
+						"0.1667": [0, 0, 0]
+					},
+					"scale": {
+						"0.0": [0.4, 1, 1],
+						"0.0833": [1, 1, 1],
+						"0.125": [0.8, 1, 1],
+						"0.1667": [1, 1, 1]
+					}
+				}
+			}
+		},
+		"animation.s7d_parkour.smart_watch.main_hand_third_person": {
+			"loop": "hold_on_last_frame",
+			"bones": {
+				"s7d_parkour_wallrun_skill": {
+					"scale": "1 - v.wallrun_skill"
+				},
+				"s7d_parkour_dropkick_skill": {
+					"scale": "1 - v.dropkick_skill"
+				},
+				"s7d_parkour_ledge_grab_skill": {
+					"scale": "1 - v.ledge_grab_skill"
+				},
+				"s7d_parkour_aqua_dash_skill": {
+					"scale": "1 - v.aqua_dash_skill"
+				},
+				"s7d_parkour_vault_skill": {
+					"scale": "1 - v.vault_skill"
+				},
+				"s7d_parkour_dodge_skill": {
+					"scale": "1 - v.dodge_skill"
+				},
+				"s7d_parkour_roll_skill": {
+					"scale": "1 - v.roll_skill"
+				},
+				"s7d_parkour_slide_skill": {
+					"scale": "1 - v.slide_skill"
+				},
+				"s7d_parkour_crawl_skill": {
+					"scale": "1 - v.crawl_skill"
+				},
+				"s7d_parkour_smart_watch_third_person_root": {
+					"rotation": [0, 0, -2],
+					"position": [0.75, 17, 1.5],
+					"scale": 0.5
+				}
+			}
+		},
+		"animation.s7d_parkour.smart_watch.off_hand_third_person": {
+			"loop": "hold_on_last_frame",
+			"bones": {
+				"s7d_parkour_wallrun_skill": {
+					"scale": "1 - v.wallrun_skill"
+				},
+				"s7d_parkour_dropkick_skill": {
+					"scale": "1 - v.dropkick_skill"
+				},
+				"s7d_parkour_ledge_grab_skill": {
+					"scale": "1 - v.ledge_grab_skill"
+				},
+				"s7d_parkour_aqua_dash_skill": {
+					"scale": "1 - v.aqua_dash_skill"
+				},
+				"s7d_parkour_vault_skill": {
+					"scale": "1 - v.vault_skill"
+				},
+				"s7d_parkour_dodge_skill": {
+					"scale": "1 - v.dodge_skill"
+				},
+				"s7d_parkour_roll_skill": {
+					"scale": "1 - v.roll_skill"
+				},
+				"s7d_parkour_slide_skill": {
+					"scale": "1 - v.slide_skill"
+				},
+				"s7d_parkour_crawl_skill": {
+					"scale": "1 - v.crawl_skill"
+				},
+				"s7d_parkour_upper_straps": {
+					"position": [0, -0.7, 0]
+				},
+				"s7d_parkour_straps_up_2": {
+					"position": [0, -0.4, 0],
+					"scale": [1, 1, 0.89]
+				},
+				"s7d_parkour_straps_up_1": {
+					"scale": [1, 0.815, 1]
+				},
+				"s7d_parkour_straps_mid_1": {
+					"position": [0, 0.5, -0.8],
+					"scale": [1, 0.875, 1]
+				},
+				"s7d_parkour_lower_straps": {
+					"position": [0, 0.59979, 0]
+				},
+				"s7d_parkour_straps_low_1": {
+					"scale": [1, 0.65, 1]
+				},
+				"s7d_parkour_straps_low_2": {
+					"position": [0, 0.7, -0.05],
+					"scale": [1, 1, 0.89]
+				},
+				"s7d_parkour_smart_watch_third_person_root": {
+					"rotation": [-90, 0, 90],
+					"position": [-4.3, 24, -4.075],
+					"scale": 0.6
+				}
+			}
+		}
+	}
+}

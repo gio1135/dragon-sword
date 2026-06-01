@@ -1,0 +1,125 @@
+{
+	"format_version": "1.10.0",
+	"animations": {
+		"animation.s7d_parkour.dropkick_skill_0": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.dropkick_skill = 0;"
+			}
+		},
+		"animation.s7d_parkour.dropkick_skill_1": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.dropkick_skill = 1;"
+			}
+		},
+		"animation.s7d_parkour.aqua_dash_skill_0": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.aqua_dash_skill = 0;"
+			}
+		},
+		"animation.s7d_parkour.aqua_dash_skill_1": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.aqua_dash_skill = 1;"
+			}
+		},
+		"animation.s7d_parkour.crawl_skill_0": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.crawl_skill = 0;"
+			}
+		},
+		"animation.s7d_parkour.crawl_skill_1": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.crawl_skill = 1;"
+			}
+		},
+		"animation.s7d_parkour.dodge_skill_0": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.dodge_skill = 0;"
+			}
+		},
+		"animation.s7d_parkour.dodge_skill_1": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.dodge_skill = 1;"
+			}
+		},
+		"animation.s7d_parkour.slide_skill_0": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.slide_skill = 0;"
+			}
+		},
+		"animation.s7d_parkour.slide_skill_1": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.slide_skill = 1;"
+			}
+		},
+		"animation.s7d_parkour.roll_skill_0": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.roll_skill = 0;"
+			}
+		},
+		"animation.s7d_parkour.roll_skill_1": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.roll_skill = 1;"
+			}
+		},
+		"animation.s7d_parkour.wallrun_skill_0": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.wallrun_skill = 0;"
+			}
+		},
+		"animation.s7d_parkour.wallrun_skill_1": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.wallrun_skill = 1;"
+			}
+		},
+		"animation.s7d_parkour.vault_skill_0": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.vault_skill = 0;"
+			}
+		},
+		"animation.s7d_parkour.vault_skill_1": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.vault_skill = 1;"
+			}
+		},
+		"animation.s7d_parkour.regen_skill_0": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.regen_skill = 0;"
+			}
+		},
+		"animation.s7d_parkour.regen_skill_1": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.regen_skill = 1;"
+			}
+		},
+		"animation.s7d_parkour.ledge_grab_skill_0": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.ledge_grab_skill = 0;"
+			}
+		},
+		"animation.s7d_parkour.ledge_grab_skill_1": {
+			"loop": "hold_on_last_frame",
+			"timeline": {
+				"0.0": "v.ledge_grab_skill = 1;"
+			}
+		}
+	}
+}

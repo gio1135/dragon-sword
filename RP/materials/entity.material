@@ -1,0 +1,23 @@
+{
+  "materials": {
+    "version": "1.0.0",
+    "glow_in_walls:entity_emissive_alpha": {
+      "depthFunc": "Always",
+      "+defines": [
+        "ENABLE_COLOR_MASK",
+        "ENABLE_TINTING",
+        "ENABLE_VERTEX_COLOR",
+        "USE_OVERLAY"
+      ],
+      "+states": [
+        "Blending"
+      ],
+      "vertexFields": [
+        { "field": "Position" },
+        { "field": "Color" },
+        { "field": "Normal" },
+        { "field": "UV0" }
+      ]
+    }
+  }
+}
