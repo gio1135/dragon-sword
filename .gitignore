@@ -2,3 +2,5 @@ Docs/
 *.zip
 .agentrules.md
 .cursorrules
+.gitignore
+GIT_WORKFLOW.md
