@@ -3,6 +3,7 @@ import sys
 import json
 import zipfile
 import shutil
+import re
 
 PROJECT_DIR = r"C:\Users\gio1135\Projects\Dragon sword"
 BP_DIR = os.path.join(PROJECT_DIR, "BP")
@@ -21,7 +22,7 @@ def read_manifest(path):
 
 def write_manifest(path, data):
     with open(path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=4)
+        json.dump(data, f, indent=2)
 
 def bump_version(version_array, bump_type):
     # version_array is [major, minor, patch]
@@ -90,6 +91,11 @@ def main():
     new_version_str = ".".join(map(str, bp_data['header']['version']))
     print(f"New version: {new_version_str}")
     
+    # Update description version if present
+    for data in [bp_data, rp_data]:
+        if 'header' in data and 'description' in data['header']:
+            data['header']['description'] = re.sub(r'v?\d+\.\d+\.\d+', f'v{new_version_str}', data['header']['description'])
+            
     # Write manifests
     write_manifest(bp_manifest_path, bp_data)
     write_manifest(rp_manifest_path, rp_data)

@@ -1,48 +1,48 @@
 {
-    "format_version": 2,
-    "metadata": {
-        "authors": [
-            "gio1135"
-        ],
-        "product_type": "addon",
-        "capabilities": [
-            "raytraced"
-        ]
-    },
-    "header": {
-        "name": "Dragon sword",
-        "description": "Dragon sword rp v7.6.1",
-        "min_engine_version": [
-            1,
-            20,
-            0
-        ],
-        "uuid": "877901f7-e59d-4a03-acf8-b71b32238fa8",
-        "version": [
-            7,
-            6,
-            2
-        ]
-    },
-    "modules": [
-        {
-            "type": "resources",
-            "uuid": "8bb667df-02fd-42a3-8454-c7e4b0b7ee54",
-            "version": [
-                7,
-                6,
-                2
-            ]
-        }
+  "format_version": 2,
+  "metadata": {
+    "authors": [
+      "gio1135"
     ],
-    "dependencies": [
-        {
-            "uuid": "acdd5b56-7b7d-405b-bcdf-13e85e2beaaf",
-            "version": [
-                7,
-                6,
-                2
-            ]
-        }
+    "product_type": "addon",
+    "capabilities": [
+      "raytraced"
     ]
+  },
+  "header": {
+    "name": "Dragon sword",
+    "description": "Dragon sword rp v7.7.0",
+    "min_engine_version": [
+      1,
+      20,
+      0
+    ],
+    "uuid": "877901f7-e59d-4a03-acf8-b71b32238fa8",
+    "version": [
+      7,
+      7,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "8bb667df-02fd-42a3-8454-c7e4b0b7ee54",
+      "version": [
+        7,
+        7,
+        0
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "uuid": "acdd5b56-7b7d-405b-bcdf-13e85e2beaaf",
+      "version": [
+        7,
+        7,
+        0
+      ]
+    }
+  ]
 }
