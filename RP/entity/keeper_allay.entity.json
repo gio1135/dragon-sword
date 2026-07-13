@@ -3,10 +3,18 @@
   "minecraft:client_entity": {
     "description": {
       "identifier": "civ:keeper_allay",
-      "materials": { "default": "allay" },
-      "textures": { "default": "textures/entity/allay/allay" },
-      "geometry": { "default": "geometry.allay" },
-      "render_controllers": [ "controller.render.allay" ],
+      "materials": {
+        "default": "allay"
+      },
+      "textures": {
+        "default": "textures/entity/allay/allay"
+      },
+      "geometry": {
+        "default": "geometry.allay"
+      },
+      "render_controllers": [
+        "controller.render.allay"
+      ],
       "scripts": {
         "animate": [
           "bob",
