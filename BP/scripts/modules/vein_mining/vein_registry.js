@@ -4,7 +4,7 @@ export function IsBlockAllowedForTool(blockIdRaw, toolId, hasSilkTouch, hasFortu
 
   const isLeaf = blockId.includes("leaves") || blockId.includes("_leaf");
   if (isLeaf) {
-    if (!type || type === "hoe" || type === "shears") {
+    if (type === "hoe" || type === "shears") {
       return true;
     }
   }
