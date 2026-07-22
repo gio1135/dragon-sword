@@ -15,7 +15,7 @@ const ADMIN_TOOL = "minecraft:compass";
 function handleAdminTool(player, itemStack, cancelCallback) {
   // 1. Check Tool
   if (!itemStack || itemStack.typeId !== ADMIN_TOOL) return;
-  
+
   // Prevent menu while gliding (conflicts with elytra boost)
   if (player.isGliding) return;
 
@@ -34,7 +34,7 @@ function handleAdminTool(player, itemStack, cancelCallback) {
       const current = player.getGameMode();
       // Try to match current gamemode
       const next = current === GameMode.Creative ? GameMode.Survival : GameMode.Creative;
-      
+
       player.setGameMode(next);
       // Silent / No Feedback as requested
     } else {
@@ -46,16 +46,15 @@ function handleAdminTool(player, itemStack, cancelCallback) {
 
 // Handle Item Use (Air or Block)
 world.beforeEvents.itemUse.subscribe((ev) => {
-    const player = ev.source;
-    
-    // Check if player is NOT looking at a block (Air Only)
-    // getBlockFromViewDirection returns a BlockRaycastHit or undefined
-    const blockHit = player.getBlockFromViewDirection({ maxDistance: 5 });
-    
-    // If we hit a block, do NOT trigger the admin menu.
-    // This allows default interactions (Lodestones, Chests, etc.) to proceed clearly.
-    if (blockHit) return;
+  const player = ev.source;
 
-    handleAdminTool(player, ev.itemStack, () => { ev.cancel = true; });
+  // Check if player is NOT looking at a block (Air Only)
+  // getBlockFromViewDirection returns a BlockRaycastHit or undefined
+  const blockHit = player.getBlockFromViewDirection({ maxDistance: 5 });
+
+  // If we hit a block, do NOT trigger the admin menu.
+  // This allows default interactions (Lodestones, Chests, etc.) to proceed clearly.
+  if (blockHit) return;
+
+  handleAdminTool(player, ev.itemStack, () => { ev.cancel = true; });
 });
-// Removed playerInteractWithBlock subscriber to prevent conflicts with blocks entirely.

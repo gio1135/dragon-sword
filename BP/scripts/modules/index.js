@@ -11,7 +11,7 @@ import './outlaw/main.js';
 import './mounts/main.js';
 import './bedrock_border/index.js';
 import './vein_mining/main.js';
-import './mobs/skeleton.js'
-import './mobs/elder_guardian.js'
-import './mobs/enderman.js'
-import './mobs/mount_effects.js'
+import './mobs/skeleton.js';
+import './mobs/enderman.js';
+import './mobs/mount_effects.js';
+import './dungeons/main.js';

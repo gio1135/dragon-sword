@@ -10,7 +10,7 @@ export const UI = {
     const form = new ActionFormData();
     form.title(title);
     form.body(body);
-    
+
     // Wrapper
     const wrapper = {
       callbacks: [],
@@ -22,20 +22,20 @@ export const UI = {
         let callback = undefined;
 
         if (typeof arg2 === 'function') {
-            callback = arg2;
+          callback = arg2;
         } else if (typeof arg2 === 'string') {
-            iconPath = arg2;
-            if (typeof arg3 === 'function') {
-                callback = arg3;
-            }
+          iconPath = arg2;
+          if (typeof arg3 === 'function') {
+            callback = arg3;
+          }
         }
 
         if (iconPath) {
-            form.button(text, iconPath);
+          form.button(text, iconPath);
         } else {
-            form.button(text);
+          form.button(text);
         }
-        
+
         this.callbacks.push(callback);
         return this;
       },
@@ -63,18 +63,18 @@ export const UI = {
 
         // Handle Back/Cancel
         if (response.canceled) {
-             if (this.backCallback) {
-                 this.backCallback();
-                 return response;
-             }
-             return response;
+          if (this.backCallback) {
+            this.backCallback();
+            return response;
+          }
+          return response;
         }
-        
+
         if (response.selection === undefined) return response;
-        
+
         const cb = this.callbacks[response.selection];
         if (cb) cb();
-        
+
         return response;
       },
 
@@ -92,83 +92,83 @@ export const UI = {
   createForm(title) {
     const form = new ModalFormData();
     form.title(title);
-    
+
     // Wrapper
     const wrapper = {
-        _submitCallback: null,
+      _submitCallback: null,
 
-        // Toggle
-        toggle(label, defaultValue) {
-            if (defaultValue !== undefined) {
-                form.toggle(label, { defaultValue: defaultValue });
-            } else {
-                form.toggle(label);
-            }
-            return this;
-        },
-
-        // Text Field
-        textField(label, placeholder, defaultValue) {
-            if (defaultValue !== undefined) {
-                form.textField(label, placeholder, { defaultValue: defaultValue });
-            } else {
-                form.textField(label, placeholder);
-            }
-            return this;
-        },
-
-        // Dropdown
-        dropdown(label, options, defaultValueIndex) {
-            if (defaultValueIndex !== undefined) {
-                form.dropdown(label, options, { defaultValueIndex: defaultValueIndex });
-            } else {
-                form.dropdown(label, options);
-            }
-            return this;
-        },
-
-        // Slider
-        slider(label, min, max, step, defaultValue) {
-             const options = {};
-             if (step !== undefined && step !== null) options.valueStep = step;
-             if (defaultValue !== undefined && defaultValue !== null) options.defaultValue = defaultValue;
-
-             if (Object.keys(options).length > 0) {
-                 form.slider(label, min, max, options);
-             } else {
-                 form.slider(label, min, max);
-             }
-             return this;
-        },
-
-        // Submit
-        submit(callback) {
-            this._submitCallback = callback;
-            return this;
-        },
-
-        // Show
-        async show(player) {
-            const response = await form.show(player);
-            if (this._submitCallback) {
-                this._submitCallback(response);
-            }
-            return response;
+      // Toggle
+      toggle(label, defaultValue) {
+        if (defaultValue !== undefined) {
+          form.toggle(label, { defaultValue: defaultValue });
+        } else {
+          form.toggle(label);
         }
+        return this;
+      },
+
+      // Text Field
+      textField(label, placeholder, defaultValue) {
+        if (defaultValue !== undefined) {
+          form.textField(label, placeholder, { defaultValue: defaultValue });
+        } else {
+          form.textField(label, placeholder);
+        }
+        return this;
+      },
+
+      // Dropdown
+      dropdown(label, options, defaultValueIndex) {
+        if (defaultValueIndex !== undefined) {
+          form.dropdown(label, options, { defaultValueIndex: defaultValueIndex });
+        } else {
+          form.dropdown(label, options);
+        }
+        return this;
+      },
+
+      // Slider
+      slider(label, min, max, step, defaultValue) {
+        const options = {};
+        if (step !== undefined && step !== null) options.valueStep = step;
+        if (defaultValue !== undefined && defaultValue !== null) options.defaultValue = defaultValue;
+
+        if (Object.keys(options).length > 0) {
+          form.slider(label, min, max, options);
+        } else {
+          form.slider(label, min, max);
+        }
+        return this;
+      },
+
+      // Submit
+      submit(callback) {
+        this._submitCallback = callback;
+        return this;
+      },
+
+      // Show
+      async show(player) {
+        const response = await form.show(player);
+        if (this._submitCallback) {
+          this._submitCallback(response);
+        }
+        return response;
+      }
     };
     return wrapper;
   },
 
   // Message Form
   message(title, body, confirmText, cancelText) {
-      return this.createConfirmation(title, body, confirmText, cancelText);
+    return this.createConfirmation(title, body, confirmText, cancelText);
   },
 
   createConfirmation(title, body) {
     const form = new MessageFormData();
     form.title(title);
     form.body(body);
-    
+
     // Wrapper
     const wrapper = {
       callbacks: [],
@@ -191,7 +191,7 @@ export const UI = {
 
         const cb = this.callbacks[response.selection];
         if (cb) cb();
-        
+
         return response;
       }
     };

@@ -11,7 +11,7 @@ class DragonSwordCore {
     this.world = world;
     this.system = system;
     this.initialized = false;
-    
+
     // Debug Configuration
     this.debugMode = false;
     this.verbose = false;
@@ -33,7 +33,7 @@ class DragonSwordCore {
     const players = world.getAllPlayers();
     for (const p of players) {
       if (p.hasTag('debug')) {
-         p.sendMessage(`§7[DEBUG] [${sender}] ${message}`);
+        p.sendMessage(`§7[DEBUG] [${sender}] ${message}`);
       }
     }
   }

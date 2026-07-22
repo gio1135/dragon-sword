@@ -1,0 +1,88 @@
+04:02:29[Scripting][verbose]-Plugin Discovered [Dragon sword] PackId [acdd5b56-7b7d-405b-bcdf-13e85e2beaaf_7.7.1] ModuleId [497ce0f6-6b3e-45b1-b4b3-f4529febec18]
+
+04:02:29[Scripting][verbose]-Plugin [Dragon sword] - promoted [@minecraft/server] from [2.7.0] to [2.8.0] requested by [Dragon sword - 7.7.1].
+
+04:02:29[Scripting][verbose]-Plugin [Dragon sword] - promoted [@minecraft/server] from [2.0.0] to [2.8.0] requested by [@minecraft/server-ui-bindings - 2.1.0].
+
+04:02:29[Scripting][verbose]-Plugin [Dragon sword] - promoted [@minecraft/server] from [2.0.0] to [2.8.0] requested by [@minecraft/server-ui-bindings - 2.0.0].
+
+04:02:29[Scripting][verbose]-Plugin [Dragon sword] - promoted [@minecraft/server-bindings] from [2.7.0] to [2.8.0] requested by [@minecraft/server - 2.7.0].
+
+04:02:29[Scripting][verbose]-Plugin [Dragon sword] - promoted [@minecraft/server-bindings] from [2.0.0] to [2.8.0] requested by [@minecraft/server - 2.0.0].
+
+04:02:29[Scripting][verbose]-Plugin [Dragon sword] - promoted [@minecraft/server-ui-bindings] from [2.0.0] to [2.1.0] requested by [@minecraft/server-ui - 2.0.0].
+
+04:02:29[Scripting][verbose]-Plugin [Dragon sword] - promoted [@minecraft/server-ui] from [2.0.0] to [2.1.0] requested by [Dragon sword - 7.7.1].
+
+04:02:29[Scripting][error]-[Dragon sword] ReferenceError: Import [modules/mobs/elder_guardian.js] not found.
+
+04:02:29[Scripting][error]-Plugin [Dragon sword - 7.7.1] - [main.js] ran with error: [ReferenceError: Import [modules/mobs/elder_guardian.js] not found.]
+
+04:02:29[Item][error]-To use item component 'minecraft:custom_components' in json formats earlier than 1.21.10, turn on the 'Beta APIs' toggle in settings
+
+04:02:29[Item][warning]-ds:queue_token -> components -> minecraft:icon -> texture: this member was found in the input, but is not present in the Schema
+
+04:02:32[Texture][inform]-TextureSet (textures/entity/wolf/wolf_collar_baby_mers) | Specified image could not be found
+
+04:02:38[Effects][error]-entity/nrn.json | Entity .json 'entity/nrn.json' referenced particle '' that doesn't exist
+
+04:02:38[Effects][error]-entity/nrn.json | Entity .json 'entity/nrn.json' referenced particle '' that doesn't exist
+
+04:02:41[Blocks][warning]-minecraft:poppy | 'minecraft:poppy' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:blue_orchid | 'minecraft:blue_orchid' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:allium | 'minecraft:allium' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:azure_bluet | 'minecraft:azure_bluet' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:red_tulip | 'minecraft:red_tulip' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:orange_tulip | 'minecraft:orange_tulip' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:white_tulip | 'minecraft:white_tulip' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:pink_tulip | 'minecraft:pink_tulip' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:oxeye_daisy | 'minecraft:oxeye_daisy' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:cornflower | 'minecraft:cornflower' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:lily_of_the_valley | 'minecraft:lily_of_the_valley' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:dandelion | 'minecraft:dandelion' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:brown_mushroom | 'minecraft:brown_mushroom' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:red_mushroom | 'minecraft:red_mushroom' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:cobblestone_wall | 'minecraft:cobblestone_wall' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:mossy_cobblestone_wall | 'minecraft:mossy_cobblestone_wall' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:granite_wall | 'minecraft:granite_wall' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:diorite_wall | 'minecraft:diorite_wall' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:andesite_wall | 'minecraft:andesite_wall' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:sandstone_wall | 'minecraft:sandstone_wall' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:brick_wall | 'minecraft:brick_wall' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:stone_brick_wall | 'minecraft:stone_brick_wall' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:mossy_stone_brick_wall | 'minecraft:mossy_stone_brick_wall' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:nether_brick_wall | 'minecraft:nether_brick_wall' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:end_stone_brick_wall | 'minecraft:end_stone_brick_wall' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:prismarine_wall | 'minecraft:prismarine_wall' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:red_sandstone_wall | 'minecraft:red_sandstone_wall' | Invalid blockshape name.
+
+04:02:41[Blocks][warning]-minecraft:red_nether_brick_wall | 'minecraft:red_nether_brick_wall' | Invalid blockshape name.
+
+04:02:54[Texture][inform]-TextureSet (textures/entity/wolf/wolf_collar_baby_mers) | Specified image could not be found
+
