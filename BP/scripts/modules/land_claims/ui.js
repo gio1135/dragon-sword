@@ -452,41 +452,12 @@ export class ClaimUI {
     DS.ui.modal('Name your claim')
       .textField('', 'Claim name', '')
       .toggle('Particles', true)
-      .toggle('§cCreate as TestUser', false) 
       .submit(response => {
         if (response.canceled) {
           player.sendMessage('§7Claim creation canceled');
           return;
         }
-        let [name, particles, isDebug] = response.formValues;
-
-        if (isDebug) {
-          // --- TestUser Logic ---
-          const dummyName = 'TestUser';
-          let dummyPD = ClaimManager.database.find(p => p.name === dummyName);
-          
-          if (!dummyPD) {
-             dummyPD = {
-                id: 'test_user_id',
-                name: dummyName,
-                claims: [],
-                claimBlocks: { amount: 10000 },
-                settings: {}
-             };
-             ClaimManager.database.push(dummyPD);
-          }
-
-          if (!name || name.trim().length === 0) name = 'TestZone';
-
-          const newClaim = new Claim(name, start, end);
-          newClaim.particlesEnabled = particles;
-          
-          dummyPD.claims.push(newClaim);
-          ClaimManager.save();
-          player.sendMessage(`§aClaim '§f${name}§a' created for TestUser`);
-          player.playSound('random.orb');
-          return;
-        }
+        let [name, particles] = response.formValues;
 
         // Default name if empty
         if (!name || name.trim().length === 0) name = `${player.name}'s Claim`;
