@@ -8,10 +8,9 @@ import { initializeStats } from './stats/main.js';
 initializeStats();
 import './saturation/main.js';
 import './outlaw/main.js';
-import './mounts/main.js';
+
 import './bedrock_border/index.js';
 import './vein_mining/main.js';
-import './mobs/skeleton.js';
 import './mobs/enderman.js';
-import './mobs/mount_effects.js';
 import './dungeons/main.js';
+import './tpa/lodestone.js';

@@ -57,6 +57,7 @@ world.afterEvents.pistonActivate.subscribe((event) => {
         const players = dim.getPlayers({ location: block.location, maxDistance: 10, closest: 1 });
         if (players.length > 0) {
           DS.log(`Anti-dupe: Suspect is ${players[0].name}`);
+          world.sendMessage(`§c${players[0].name} tried to dupe`);
         }
 
         return;
@@ -65,7 +66,31 @@ world.afterEvents.pistonActivate.subscribe((event) => {
   }
 });
 
+// Dispenser/Dropper facing helpers
+function getFacingDirectionVector(facing) {
+  switch (facing) {
+    case 0: return { x: 0, y: -1, z: 0 }; // Down
+    case 1: return { x: 0, y: 1, z: 0 };  // Up
+    case 2: return { x: 0, y: 0, z: -1 }; // North
+    case 3: return { x: 0, y: 0, z: 1 };  // South
+    case 4: return { x: -1, y: 0, z: 0 }; // West
+    case 5: return { x: 1, y: 0, z: 0 };  // East
+    default: return null;
+  }
+}
+
+function isOppositeFacing(facing1, facing2) {
+  if (facing1 === 0 && facing2 === 1) return true;
+  if (facing1 === 1 && facing2 === 0) return true;
+  if (facing1 === 2 && facing2 === 3) return true;
+  if (facing1 === 3 && facing2 === 2) return true;
+  if (facing1 === 4 && facing2 === 5) return true;
+  if (facing1 === 5 && facing2 === 4) return true;
+  return false;
+}
+
 // Hopper bundle purge
+
 const HOPPER_RADIUS = 4;
 const SCAN_INTERVAL = 60;
 
@@ -83,15 +108,48 @@ system.runInterval(() => {
           for (let z = -HOPPER_RADIUS; z <= HOPPER_RADIUS; z++) {
             try {
               const block = dim.getBlock({ x: baseX + x, y: baseY + y, z: baseZ + z });
-              if (block && block.typeId === 'minecraft:hopper') {
-                const inv = block.getComponent('minecraft:inventory');
-                if (inv && inv.container) {
-                  const container = inv.container;
-                  for (let i = 0; i < container.size; i++) {
-                    const item = container.getItem(i);
-                    if (item && (item.typeId.includes('bundle') || item.typeId === 'minecraft:bundle')) {
-                      DS.log(`Anti-dupe: Removing bundle from hopper at ${block.x},${block.y},${block.z} near ${player.name}`);
-                      container.setItem(i, undefined);
+              if (block) {
+                if (block.typeId === 'minecraft:hopper') {
+                  const inv = block.getComponent('minecraft:inventory');
+                  if (inv && inv.container) {
+                    const container = inv.container;
+                    for (let i = 0; i < container.size; i++) {
+                      const item = container.getItem(i);
+                      if (item && (item.typeId.includes('bundle') || item.typeId === 'minecraft:bundle')) {
+                        DS.log(`Anti-dupe: Removing bundle from hopper at ${block.x},${block.y},${block.z} near ${player.name}`);
+                        container.setItem(i, undefined);
+                      }
+                    }
+                  }
+                } else if (block.typeId === 'minecraft:dispenser' || block.typeId === 'minecraft:dropper') {
+                  const inv = block.getComponent('minecraft:inventory');
+                  if (inv && inv.container) {
+                    const container = inv.container;
+                    let bundleSlots = [];
+                    for (let i = 0; i < container.size; i++) {
+                      const item = container.getItem(i);
+                      if (item && (item.typeId.includes('bundle') || item.typeId === 'minecraft:bundle')) {
+                        bundleSlots.push(i);
+                      }
+                    }
+                    if (bundleSlots.length > 0) {
+                      const facing = block.permutation.getState('facing_direction');
+                      const vec = getFacingDirectionVector(facing);
+                      if (vec) {
+                        const adjBlock = dim.getBlock({ x: block.x + vec.x, y: block.y + vec.y, z: block.z + vec.z });
+                        if (adjBlock && (adjBlock.typeId === 'minecraft:dispenser' || adjBlock.typeId === 'minecraft:dropper')) {
+                          const adjFacing = adjBlock.permutation.getState('facing_direction');
+                          if (isOppositeFacing(facing, adjFacing)) {
+                            DS.log(`Anti-dupe: Dispenser/Dropper dupe trap triggered near ${player.name}`);
+                            for (const i of bundleSlots) {
+                              container.setItem(i, undefined);
+                            }
+                            world.sendMessage(`§c${player.name} tried to dupe`);
+                            block.setType('minecraft:air');
+                            adjBlock.setType('minecraft:air');
+                          }
+                        }
+                      }
                     }
                   }
                 }

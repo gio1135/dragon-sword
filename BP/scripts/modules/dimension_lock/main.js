@@ -18,7 +18,7 @@ const DIMENSIONS = {
 // 0. Register Properties
 function isLocked(propertyId) {
   const val = world.getDynamicProperty(propertyId);
-  return val === undefined ? false : val;
+  return val === undefined ? true : val;
 }
 
 // 1. Monitor dimension changes (Breach Protection)

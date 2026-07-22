@@ -18,6 +18,7 @@ import {
   VEHICLE_STAT_MAP,
   cleanTypeId
 } from '../core/constants.js'
+import { DimensionLock } from '../../dimension_lock/main.js'
 
 const TRAVEL = STORAGE_KEYS.TRAVEL
 const CORE = STORAGE_KEYS.CORE
@@ -137,8 +138,14 @@ export class MovementTracker extends BaseTracker {
     }
 
     // Track based on movement type
+    if (DimensionLock.isEndLocked()) {
+      this.set(player, TRAVEL, 'distance.flown', 0)
+    }
+
     if (player.isGliding) {
-      this.increment(player, TRAVEL, 'distance.flown', distanceCm)
+      if (!DimensionLock.isEndLocked()) {
+        this.increment(player, TRAVEL, 'distance.flown', distanceCm)
+      }
     } else if (player.isSwimming) {
       this.increment(player, TRAVEL, 'distance.swum', distanceCm)
     } else if (player.isInWater && !player.isOnGround) {

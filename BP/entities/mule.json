@@ -1,5 +1,5 @@
 {
-  "format_version": "1.26.10",
+  "format_version": "1.26.30",
   "minecraft:entity": {
     "description": {
       "identifier": "minecraft:mule",
@@ -62,7 +62,7 @@
         },
         "minecraft:behavior.follow_parent": {
           "priority": 4,
-          "speed_multiplier": 1
+          "speed_multiplier": 0.5
         }
       },
       "minecraft:mule_adult": {
@@ -75,7 +75,7 @@
         "minecraft:leashable_to": {},
         "minecraft:behavior.run_around_like_crazy": {
           "priority": 1,
-          "speed_multiplier": 1.2
+          "speed_multiplier": 0.6
         }
       },
       "minecraft:mule_wild": {
@@ -88,7 +88,7 @@
           "interact_text": "action.interact.mount",
           "seats": {
             "position": [
-              0,
+              0.0,
               0.975,
               -0.2
             ]
@@ -96,8 +96,8 @@
         },
         "minecraft:behavior.mount_pathing": {
           "priority": 2,
-          "speed_multiplier": 1.5,
-          "target_dist": 0,
+          "speed_multiplier": 0.75,
+          "target_dist": 0.0,
           "track_target": true
         },
         "minecraft:tamemount": {
@@ -192,7 +192,7 @@
           "interact_text": "action.interact.ride.horse",
           "seats": {
             "position": [
-              0,
+              0.0,
               0.975,
               -0.2
             ]
@@ -402,8 +402,10 @@
         "height": 1.6
       },
       "minecraft:health": {
-        "value": 60,
-        "max": 60
+        "value": {
+          "range_min": 15,
+          "range_max": 30
+        }
       },
       "minecraft:hurt_on_condition": {
         "damage_conditions": [
@@ -418,7 +420,7 @@
         ]
       },
       "minecraft:movement": {
-        "value": 0.3
+        "value": 0.35
       },
       "minecraft:navigation.walk": {
         "can_path_over_water": true,
@@ -436,7 +438,7 @@
       },
       "minecraft:spawn_egg_interaction": {},
       "minecraft:horse.jump_strength": {
-        "value": 1.5
+        "value": 0.75
       },
       "minecraft:leashable": {
         "presets": [
@@ -492,26 +494,28 @@
       },
       "minecraft:behavior.float": {
         "priority": 0,
-        "chance_per_tick_to_float": 1,
-        "time_under_water_to_dismount_passengers": 99999
+        "chance_per_tick_to_float": 0.0,
+        "time_under_water_to_dismount_passengers": 2.0
       },
       "minecraft:buoyant": {
-        "base_buoyancy": 1,
-        "apply_gravity": true,
+        "base_buoyancy": 1.0,
+        "apply_gravity": false,
         "can_auto_step_from_liquid": true,
         "movement_type": "bobbing",
         "liquid_blocks": [
           "minecraft:water",
-          "minecraft:flowing_water"
+          "minecraft:flowing_water",
+          "minecraft:lava",
+          "minecraft:flowing_lava"
         ]
       },
       "minecraft:behavior.panic": {
         "priority": 1,
-        "speed_multiplier": 1.2
+        "speed_multiplier": 0.6
       },
       "minecraft:behavior.tempt": {
         "priority": 5,
-        "speed_multiplier": 1.2,
+        "speed_multiplier": 0.6,
         "items": [
           "golden_apple",
           "appleEnchanted",
@@ -520,18 +524,45 @@
       },
       "minecraft:behavior.random_stroll": {
         "priority": 6,
-        "speed_multiplier": 0.7
+        "speed_multiplier": 0.35
       },
       "minecraft:behavior.look_at_player": {
         "priority": 7,
-        "look_distance": 6,
+        "look_distance": 6.0,
         "probability": 0.02
       },
       "minecraft:behavior.random_look_around": {
         "priority": 8
       },
       "minecraft:physics": {},
-      "minecraft:pushable_by_entity": {},
+      "minecraft:pushable_by_entity": {
+        "presets": [
+          {
+            "filters": {
+              "all_of": [
+                {
+                  "test": "is_family",
+                  "subject": "other",
+                  "value": "sulfur_cube"
+                },
+                {
+                  "test": "enum_property",
+                  "subject": "other",
+                  "domain": "minecraft:sulfur_cube_archetype",
+                  "operator": "not",
+                  "value": "none"
+                },
+                {
+                  "test": "is_controlling_passenger_family",
+                  "subject": "self",
+                  "value": "player"
+                }
+              ]
+            },
+            "push_mode": "none"
+          }
+        ]
+      },
       "minecraft:pushable_by_block": {},
       "minecraft:conditional_bandwidth_optimization": {}
     },
