@@ -1,43 +1,31 @@
-/**
- * Permission Registry
- * Central repository for all available claim permissions.
- */
 
 export class PermissionRegistry {
-    static _permissions = new Map();
+ static _permissions = new Map();
 
-    /**
-     * Registers a new permission type.
-     * @param {string} key - The internal key (e.g. "allowOutlaws")
-     * @param {string} label - The UI label (e.g. "Allow outlaws")
-     * @param {boolean} defaultValue - Initial state
-     */
-    static register(key, label, defaultValue = false) {
-        this._permissions.set(key, { label, defaultValue });
-    }
+ static register(key, label, defaultValue = false) {
+  this._permissions.set(key, { label, defaultValue });
+ }
 
-    static get(key) {
-        return this._permissions.get(key);
-    }
+ static get(key) {
+  return this._permissions.get(key);
+ }
 
-    static getAll() {
-        return Array.from(this._permissions.values()).map((v, i) => ({
-            key: Array.from(this._permissions.keys())[i],
-            ...v
-        }));
-    }
+ static getAll() {
+  return Array.from(this._permissions.values()).map((v, i) => ({
+   key: Array.from(this._permissions.keys())[i],
+   ...v
+  }));
+ }
 
-    static register(key, label, defaultValue = false, globalOnly = false) {
-        this._permissions.set(key, { label, defaultValue, globalOnly });
-    }
+ static register(key, label, defaultValue = false, globalOnly = false) {
+  this._permissions.set(key, { label, defaultValue, globalOnly });
+ }
 
-    static getKeys() {
-        return Array.from(this._permissions.keys());
-    }
+ static getKeys() {
+  return Array.from(this._permissions.keys());
+ }
 }
 
-// Register Core Permissions
-// These were previously hardcoded in data_model.js
 PermissionRegistry.register("enterClaim", "Enter claim", true);
 PermissionRegistry.register("breakBlocks", "Break blocks", false);
 PermissionRegistry.register("useItemsOnBlocks", "Use items on blocks", false);

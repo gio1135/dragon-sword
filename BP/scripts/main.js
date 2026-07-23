@@ -6,5 +6,4 @@ import "./core/ui.js";
 import "./core/admin_interaction.js";
 import "./modules/index.js";
 
-// Initialize Core
 DS.init();

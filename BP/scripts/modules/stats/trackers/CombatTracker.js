@@ -1,256 +1,179 @@
-/**
- * Combat tracker - tracks all combat-related statistics
- *
- * Handles:
- * - Mob kills (with per-type breakdown)
- * - Player kills (pvp)
- * - Damage dealt/taken (with breakdown by type)
- * - Player deaths (with cause tracking)
- */
 
 import { world, EquipmentSlot } from '@minecraft/server'
 import { BaseTracker } from './BaseTracker.js'
 import {
-  STORAGE_KEYS,
-  DEATH_CAUSE_MAP,
-  cleanTypeId
+STORAGE_KEYS,
+DEATH_CAUSE_MAP,
+cleanTypeId
 } from '../core/constants.js'
 
 const COMBAT = STORAGE_KEYS.COMBAT
 const CORE = STORAGE_KEYS.CORE
 
 export class CombatTracker extends BaseTracker {
-  constructor() {
-    super()
-    /** @type {PlayerTracker|null} */
-    this.playerTracker = null
-  }
+constructor() {
+ super()
 
-  /**
-   * Set reference to playertracker for death callbacks
-   * @param {PlayerTracker} tracker
-   */
-  setPlayerTracker(tracker) {
-    this.playerTracker = tracker
-  }
+ this.playerTracker = null
+}
 
-  registerEvents() {
-    // Entity death (for kill tracking)
-    world.afterEvents.entityDie.subscribe((event) => {
-      this.onEntityDeath(event)
-    })
+setPlayerTracker(tracker) {
+ this.playerTracker = tracker
+}
 
-    // Entity hurt (for damage tracking)
-    world.afterEvents.entityHurt.subscribe((event) => {
-      this.onEntityHurt(event)
-    })
+registerEvents() {
+ world.afterEvents.entityDie.subscribe((event) => {
+ this.onEntityDeath(event)
+ })
 
-    // Projectile hit entity (for shield deflection tracking)
-    world.afterEvents.projectileHitEntity.subscribe((event) => {
-      this.onProjectileHitEntity(event)
-    })
-  }
+ world.afterEvents.entityHurt.subscribe((event) => {
+ this.onEntityHurt(event)
+ })
 
-  /**
-   * Handle entity death event
-   * @param {EntityDieAfterEvent} event
-   */
-  onEntityDeath(event) {
-    const deadEntity = event.deadEntity
-    const damageSource = event.damageSource
+ world.afterEvents.projectileHitEntity.subscribe((event) => {
+ this.onProjectileHitEntity(event)
+ })
+}
 
-    // Check if a player died
-    if (deadEntity.typeId === 'minecraft:player') {
-      this.onPlayerDeath(deadEntity, damageSource)
+onEntityDeath(event) {
+ const deadEntity = event.deadEntity
+ const damageSource = event.damageSource
 
-      // Credit the killer if it was a player (pvp kill)
-      const killer = damageSource?.damagingEntity
-      if (killer?.typeId === 'minecraft:player' && killer !== deadEntity) {
-        this.onPlayerKill(killer, deadEntity)
-      }
-      return
-    }
+ if (deadEntity.typeId === 'minecraft:player') {
+ this.onPlayerDeath(deadEntity, damageSource)
 
-    // Check if a player killed something
-    const killer = damageSource?.damagingEntity
-    if (killer?.typeId === 'minecraft:player') {
-      this.onPlayerKill(killer, deadEntity)
-    }
-  }
+ const killer = damageSource?.damagingEntity
+ if (killer?.typeId === 'minecraft:player' && killer !== deadEntity) {
+  this.onPlayerKill(killer, deadEntity)
+ }
+ return
+ }
 
-  /**
-   * Handle player killing an entity
-   * @param {Player} player - The player who killed
-   * @param {Entity} victim - The entity that died
-   */
-  onPlayerKill(player, victim) {
-    const victimType = cleanTypeId(victim.typeId)
+ const killer = damageSource?.damagingEntity
+ if (killer?.typeId === 'minecraft:player') {
+ this.onPlayerKill(killer, deadEntity)
+ }
+}
 
-    // Check if it is a player kill (pvp)
-    if (victim.typeId === 'minecraft:player') {
-      this.increment(player, COMBAT, 'kills.players.total', 1)
-      const victimName = victim.name || 'Unknown'
-      this.increment(player, COMBAT, `kills.players.byPlayer.${victimName}`, 1)
-      return
-    }
+onPlayerKill(player, victim) {
+ const victimType = cleanTypeId(victim.typeId)
 
-    // Mob kill
-    this.increment(player, COMBAT, 'kills.mobs.total', 1)
-    this.increment(player, COMBAT, `kills.mobs.byType.${victimType}`, 1)
-  }
+ if (victim.typeId === 'minecraft:player') {
+ this.increment(player, COMBAT, 'kills.players.total', 1)
+ const victimName = victim.name || 'Unknown'
+ this.increment(player, COMBAT, `kills.players.byPlayer.${victimName}`, 1)
+ return
+ }
 
-  /**
-   * Handle player death
-   * @param {Player} player - The player who died
-   * @param {EntityDamageSource} damageSource - How they died
-   */
-  onPlayerDeath(player, damageSource) {
-    // Increment total deaths
-    this.increment(player, COMBAT, 'deaths.total', 1)
-    this.increment(player, CORE, 'deaths.total', 1)
+ this.increment(player, COMBAT, 'kills.mobs.total', 1)
+ this.increment(player, COMBAT, `kills.mobs.byType.${victimType}`, 1)
+}
 
-    // Determine death cause
-    const cause = this.getDeathCause(damageSource)
-    this.increment(player, COMBAT, `deaths.causes.${cause}`, 1)
+onPlayerDeath(player, damageSource) {
+ this.increment(player, COMBAT, 'deaths.total', 1)
+ this.increment(player, CORE, 'deaths.total', 1)
 
-    // Track last death info
-    this.set(player, CORE, 'deaths.lastCause', cause)
-    this.set(player, CORE, 'deaths.lastTime', Date.now())
+ const cause = this.getDeathCause(damageSource)
+ this.increment(player, COMBAT, `deaths.causes.${cause}`, 1)
 
-    // Check if killed by mob or player
-    const killer = damageSource?.damagingEntity
-    if (killer) {
-      if (killer.typeId === 'minecraft:player') {
-        this.increment(player, COMBAT, 'deaths.byPlayer', 1)
-      } else {
-        this.increment(player, COMBAT, 'deaths.byMob', 1)
-      }
-    }
+ this.set(player, CORE, 'deaths.lastCause', cause)
+ this.set(player, CORE, 'deaths.lastTime', Date.now())
 
-    // Notify playertracker
-    if (this.playerTracker) {
-      this.playerTracker.onPlayerDeath(player)
-    }
-  }
+ const killer = damageSource?.damagingEntity
+ if (killer) {
+ if (killer.typeId === 'minecraft:player') {
+  this.increment(player, COMBAT, 'deaths.byPlayer', 1)
+ } else {
+  this.increment(player, COMBAT, 'deaths.byMob', 1)
+ }
+ }
 
-  /**
-   * Get a readable death cause from damage source
-   * @param {EntityDamageSource} damageSource
-   * @returns {string}
-   */
-  getDeathCause(damageSource) {
-    if (!damageSource) return 'unknown'
+ if (this.playerTracker) {
+ this.playerTracker.onPlayerDeath(player)
+ }
+}
 
-    const cause = damageSource.cause
+getDeathCause(damageSource) {
+ if (!damageSource) return 'unknown'
 
-    // Check for specific entity damage
-    const damager = damageSource.damagingEntity
-    if (damager) {
-      if (damager.typeId === 'minecraft:player') {
-        return 'player'
-      }
-      return cleanTypeId(damager.typeId)
-    }
+ const cause = damageSource.cause
 
-    // Map cause to readable name
-    return DEATH_CAUSE_MAP[cause] ? cleanTypeId(cause) : (cause || 'unknown')
-  }
+ const damager = damageSource.damagingEntity
+ if (damager) {
+ if (damager.typeId === 'minecraft:player') {
+  return 'player'
+ }
+ return cleanTypeId(damager.typeId)
+ }
 
-  /**
-   * Handle entity hurt event
-   * @param {EntityHurtAfterEvent} event
-   */
-  onEntityHurt(event) {
-    const hurtEntity = event.hurtEntity
-    const damageSource = event.damageSource
-    const damage = event.damage
+ return DEATH_CAUSE_MAP[cause] ? cleanTypeId(cause) : (cause || 'unknown')
+}
 
-    // Convert to tenths of a heart (like java edition)
-    const damageAmount = Math.round(damage * 10)
+onEntityHurt(event) {
+ const hurtEntity = event.hurtEntity
+ const damageSource = event.damageSource
+ const damage = event.damage
 
-    // Track damage taken if a player was hurt
-    if (hurtEntity.typeId === 'minecraft:player') {
-      this.onPlayerTakeDamage(hurtEntity, damageSource, damageAmount)
-    }
+ const damageAmount = Math.round(damage * 10)
 
-    // Track damage dealt if a player dealt damage
-    const damager = damageSource?.damagingEntity
-    if (damager?.typeId === 'minecraft:player') {
-      this.onPlayerDealDamage(damager, hurtEntity, damageAmount)
-    }
-  }
+ if (hurtEntity.typeId === 'minecraft:player') {
+ this.onPlayerTakeDamage(hurtEntity, damageSource, damageAmount)
+ }
 
-  /**
-   * Handle player taking damage
-   * @param {Player} player - The player who was hurt
-   * @param {EntityDamageSource} source - Source of damage
-   * @param {number} amount - Damage in tenths of hearts
-   */
-  onPlayerTakeDamage(player, source, amount) {
-    this.increment(player, COMBAT, 'damage.taken.total', amount)
+ const damager = damageSource?.damagingEntity
+ if (damager?.typeId === 'minecraft:player') {
+ this.onPlayerDealDamage(damager, hurtEntity, damageAmount)
+ }
+}
 
-    const damager = source?.damagingEntity
-    if (damager) {
-      if (damager.typeId === 'minecraft:player') {
-        this.increment(player, COMBAT, 'damage.taken.fromPlayers', amount)
-      } else {
-        this.increment(player, COMBAT, 'damage.taken.fromMobs', amount)
-      }
-    } else {
-      // Environmental damage
-      this.increment(player, COMBAT, 'damage.taken.environmental', amount)
-    }
-  }
+onPlayerTakeDamage(player, source, amount) {
+ this.increment(player, COMBAT, 'damage.taken.total', amount)
 
-  /**
-   * Handle projectile hitting an entity (for shield deflection tracking)
-   * When a projectile hits a player who is blocking with a shield,
-   * the projectilehitentity event fires but entityhurt does not fire
-   * This allows us to detect successful shield blocks against projectiles
-   * @param {ProjectileHitEntityAfterEvent} event
-   */
-  onProjectileHitEntity(event) {
-    try {
-      const hitInfo = event.getEntityHit()
-      if (!hitInfo) return
+ const damager = source?.damagingEntity
+ if (damager) {
+ if (damager.typeId === 'minecraft:player') {
+  this.increment(player, COMBAT, 'damage.taken.fromPlayers', amount)
+ } else {
+  this.increment(player, COMBAT, 'damage.taken.fromMobs', amount)
+ }
+ } else {
+ this.increment(player, COMBAT, 'damage.taken.environmental', amount)
+ }
+}
 
-      const hitEntity = hitInfo.entity
-      if (hitEntity?.typeId !== 'minecraft:player') return
+onProjectileHitEntity(event) {
+ try {
+ const hitInfo = event.getEntityHit()
+ if (!hitInfo) return
 
-      const player = hitEntity
+ const hitEntity = hitInfo.entity
+ if (hitEntity?.typeId !== 'minecraft:player') return
 
-      // Check if player has a shield equipped using equippable component
-      const equippable = player.getComponent('minecraft:equippable')
-      if (!equippable) return
+ const player = hitEntity
 
-      const mainhand = equippable.getEquipment(EquipmentSlot.Mainhand)
-      const offhand = equippable.getEquipment(EquipmentSlot.Offhand)
+ const equippable = player.getComponent('minecraft:equippable')
+ if (!equippable) return
 
-      const hasShield = mainhand?.typeId === 'minecraft:shield' ||
-                       offhand?.typeId === 'minecraft:shield'
+ const mainhand = equippable.getEquipment(EquipmentSlot.Mainhand)
+ const offhand = equippable.getEquipment(EquipmentSlot.Offhand)
 
-      // Player must have shield and be sneaking to block (bedrock edition)
-      if (hasShield && player.isSneaking) {
-        this.increment(player, COMBAT, 'damage.blocked.projectiles', 1)
-      }
-    } catch {
-      // Projectile hit api may fail
-    }
-  }
+ const hasShield = mainhand?.typeId === 'minecraft:shield' ||
+     offhand?.typeId === 'minecraft:shield'
 
-  /**
-   * Handle player dealing damage
-   * @param {Player} player - The player who dealt damage
-   * @param {Entity} target - Entity that was hurt
-   * @param {number} amount - Damage in tenths of hearts
-   */
-  onPlayerDealDamage(player, target, amount) {
-    this.increment(player, COMBAT, 'damage.dealt.total', amount)
+ if (hasShield && player.isSneaking) {
+  this.increment(player, COMBAT, 'damage.blocked.projectiles', 1)
+ }
+ } catch {
+ }
+}
 
-    if (target.typeId === 'minecraft:player') {
-      this.increment(player, COMBAT, 'damage.dealt.toPlayers', amount)
-    } else {
-      this.increment(player, COMBAT, 'damage.dealt.toMobs', amount)
-    }
-  }
+onPlayerDealDamage(player, target, amount) {
+ this.increment(player, COMBAT, 'damage.dealt.total', amount)
+
+ if (target.typeId === 'minecraft:player') {
+ this.increment(player, COMBAT, 'damage.dealt.toPlayers', amount)
+ } else {
+ this.increment(player, COMBAT, 'damage.dealt.toMobs', amount)
+ }
+}
 }

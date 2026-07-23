@@ -9,17 +9,17 @@
   },
   "header": {
     "name": "Dragon sword",
-    "description": "Dragon sword bp v7.7.8",
+    "description": "Dragon sword bp v7.7.10",
     "min_engine_version": [
       1,
       21,
-      130
+      50
     ],
     "uuid": "acdd5b56-7b7d-405b-bcdf-13e85e2beaaf",
     "version": [
       7,
       7,
-      8
+      10
     ]
   },
   "modules": [
@@ -29,7 +29,7 @@
       "version": [
         7,
         7,
-        8
+        10
       ]
     },
     {
@@ -40,7 +40,7 @@
       "version": [
         7,
         7,
-        8
+        10
       ]
     }
   ],
@@ -58,7 +58,7 @@
       "version": [
         7,
         7,
-        8
+        10
       ]
     }
   ]
