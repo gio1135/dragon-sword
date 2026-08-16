@@ -4,24 +4,21 @@
     "authors": [
       "gio1135"
     ],
-    "product_type": "addon",
-    "capabilities": [
-      "raytraced"
-    ]
+    "product_type": "addon"
   },
   "header": {
     "name": "Dragon sword",
-    "description": "Dragon sword rp v7.7.10",
+    "description": "Dragon sword rp v7.8.3",
     "min_engine_version": [
       1,
-      21,
-      50
+      26,
+      42
     ],
     "uuid": "877901f7-e59d-4a03-acf8-b71b32238fa8",
     "version": [
       7,
-      7,
-      10
+      8,
+      3
     ]
   },
   "modules": [
@@ -30,8 +27,8 @@
       "uuid": "8bb667df-02fd-42a3-8454-c7e4b0b7ee54",
       "version": [
         7,
-        7,
-        10
+        8,
+        3
       ]
     }
   ]

@@ -1,6 +1,4 @@
 
-import { Dimension, Vector3 } from "@minecraft/server";
-
 export const Utils = {
 
 findSafeLocation(dimension, centerLocation) {

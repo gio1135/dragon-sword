@@ -3,137 +3,201 @@ import { ClaimManager } from '../land_claims/manager.js'
 import { PermissionTypes } from '../land_claims/classes/data_model.js'
 import { FeatureFlags } from '../../core/feature_flags.js'
 
-const activeTeleports = new Map()
+const tpQueue = [] // Array of { playerId, player, targetX, targetY, targetZ, dimension, startLoc }
+const activeTeleports = new Map() // Map<playerId, req>
+const recentTeleports = new Map() // Map<playerId, number (timestamp)>
 
 world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
-const { player, block, itemStack } = ev
-if (!itemStack) return
+  const { player, block, itemStack } = ev
+  if (!itemStack) return
 
-if (block.typeId === 'minecraft:lodestone') {
- if (itemStack.typeId === 'minecraft:compass' || itemStack.typeId === 'minecraft:lodestone_compass') {
- let hasPermission = true
- if (FeatureFlags.isEnabled(FeatureFlags.FEATURES.LAND_CLAIMS)) {
-  ClaimManager.runInAllClaims(claim => {
-  if (!hasPermission) return
-  if (claim.isOverlap(block.location)) {
-   if (!claim.hasPermission(PermissionTypes.USE_ITEMS_ON_BLOCKS, player, ClaimManager.database)) {
-   hasPermission = false
-   }
+  if (block.typeId === 'minecraft:lodestone') {
+    if (itemStack.typeId === 'minecraft:compass' || itemStack.typeId === 'minecraft:lodestone_compass') {
+      let hasPermission = true
+      if (FeatureFlags.isEnabled(FeatureFlags.FEATURES.LAND_CLAIMS)) {
+        ClaimManager.runInAllClaims(claim => {
+          if (!hasPermission) return
+          if (claim.isOverlap(block.location)) {
+            if (!claim.hasPermission(PermissionTypes.USE_ITEMS_ON_BLOCKS, player, ClaimManager.database)) {
+              hasPermission = false
+            }
+          }
+        })
+      }
+
+      if (!hasPermission) {
+        ev.cancel = true
+        return
+      }
+
+      const loc = block.location
+
+      system.run(() => {
+        const inv = player.getComponent('minecraft:inventory').container
+        const eq = player.getComponent('minecraft:equippable')
+
+        const processItem = (item, slot, isEq) => {
+          if (item && item.typeId === 'minecraft:lodestone_compass') {
+            const lore = item.getLore()
+            if (!lore || lore.length === 0) {
+              item.setLore([`§7${loc.x}, ${loc.y}, ${loc.z}`])
+              if (isEq) {
+                eq.setEquipment(slot, item)
+              } else {
+                inv.setItem(slot, item)
+              }
+            }
+          }
+        }
+
+        processItem(eq.getEquipment(EquipmentSlot.Mainhand), EquipmentSlot.Mainhand, true)
+
+        for (let i = 0; i < inv.size; i++) {
+          processItem(inv.getItem(i), i, false)
+        }
+      })
+    }
   }
-  })
- }
-
- if (!hasPermission) {
-  ev.cancel = true
-  return
- }
-
- ev.cancel = true
-
- system.run(() => {
-  const eq = player.getComponent('minecraft:equippable')
-  const slot = eq.getEquipmentSlot(EquipmentSlot.Mainhand)
-
-  const boundCompass = new ItemStack('minecraft:lodestone_compass', 1)
-  const loc = block.location
-  boundCompass.setLore([`§7${loc.x}, ${loc.y}, ${loc.z}`])
-
-  if (itemStack.amount > 1) {
-  slot.amount -= 1
-  const inv = player.getComponent('minecraft:inventory').container
-  let added = false
-  for (let i = 0; i < inv.size; i++) {
-   if (!inv.getItem(i)) {
-   inv.setItem(i, boundCompass)
-   added = true
-   break
-   }
-  }
-  if (!added) {
-   player.dimension.spawnItem(boundCompass, player.location)
-  }
-  } else {
-  slot.setItem(boundCompass)
-  }
- })
- }
-}
 })
+
+function getEstimatedWaitTime(position) {
+  if (activeTeleports.size < 10) return 0
+  
+  const remainingTicksList = []
+  for (const req of activeTeleports.values()) {
+    remainingTicksList.push(100 - req.ticks)
+  }
+  remainingTicksList.sort((a, b) => a - b)
+  
+  const batchIndex = Math.floor((position - 1) / 10)
+  const slotIndex = (position - 1) % 10
+  
+  const waitTicks = remainingTicksList[slotIndex] + (batchIndex * 100)
+  return Math.ceil(waitTicks / 20)
+}
 
 world.beforeEvents.itemUse.subscribe((ev) => {
-const { source: player, itemStack } = ev
-if (itemStack.typeId !== 'minecraft:lodestone_compass') return
+  const { source: player, itemStack } = ev
+  if (itemStack.typeId !== 'minecraft:lodestone_compass') return
 
-const lore = itemStack.getLore()
-if (!lore || lore.length === 0) return
+  const lore = itemStack.getLore()
+  if (!lore || lore.length === 0) return
 
-const match = lore[0].match(/(-?\d+),\s*(-?\d+),\s*(-?\d+)/)
-if (!match) return
+  const match = lore[0].match(/(-?\d+),\s*(-?\d+),\s*(-?\d+)/)
+  if (!match) return
 
-ev.cancel = true
+  ev.cancel = true
 
-const targetX = parseInt(match[1])
-const targetY = parseInt(match[2])
-const targetZ = parseInt(match[3])
+  const targetX = parseInt(match[1])
+  const targetY = parseInt(match[2])
+  const targetZ = parseInt(match[3])
 
-system.run(() => {
- if (activeTeleports.has(player.id)) return
+  system.run(() => {
+    const playerId = player.id
+    
+    // Clean up expired recent teleports
+    const now = Date.now()
+    for (const [id, expireTime] of recentTeleports.entries()) {
+      if (now > expireTime) {
+        recentTeleports.delete(id)
+      }
+    }
 
- let block
- try {
- block = player.dimension.getBlock({ x: targetX, y: targetY, z: targetZ })
- } catch (e) {}
+    if (activeTeleports.has(playerId) || tpQueue.find(q => q.playerId === playerId)) return
+    if (recentTeleports.has(playerId)) return
 
- if (!block || block.typeId !== 'minecraft:lodestone') {
- player.playSound('note.bass')
- return
- }
+    const req = {
+      playerId,
+      player,
+      targetX,
+      targetY,
+      targetZ,
+      dimension: player.dimension,
+      startLoc: player.location,
+      ticks: 0,
+      canceled: false
+    }
 
- const startLoc = player.location
- let ticks = 0
- const totalTicks = 100
+    tpQueue.push(req)
+    
+    const position = tpQueue.length
+    if (activeTeleports.size === 10) {
+      const waitTime = getEstimatedWaitTime(position)
+      player.sendMessage(`§eTeleporting in ${waitTime + 5}s (position in queue: ${position})`)
+    } else {
+      player.sendMessage('§eTeleporting in 5 seconds')
+    }
+  })
+})
 
- const tpInterval = system.runInterval(() => {
- const currentLoc = player.location
+system.runInterval(() => {
+  // Promote from queue
+  while (activeTeleports.size < 10 && tpQueue.length > 0) {
+    const req = tpQueue.shift()
+    if (!req.player.isValid()) continue
 
- const dist = Math.sqrt(
-  Math.pow(currentLoc.x - startLoc.x, 2) +
-  Math.pow(currentLoc.y - startLoc.y, 2) +
-  Math.pow(currentLoc.z - startLoc.z, 2)
- )
-
- if (dist > 0.5) {
-  player.onScreenDisplay.setActionBar('')
-  system.clearRun(tpInterval)
-  activeTeleports.delete(player.id)
-  return
- }
-
- if (ticks >= totalTicks) {
-  system.clearRun(tpInterval)
-  activeTeleports.delete(player.id)
-
-  let finalBlock
-  try {
-  finalBlock = player.dimension.getBlock({ x: targetX, y: targetY, z: targetZ })
-  } catch (e) {}
-
-  if (!finalBlock || finalBlock.typeId !== 'minecraft:lodestone') {
-  player.onScreenDisplay.setActionBar('')
-  player.playSound('note.bass')
-  return
+    req.tickingAreaName = `lode_${req.playerId.replace(/-/g, '')}`
+    req.dimension.runCommandAsync(`tickingarea add ${req.targetX} 0 ${req.targetZ} ${req.targetX} 0 ${req.targetZ} ${req.tickingAreaName} true`).catch(() => {})
+    
+    activeTeleports.set(req.playerId, req)
   }
 
-  player.teleport({ x: targetX + 0.5, y: targetY + 1, z: targetZ + 0.5 }, { dimension: player.dimension })
-  player.onScreenDisplay.setActionBar('')
-  return
- }
+  // Process active teleports
+  for (const [playerId, req] of activeTeleports.entries()) {
+    if (!req.player.isValid()) {
+      cleanUpReq(req)
+      continue
+    }
 
- const remainingSeconds = Math.ceil((totalTicks - ticks) / 20)
- player.onScreenDisplay.setActionBar(`§bTeleporting in ${remainingSeconds}`)
- ticks += 10
- }, 10)
+    const currentLoc = req.player.location
+    const dist = Math.sqrt(
+      Math.pow(currentLoc.x - req.startLoc.x, 2) +
+      Math.pow(currentLoc.y - req.startLoc.y, 2) +
+      Math.pow(currentLoc.z - req.startLoc.z, 2)
+    )
 
- activeTeleports.set(player.id, tpInterval)
-})
-})
+    if (dist > 0.5 && !req.canceled) {
+      req.canceled = true
+      req.player.playSound('note.bass') // Play immediately when canceled, but keep the 5s timer going
+    }
+
+    if (req.ticks >= 100) {
+      cleanUpReq(req)
+
+      if (!req.canceled) {
+        let finalBlock
+        try {
+          finalBlock = req.dimension.getBlock({ x: req.targetX, y: req.targetY, z: req.targetZ })
+        } catch (e) { }
+
+        if (!finalBlock || finalBlock.typeId !== 'minecraft:lodestone') {
+          req.player.playSound('note.bass')
+        } else {
+          req.player.teleport({ x: req.targetX + 0.5, y: req.targetY + 1, z: req.targetZ + 0.5 }, { dimension: req.dimension })
+        }
+      }
+      continue
+    }
+
+    if (!req.canceled) {
+      if (req.ticks % 20 === 0) {
+        req.player.playSound('random.click')
+      }
+      req.player.dimension.spawnParticle('minecraft:shriek_particle', {
+        x: req.player.location.x,
+        y: req.player.location.y + 0.1,
+        z: req.player.location.z
+      })
+    }
+
+    req.ticks += 10
+  }
+}, 10)
+
+function cleanUpReq(req) {
+  if (req.tickingAreaName) {
+    req.dimension.runCommandAsync(`tickingarea remove ${req.tickingAreaName}`).catch(() => {})
+  }
+  activeTeleports.delete(req.playerId)
+  recentTeleports.set(req.playerId, Date.now() + 5000)
+}

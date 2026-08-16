@@ -9,17 +9,17 @@
   },
   "header": {
     "name": "Dragon sword",
-    "description": "Dragon sword bp v7.7.10",
+    "description": "Dragon sword bp v7.8.3",
     "min_engine_version": [
       1,
-      21,
-      50
+      26,
+      42
     ],
     "uuid": "acdd5b56-7b7d-405b-bcdf-13e85e2beaaf",
     "version": [
       7,
-      7,
-      10
+      8,
+      3
     ]
   },
   "modules": [
@@ -28,8 +28,8 @@
       "uuid": "b03e4b0d-3888-4ad8-b44e-5de0a39802d9",
       "version": [
         7,
-        7,
-        10
+        8,
+        3
       ]
     },
     {
@@ -39,26 +39,26 @@
       "entry": "scripts/main.js",
       "version": [
         7,
-        7,
-        10
+        8,
+        3
       ]
     }
   ],
   "dependencies": [
     {
       "module_name": "@minecraft/server",
-      "version": "2.7.0"
+      "version": "2.9.0"
     },
     {
       "module_name": "@minecraft/server-ui",
-      "version": "2.0.0"
+      "version": "2.1.0"
     },
     {
       "uuid": "877901f7-e59d-4a03-acf8-b71b32238fa8",
       "version": [
         7,
-        7,
-        10
+        8,
+        3
       ]
     }
   ]

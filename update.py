@@ -47,14 +47,17 @@ def zip_directory(dir_path, zip_file, arc_prefix=""):
 
 def clean_zip_backups(current_version_str, previous_version_str=None):
   current_zip = f"Dragon_sword_v{current_version_str}.zip"
+  current_mcaddon = f"Dragon_sword_v{current_version_str}.mcaddon"
   prev_zip = f"Dragon_sword_v{previous_version_str}.zip" if previous_version_str else None
+  prev_mcaddon = f"Dragon_sword_v{previous_version_str}.mcaddon" if previous_version_str else None
 
-  allowed_zips = {current_zip}
+  allowed_zips = {current_zip, current_mcaddon}
   if prev_zip:
     allowed_zips.add(prev_zip)
+    allowed_zips.add(prev_mcaddon)
 
   for file in os.listdir(PROJECT_DIR):
-    if file.startswith("Dragon_sword_v") and file.endswith(".zip"):
+    if file.startswith("Dragon_sword_v") and (file.endswith(".zip") or file.endswith(".mcaddon")):
       if file not in allowed_zips:
         p = os.path.join(PROJECT_DIR, file)
         try:
@@ -84,20 +87,22 @@ def strip_json_comments(text):
   return regex.sub(_replacer, text)
 
 def build_mounts():
-  print("Building mounts from bedrock-samples...")
+  print("Building mounts from local bedrock-samples...")
   mounts = ['horse.json', 'camel.json', 'camel_husk.json', 'donkey.json', 'mule.json']
-  base_url = "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/behavior_pack/entities/"
+  samples_dir = os.path.join(PROJECT_DIR, "Docs", "bedrock-samples-v1.26.30.5-full", "behavior_pack", "entities")
 
   speed_mult = 2.0
   jump_mult = 1.5
   ai_mult = 0.5
 
   for mount in mounts:
-    url = base_url + mount
+    source_path = os.path.join(samples_dir, mount)
     try:
-      req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-      with urllib.request.urlopen(req) as response:
-        content = response.read().decode('utf-8')
+      if not os.path.exists(source_path):
+        print(f"  Skipped {mount}: not found in local samples.")
+        continue
+      with open(source_path, 'r', encoding='utf-8') as f:
+        content = f.read()
 
       content = strip_json_comments(content)
       data = json.loads(content)
@@ -194,11 +199,16 @@ def main():
     print("Updated manifest.json files.")
 
   current_zip_path = os.path.join(PROJECT_DIR, f"Dragon_sword_v{new_version_str}.zip")
-  with zipfile.ZipFile(current_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+  current_mcaddon_path = os.path.join(PROJECT_DIR, f"Dragon_sword_v{new_version_str}.mcaddon")
+  
+  with zipfile.ZipFile(current_mcaddon_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
     if os.path.exists(BP_DIR):
       zip_directory(BP_DIR, zipf, "BP")
     if os.path.exists(RP_DIR):
       zip_directory(RP_DIR, zipf, "RP")
+  print(f"Created version mcaddon: {current_mcaddon_path}")
+
+  shutil.copy2(current_mcaddon_path, current_zip_path)
   print(f"Created version zip: {current_zip_path}")
 
   clean_zip_backups(new_version_str, old_version_str if bump_type != 'dev' else "7.7.9")
