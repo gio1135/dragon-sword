@@ -1,1 +1,22 @@
-{"format_version":"1.10.0","minecraft:attachable":{"description":{"animations":{"ihai":"animation.ascent_chess.kbfy","mtzk":"animation.ascent_chess.mhcr"},"scripts":{"animate":[{"mtzk":"c.is_first_person"},{"ihai":"!c.is_first_person"}]},"render_controllers":["controller.render.ascent_chess.default"],"textures":{"default":"textures/ascent/chess/xntn"},"materials":{"default":"entity_alphatest"},"geometry":{"default":"geometry.ascent_chess.bacv"},"identifier":"ascent_chess:addon_book"}}}
+{
+  "format_version": "1.10.0",
+  "minecraft:attachable": {
+    "description": {
+      "animations": {
+        "ihai": "animation.ascent_chess.kbfy",
+        "mtzk": "animation.ascent_chess.mhcr"
+      },
+      "scripts": {
+        "animate": [
+          { "mtzk": "c.is_first_person" },
+          { "ihai": "!c.is_first_person" }
+        ]
+      },
+      "render_controllers": ["controller.render.ascent_chess.default"],
+      "textures": { "default": "textures/ascent/chess/xntn" },
+      "materials": { "default": "entity_alphatest" },
+      "geometry": { "default": "geometry.ascent_chess.bacv" },
+      "identifier": "ascent_chess:addon_book"
+    }
+  }
+}

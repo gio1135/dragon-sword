@@ -1,1 +1,387 @@
-{"format_version":"1.26.0","minecraft:block":{"description":{"identifier":"ascent_chess:piece","states":{"ascent_chess:color":{"values":{"min":0,"max":1}},"ascent_chess:piece_type":["bishop","king","knight","pawn","queen","rook"],"ascent_chess:persist":{"values":{"min":0,"max":1}}}},"components":{"minecraft:loot":"loot_tables/empty.json","ascent_chess:interactable":{},"ascent_chess:piece":{},"minecraft:light_emission":10,"minecraft:collision_box":{"origin":[-5,0,-5],"size":[10,16,10]},"minecraft:selection_box":{"origin":[-5,0,-5],"size":[10,16,10]},"minecraft:destructible_by_mining":false,"minecraft:destructible_by_explosion":false,"minecraft:movable":{"movement_type":"immovable"}},"permutations":[{"condition":"q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'bishop' && q.block_state('ascent_chess:persist') == 0","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.empty","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.czjo"},"minecraft:transformation":{"rotation":[0,180,0]}}},{"condition":"q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'bishop' && q.block_state('ascent_chess:persist') == 0","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.empty","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.nkde"}}},{"condition":"q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'king' && q.block_state('ascent_chess:persist') == 0","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.empty","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.hakc"},"minecraft:transformation":{"rotation":[0,180,0]}}},{"condition":"q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'king' && q.block_state('ascent_chess:persist') == 0","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.empty","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.xufc"}}},{"condition":"q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'knight' && q.block_state('ascent_chess:persist') == 0","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.empty","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.fxto"},"minecraft:transformation":{"rotation":[0,180,0]}}},{"condition":"q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'knight' && q.block_state('ascent_chess:persist') == 0","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.empty","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.qgno"}}},{"condition":"q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'pawn' && q.block_state('ascent_chess:persist') == 0","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.empty","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.fatc"},"minecraft:transformation":{"rotation":[0,180,0]}}},{"condition":"q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'pawn' && q.block_state('ascent_chess:persist') == 0","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.empty","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.tpce"}}},{"condition":"q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'queen' && q.block_state('ascent_chess:persist') == 0","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.empty","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.slwp"},"minecraft:transformation":{"rotation":[0,180,0]}}},{"condition":"q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'queen' && q.block_state('ascent_chess:persist') == 0","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.empty","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.fhvi"}}},{"condition":"q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'rook' && q.block_state('ascent_chess:persist') == 0","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.empty","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.htli"},"minecraft:transformation":{"rotation":[0,180,0]}}},{"condition":"q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'rook' && q.block_state('ascent_chess:persist') == 0","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.empty","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.kdil"}}},{"condition":"q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'bishop' && q.block_state('ascent_chess:persist') == 1","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.bishop_white","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.czjo"},"minecraft:transformation":{"rotation":[0,180,0]}}},{"condition":"q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'bishop' && q.block_state('ascent_chess:persist') == 1","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.bishop_black","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.nkde"}}},{"condition":"q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'king' && q.block_state('ascent_chess:persist') == 1","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.king_white","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.hakc"},"minecraft:transformation":{"rotation":[0,180,0]}}},{"condition":"q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'king' && q.block_state('ascent_chess:persist') == 1","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.king_black","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.xufc"}}},{"condition":"q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'knight' && q.block_state('ascent_chess:persist') == 1","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.knight_white","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.fxto"},"minecraft:transformation":{"rotation":[0,180,0]}}},{"condition":"q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'knight' && q.block_state('ascent_chess:persist') == 1","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.knight_black","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.qgno"}}},{"condition":"q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'pawn' && q.block_state('ascent_chess:persist') == 1","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.pawn_white","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.fatc"},"minecraft:transformation":{"rotation":[0,180,0]}}},{"condition":"q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'pawn' && q.block_state('ascent_chess:persist') == 1","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.pawn_black","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.tpce"}}},{"condition":"q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'queen' && q.block_state('ascent_chess:persist') == 1","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.queen_white","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.slwp"},"minecraft:transformation":{"rotation":[0,180,0]}}},{"condition":"q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'queen' && q.block_state('ascent_chess:persist') == 1","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.queen_black","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.fhvi"}}},{"condition":"q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'rook' && q.block_state('ascent_chess:persist') == 1","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.rook_white","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.htli"},"minecraft:transformation":{"rotation":[0,180,0]}}},{"condition":"q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'rook' && q.block_state('ascent_chess:persist') == 1","components":{"minecraft:material_instances":{"*":{"texture":"ascent_chess.rook_black","render_method":"alpha_test","ambient_occlusion":true,"face_dimming":true}},"minecraft:geometry":{"identifier":"geometry.ascent_chess.kdil"}}}]}}
+{
+  "format_version": "1.26.0",
+  "minecraft:block": {
+    "description": {
+      "identifier": "ascent_chess:piece",
+      "states": {
+        "ascent_chess:color": { "values": { "min": 0, "max": 1 } },
+        "ascent_chess:piece_type": [
+          "bishop",
+          "king",
+          "knight",
+          "pawn",
+          "queen",
+          "rook"
+        ],
+        "ascent_chess:persist": { "values": { "min": 0, "max": 1 } }
+      }
+    },
+    "components": {
+      "minecraft:loot": "loot_tables/empty.json",
+      "ascent_chess:interactable": {},
+      "ascent_chess:piece": {},
+      "minecraft:light_emission": 10,
+      "minecraft:collision_box": {
+        "origin": [-5, 0, -5],
+        "size": [10, 16, 10]
+      },
+      "minecraft:selection_box": {
+        "origin": [-5, 0, -5],
+        "size": [10, 16, 10]
+      },
+      "minecraft:destructible_by_mining": false,
+      "minecraft:destructible_by_explosion": false,
+      "minecraft:movable": { "movement_type": "immovable" }
+    },
+    "permutations": [
+      {
+        "condition": "q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'bishop' && q.block_state('ascent_chess:persist') == 0",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.empty",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.czjo" },
+          "minecraft:transformation": { "rotation": [0, 180, 0] }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'bishop' && q.block_state('ascent_chess:persist') == 0",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.empty",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.nkde" }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'king' && q.block_state('ascent_chess:persist') == 0",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.empty",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.hakc" },
+          "minecraft:transformation": { "rotation": [0, 180, 0] }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'king' && q.block_state('ascent_chess:persist') == 0",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.empty",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.xufc" }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'knight' && q.block_state('ascent_chess:persist') == 0",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.empty",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.fxto" },
+          "minecraft:transformation": { "rotation": [0, 180, 0] }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'knight' && q.block_state('ascent_chess:persist') == 0",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.empty",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.qgno" }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'pawn' && q.block_state('ascent_chess:persist') == 0",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.empty",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.fatc" },
+          "minecraft:transformation": { "rotation": [0, 180, 0] }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'pawn' && q.block_state('ascent_chess:persist') == 0",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.empty",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.tpce" }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'queen' && q.block_state('ascent_chess:persist') == 0",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.empty",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.slwp" },
+          "minecraft:transformation": { "rotation": [0, 180, 0] }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'queen' && q.block_state('ascent_chess:persist') == 0",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.empty",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.fhvi" }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'rook' && q.block_state('ascent_chess:persist') == 0",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.empty",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.htli" },
+          "minecraft:transformation": { "rotation": [0, 180, 0] }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'rook' && q.block_state('ascent_chess:persist') == 0",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.empty",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.kdil" }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'bishop' && q.block_state('ascent_chess:persist') == 1",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.bishop_white",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.czjo" },
+          "minecraft:transformation": { "rotation": [0, 180, 0] }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'bishop' && q.block_state('ascent_chess:persist') == 1",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.bishop_black",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.nkde" }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'king' && q.block_state('ascent_chess:persist') == 1",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.king_white",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.hakc" },
+          "minecraft:transformation": { "rotation": [0, 180, 0] }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'king' && q.block_state('ascent_chess:persist') == 1",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.king_black",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.xufc" }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'knight' && q.block_state('ascent_chess:persist') == 1",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.knight_white",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.fxto" },
+          "minecraft:transformation": { "rotation": [0, 180, 0] }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'knight' && q.block_state('ascent_chess:persist') == 1",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.knight_black",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.qgno" }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'pawn' && q.block_state('ascent_chess:persist') == 1",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.pawn_white",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.fatc" },
+          "minecraft:transformation": { "rotation": [0, 180, 0] }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'pawn' && q.block_state('ascent_chess:persist') == 1",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.pawn_black",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.tpce" }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'queen' && q.block_state('ascent_chess:persist') == 1",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.queen_white",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.slwp" },
+          "minecraft:transformation": { "rotation": [0, 180, 0] }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'queen' && q.block_state('ascent_chess:persist') == 1",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.queen_black",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.fhvi" }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 0 && q.block_state('ascent_chess:piece_type') == 'rook' && q.block_state('ascent_chess:persist') == 1",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.rook_white",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.htli" },
+          "minecraft:transformation": { "rotation": [0, 180, 0] }
+        }
+      },
+      {
+        "condition": "q.block_state('ascent_chess:color') == 1 && q.block_state('ascent_chess:piece_type') == 'rook' && q.block_state('ascent_chess:persist') == 1",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "ascent_chess.rook_black",
+              "render_method": "alpha_test",
+              "ambient_occlusion": true,
+              "face_dimming": true
+            }
+          },
+          "minecraft:geometry": { "identifier": "geometry.ascent_chess.kdil" }
+        }
+      }
+    ]
+  }
+}

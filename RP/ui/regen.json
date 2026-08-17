@@ -28,7 +28,9 @@
     "type": "panel",
     "factory": {
       "name": "hud_actionbar_text_factory",
-      "control_ids": { "hud_actionbar_text": "regen_panel_non_centered@java_regen.regen_panel_non_centered" }
+      "control_ids": {
+        "hud_actionbar_text": "regen_panel_non_centered@java_regen.regen_panel_non_centered"
+      }
     }
   },
 
@@ -60,7 +62,9 @@
     "type": "panel",
     "factory": {
       "name": "hud_actionbar_text_factory",
-      "control_ids": { "hud_actionbar_text": "regen_panel_clasic@java_regen.regen_panel_clasic" }
+      "control_ids": {
+        "hud_actionbar_text": "regen_panel_clasic@java_regen.regen_panel_clasic"
+      }
     }
   },
 
@@ -92,7 +96,9 @@
     "type": "panel",
     "factory": {
       "name": "hud_actionbar_text_factory",
-      "control_ids": { "hud_actionbar_text": "regen_panel@java_regen.regen_panel" }
+      "control_ids": {
+        "hud_actionbar_text": "regen_panel@java_regen.regen_panel"
+      }
     }
   },
 

@@ -21,8 +21,13 @@
         }
       },
       "geometry": "array.bow_geo_frames[Math.Min((variable.anim_frame - 3) / 10, 2) + ((variable.anim_frame - 3) > 1)]",
-      "materials": [ { "*": "variable.is_enchanted ? material.enchanted : material.default" } ],
-      "textures": [ "array.bow_texture_frames[Math.Min((variable.anim_frame - 3) / 10, 2) + ((variable.anim_frame - 3) > 1)]", "texture.enchanted" ]
+      "materials": [
+        { "*": "variable.is_enchanted ? material.enchanted : material.default" }
+      ],
+      "textures": [
+        "array.bow_texture_frames[Math.Min((variable.anim_frame - 3) / 10, 2) + ((variable.anim_frame - 3) > 1)]",
+        "texture.enchanted"
+      ]
     }
   }
 }

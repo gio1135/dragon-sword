@@ -13,7 +13,11 @@
               "size": ["0%c", "0%c"],
               "anchor_from": "top_left",
               "anchor_to": "top_left",
-              "controls": [{ "regen_factory_non_centered@java_regen.regen_factory_non_centered": {} }],
+              "controls": [
+                {
+                  "regen_factory_non_centered@java_regen.regen_factory_non_centered": {}
+                }
+              ],
               "bindings": [
                 {
                   "binding_name": "#show_survival_ui",
@@ -53,7 +57,9 @@
             "regen_panel_clasic": {
               "type": "panel",
               "size": ["100%c", 9],
-              "controls": [{ "regen_factory_clasic@java_regen.regen_factory_clasic": {} }]
+              "controls": [
+                { "regen_factory_clasic@java_regen.regen_factory_clasic": {} }
+              ]
             }
           }
         ]

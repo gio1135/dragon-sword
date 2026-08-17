@@ -3,22 +3,36 @@ import { ClaimUI as ClaimUI_land_claims_0 } from '../modules/land_claims/ui.js';
 import { ClaimUI as ClaimUI_land_claims_1 } from '../modules/land_claims/ui.js';
 
 export const MODULES = [
-{
- id: "world_border",
- name: "World border",
- featureToggle: { "defaultEnabled": true },
- adminUI: [{ label: "World border", method: (player) => BedrockBorderUI_bedrock_border_0.openMenu(player) }]
-},
-{
- id: "land_claims",
- name: "Land claims",
- featureToggle: { "defaultEnabled": true },
- adminUI: [{ label: "Manage players", method: (player) => ClaimUI_land_claims_0.openOpPlayerList(player) }, { label: "Land claim settings", method: (player) => ClaimUI_land_claims_1.openAdminMenu(player) }]
-},
-{
- id: "outlaw",
- name: "Outlaw system",
- featureToggle: { "defaultEnabled": true },
- adminUI: null
-}
+  {
+    id: 'world_border',
+    name: 'World border',
+    featureToggle: { defaultEnabled: true },
+    adminUI: [
+      {
+        label: 'World border',
+        method: (player) => BedrockBorderUI_bedrock_border_0.openMenu(player),
+      },
+    ],
+  },
+  {
+    id: 'land_claims',
+    name: 'Land claims',
+    featureToggle: { defaultEnabled: true },
+    adminUI: [
+      {
+        label: 'Manage players',
+        method: (player) => ClaimUI_land_claims_0.openOpPlayerList(player),
+      },
+      {
+        label: 'Land claim settings',
+        method: (player) => ClaimUI_land_claims_1.openAdminMenu(player),
+      },
+    ],
+  },
+  {
+    id: 'outlaw',
+    name: 'Outlaw system',
+    featureToggle: { defaultEnabled: true },
+    adminUI: null,
+  },
 ];

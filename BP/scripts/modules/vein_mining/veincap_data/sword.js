@@ -1,6 +1,4 @@
 const SwordDefaultBlocks = {
-"minecraft:web": {}
+  'minecraft:web': {},
 };
-export {
-SwordDefaultBlocks
-};
+export { SwordDefaultBlocks };

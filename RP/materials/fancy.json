@@ -4,37 +4,25 @@
   },
   {
     "path": "materials/entity_axr.material",
-    "defines": [
-      "FANCY"
-    ]
+    "defines": ["FANCY"]
   },
   {
     "path": "materials/terrain.material",
-    "defines": [
-      "FANCY"
-    ]
+    "defines": ["FANCY"]
   },
   {
     "path": "materials/terrain.material",
-    "defines": [
-      "FANCY",
-      "FOG"
-    ]
+    "defines": ["FANCY", "FOG"]
   },
   {
     "path": "materials/hologram.material"
   },
   {
     "path": "materials/portal.material",
-    "defines": [
-      "FANCY"
-    ]
+    "defines": ["FANCY"]
   },
   {
     "path": "materials/portal.material",
-    "defines": [
-      "FANCY",
-      "FOG"
-    ]
+    "defines": ["FANCY", "FOG"]
   }
 ]

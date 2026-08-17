@@ -110,7 +110,7 @@ if (!pd.firstPoint) {
 
  const minSize = ClaimManager.settings.claimMinimumWidth;
  if (dx < minSize || dz < minSize) {
- player.sendMessage(`§cClaim too small! Minimum is §6${minSize}x${minSize}`);
+ player.sendMessage(`§cClaim too small. Minimum is §6${minSize}x${minSize}`);
  return;
  }
 
@@ -141,7 +141,7 @@ if (!pd.firstPoint) {
  }
 
  if (pd.claimBlocks.amount < costDiff) {
- player.sendMessage(`§cNot enough claim blocks! Cost: §6${costDiff}§c, You have: §6${pd.claimBlocks.amount}`);
+ player.sendMessage(`§cNot enough claim blocks. Cost: §6${costDiff}§c, You have: §6${pd.claimBlocks.amount}`);
  return;
  }
 
@@ -167,7 +167,7 @@ if (!pd.firstPoint) {
  });
 
  if (overlap) {
- player.sendMessage(`§cClaim overlaps with existing claim: '§f${overlappingClaimName}§c'`);
+ player.sendMessage('§cClaim overlaps with existing claim: \'§f' + overlappingClaimName + '§c\'');
  return;
  }
 

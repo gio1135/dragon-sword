@@ -3,7 +3,9 @@
   "minecraft:attachable": {
     "description": {
       "identifier": "minecraft:bow.animated",
-      "item": { "minecraft:bow": "!query.has_any_family('inanimate') && query.owner_identifier != 'minecraft:player'" },
+      "item": {
+        "minecraft:bow": "!query.has_any_family('inanimate') && query.owner_identifier != 'minecraft:player'"
+      },
       "materials": {
         "default": "entity_alphatest",
         "enchanted": "entity_alphatest_glint"
@@ -22,20 +24,16 @@
         "bow_pulling_2": "geometry.bow_pulling_2"
       },
       "scripts": {
-        "initialize": [
-          "variable.anim_frame = 0;"
-        ],
+        "initialize": ["variable.anim_frame = 0;"],
         "pre_animation": [
           "variable.anim_frame = query.has_target * query.facing_target_to_range_attack * !query.is_sneaking * (variable.anim_frame + query.delta_time * 20);"
         ],
-        "animate": [
-          "rotate"
-        ]
+        "animate": ["rotate"]
       },
       "animations": {
         "rotate": "animation.bow.rotate"
       },
-      "render_controllers": [ "controller.render.bow_hostile" ]
+      "render_controllers": ["controller.render.bow_hostile"]
     }
   }
 }

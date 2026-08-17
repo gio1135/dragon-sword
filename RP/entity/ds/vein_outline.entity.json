@@ -52,13 +52,9 @@
           "v.opacity = q.property('ds:opacity') / 100.0;",
           "v.a = v.opacity;"
         ],
-        "animate": [
-          "offset"
-        ]
+        "animate": ["offset"]
       },
-      "render_controllers": [
-        "controller.render.ds.vein_outline"
-      ]
+      "render_controllers": ["controller.render.ds.vein_outline"]
     }
   }
 }

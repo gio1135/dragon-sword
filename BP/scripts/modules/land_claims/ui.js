@@ -2,7 +2,7 @@ import { world, system } from '@minecraft/server';
 import { DS } from '../../core/ds.js';
 import { ClaimManager } from './manager.js';
 import { PermissionTypes, PlayerPermissions, Claim } from './classes/data_model.js';
-import { PermissionRegistry } from './classes/permission_registry.js';
+import { PermissionRegistry } from '../../core/permission_registry.js';
 
 export class ClaimUI {
 static openMainMenu(player, targetData = null) {
@@ -231,6 +231,7 @@ static deleteClaim(player, claim, targetData = null) {
  .button('Confirm delete', () => {
   const pd = targetData || ClaimManager.getOrCreatePlayer(player);
   pd.removeClaim(claim);
+  ClaimManager.rebuildCache();
 
   const dx = Math.abs(claim.start.x - claim.end.x) + 1;
   const dz = Math.abs(claim.start.z - claim.end.z) + 1;
@@ -275,46 +276,25 @@ static openOpPlayerList(player) {
 }
 
 static openOpPlayerManageMenu(player, targetData) {
- let body = `ID: ${targetData.id}\n§6Claims: §e${targetData.claims.length}`;
+  let body = `ID: ${targetData.id}\n§6Claims: §e${targetData.claims.length}`;
 
- if (targetData.outlawStatus && targetData.outlawStatus.stage > 0) {
- body += `\n§cOutlaw: §f${targetData.outlawStatus.stage} stars (${targetData.outlawStatus.timeRemaining}m)`;
- }
+  const eventPayload = {
+    player: player,
+    targetData: targetData,
+    body: body,
+    buttons: []
+  };
 
- const form = DS.ui.action(`Manage: §e${targetData.name}`, body)
- .button('Manage claims', () => {
-  this.openMainMenu(player, targetData);
- });
+  DS.events.emit('ds:op_player_manage_ui', eventPayload);
 
- if (targetData.outlawStatus && targetData.outlawStatus.stage > 0) {
- form.button('Remove 1 Star', () => {
-  targetData.outlawStatus.stage--;
-  if (targetData.outlawStatus.stage <= 0) {
-  targetData.outlawStatus.stage = 0;
-  targetData.outlawStatus.timeRemaining = 0;
-  } else {
-  targetData.outlawStatus.timeRemaining = 60;
+  const form = DS.ui.action(`Manage: §e${targetData.name}`, eventPayload.body)
+    .button('Manage claims', () => {
+      this.openMainMenu(player, targetData);
+    });
+
+  for (const btn of eventPayload.buttons) {
+    form.button(btn.text, () => btn.action(this));
   }
-  ClaimManager.save();
-
-  const victim = world.getAllPlayers().find(p => p.id === targetData.id);
-  if (victim) {
-  const stars = targetData.outlawStatus.stage;
-  if (stars > 0) {
-   const starText = stars === 1 ? 'star' : 'stars';
-   victim.sendMessage(`§aYou are at ${stars} ${starText}`);
-   if (!victim.nameTag.startsWith('\u00A7c')) {
-   victim.nameTag = '\u00A7c' + victim.name.replace(/\u00A7c/g, '');
-   }
-  } else {
-   victim.sendMessage('§aYou are at 0 stars');
-   victim.nameTag = victim.name;
-  }
-  }
-
-  this.openOpPlayerManageMenu(player, targetData);
- });
- }
 
  form.button('Delete data', () => {
  DS.ui.message('Delete all data?', `This will remove all claims and permissions for ${targetData.name}.`)
@@ -443,6 +423,7 @@ static openNewClaimMenu(player, start, end, area) {
   const newClaim = new Claim(name, start, end);
   newClaim.particlesEnabled = particles;
   pd.claims.push(newClaim);
+  ClaimManager.rebuildCache();
   pd.claimBlocks.amount -= area;
   ClaimManager.save();
 
@@ -465,6 +446,7 @@ static openResizeConfirmMenu(player, claimName, start, end, newArea, costDiff) {
   }
   claim.start = start;
   claim.end = end;
+  ClaimManager.rebuildCache();
 
   pd.claimBlocks.amount -= costDiff;
 

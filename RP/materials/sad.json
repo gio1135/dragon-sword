@@ -10,17 +10,13 @@
   },
   {
     "path": "materials/terrain.material",
-    "defines": [
-      "FOG"
-    ]
+    "defines": ["FOG"]
   },
   {
     "path": "materials/portal.material"
   },
   {
     "path": "materials/portal.material",
-    "defines": [
-      "FOG"
-    ]
+    "defines": ["FOG"]
   }
 ]

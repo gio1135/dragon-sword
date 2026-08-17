@@ -17,28 +17,28 @@
       ]
     },
     "carrots": {
-        "textures": [
-            "textures/blocks/carrots_stage_0",
-            "textures/blocks/carrots_stage_1",
-            "textures/blocks/carrots_stage_2",
-            "textures/blocks/carrots_stage_3"
-        ]
+      "textures": [
+        "textures/blocks/carrots_stage_0",
+        "textures/blocks/carrots_stage_1",
+        "textures/blocks/carrots_stage_2",
+        "textures/blocks/carrots_stage_3"
+      ]
     },
     "potatoes": {
-        "textures": [
-            "textures/blocks/potatoes_stage_0",
-            "textures/blocks/potatoes_stage_1",
-            "textures/blocks/potatoes_stage_2",
-            "textures/blocks/potatoes_stage_3"
-        ]
+      "textures": [
+        "textures/blocks/potatoes_stage_0",
+        "textures/blocks/potatoes_stage_1",
+        "textures/blocks/potatoes_stage_2",
+        "textures/blocks/potatoes_stage_3"
+      ]
     },
     "beetroot": {
-        "textures": [
-            "textures/blocks/beetroots_stage_0",
-            "textures/blocks/beetroots_stage_1",
-            "textures/blocks/beetroots_stage_2",
-            "textures/blocks/beetroots_stage_3"
-        ]
+      "textures": [
+        "textures/blocks/beetroots_stage_0",
+        "textures/blocks/beetroots_stage_1",
+        "textures/blocks/beetroots_stage_2",
+        "textures/blocks/beetroots_stage_3"
+      ]
     },
     "reeds": {
       "textures": "textures/blocks/reeds"

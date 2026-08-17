@@ -9,9 +9,7 @@
           "*": "Material.default"
         }
       ],
-      "textures": [
-        "Texture.default"
-      ],
+      "textures": ["Texture.default"],
       "overlay_color": {
         "r": "v.r",
         "g": "v.g",

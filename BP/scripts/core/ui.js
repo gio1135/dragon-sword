@@ -1,179 +1,189 @@
-import { ActionFormData, ModalFormData, MessageFormData } from '@minecraft/server-ui';
+import {
+  ActionFormData,
+  ModalFormData,
+  MessageFormData,
+} from '@minecraft/server-ui';
 
 export const UI = {
-action(title, body = "") {
- return this.createMenu(title, body);
-},
+  action(title, body = '') {
+    return this.createMenu(title, body);
+  },
 
-createMenu(title, body = "") {
- const form = new ActionFormData();
- form.title(title);
- form.body(body);
+  createMenu(title, body = '') {
+    const form = new ActionFormData();
+    form.title(title);
+    form.body(body);
 
- const wrapper = {
- callbacks: [],
- backCallback: null,
+    const wrapper = {
+      callbacks: [],
+      backCallback: null,
 
- addButton(text, arg2, arg3) {
-  let iconPath = undefined;
-  let callback = undefined;
+      addButton(text, arg2, arg3) {
+        let iconPath = undefined;
+        let callback = undefined;
 
-  if (typeof arg2 === 'function') {
-  callback = arg2;
-  } else if (typeof arg2 === 'string') {
-  iconPath = arg2;
-  if (typeof arg3 === 'function') {
-   callback = arg3;
-  }
-  }
+        if (typeof arg2 === 'function') {
+          callback = arg2;
+        } else if (typeof arg2 === 'string') {
+          iconPath = arg2;
+          if (typeof arg3 === 'function') {
+            callback = arg3;
+          }
+        }
 
-  if (iconPath) {
-  form.button(text, iconPath);
-  } else {
-  form.button(text);
-  }
+        if (iconPath) {
+          form.button(text, iconPath);
+        } else {
+          form.button(text);
+        }
 
-  this.callbacks.push(callback);
-  return this;
- },
+        this.callbacks.push(callback);
+        return this;
+      },
 
- button(text, callback) {
-  return this.addButton(text, callback);
- },
+      button(text, callback) {
+        return this.addButton(text, callback);
+      },
 
- body(text) {
-  form.body(text);
-  return this;
- },
+      body(text) {
+        form.body(text);
+        return this;
+      },
 
- back(callback) {
-  this.backCallback = callback;
-  return this;
- },
+      back(callback) {
+        this.backCallback = callback;
+        return this;
+      },
 
- async show(player) {
-  const response = await form.show(player);
+      async show(player) {
+        const response = await form.show(player);
 
-  if (response.canceled) {
-  if (this.backCallback) {
-   this.backCallback();
-   return response;
-  }
-  return response;
-  }
+        if (response.canceled) {
+          if (this.backCallback) {
+            this.backCallback();
+            return response;
+          }
+          return response;
+        }
 
-  if (response.selection === undefined) return response;
+        if (response.selection === undefined) return response;
 
-  const cb = this.callbacks[response.selection];
-  if (cb) cb();
+        const cb = this.callbacks[response.selection];
+        if (cb) cb();
 
-  return response;
- },
+        return response;
+      },
 
- raw() { return form; }
- };
- return wrapper;
-},
+      raw() {
+        return form;
+      },
+    };
+    return wrapper;
+  },
 
-modal(title) {
- return this.createForm(title);
-},
+  modal(title) {
+    return this.createForm(title);
+  },
 
-createForm(title) {
- const form = new ModalFormData();
- form.title(title);
+  createForm(title) {
+    const form = new ModalFormData();
+    form.title(title);
 
- const wrapper = {
- _submitCallback: null,
+    const wrapper = {
+      _submitCallback: null,
 
- toggle(label, defaultValue) {
-  if (defaultValue !== undefined) {
-  form.toggle(label, { defaultValue: defaultValue });
-  } else {
-  form.toggle(label);
-  }
-  return this;
- },
+      toggle(label, defaultValue) {
+        if (defaultValue !== undefined) {
+          form.toggle(label, { defaultValue: defaultValue });
+        } else {
+          form.toggle(label);
+        }
+        return this;
+      },
 
- textField(label, placeholder, defaultValue) {
-  if (defaultValue !== undefined) {
-  form.textField(label, placeholder, { defaultValue: defaultValue });
-  } else {
-  form.textField(label, placeholder);
-  }
-  return this;
- },
+      textField(label, placeholder, defaultValue) {
+        if (defaultValue !== undefined) {
+          form.textField(label, placeholder, { defaultValue: defaultValue });
+        } else {
+          form.textField(label, placeholder);
+        }
+        return this;
+      },
 
- dropdown(label, options, defaultValueIndex) {
-  if (defaultValueIndex !== undefined) {
-  form.dropdown(label, options, { defaultValueIndex: defaultValueIndex });
-  } else {
-  form.dropdown(label, options);
-  }
-  return this;
- },
+      dropdown(label, options, defaultValueIndex) {
+        if (defaultValueIndex !== undefined) {
+          form.dropdown(label, options, {
+            defaultValueIndex: defaultValueIndex,
+          });
+        } else {
+          form.dropdown(label, options);
+        }
+        return this;
+      },
 
- slider(label, min, max, step, defaultValue) {
-  const options = {};
-  if (step !== undefined && step !== null) options.valueStep = step;
-  if (defaultValue !== undefined && defaultValue !== null) options.defaultValue = defaultValue;
+      slider(label, min, max, step, defaultValue) {
+        const options = {};
+        if (step !== undefined && step !== null) options.valueStep = step;
+        if (defaultValue !== undefined && defaultValue !== null)
+          options.defaultValue = defaultValue;
 
-  if (Object.keys(options).length > 0) {
-  form.slider(label, min, max, options);
-  } else {
-  form.slider(label, min, max);
-  }
-  return this;
- },
+        if (Object.keys(options).length > 0) {
+          form.slider(label, min, max, options);
+        } else {
+          form.slider(label, min, max);
+        }
+        return this;
+      },
 
- submit(callback) {
-  this._submitCallback = callback;
-  return this;
- },
+      submit(callback) {
+        this._submitCallback = callback;
+        return this;
+      },
 
- async show(player) {
-  const response = await form.show(player);
-  if (this._submitCallback) {
-  this._submitCallback(response);
-  }
-  return response;
- }
- };
- return wrapper;
-},
+      async show(player) {
+        const response = await form.show(player);
+        if (this._submitCallback) {
+          this._submitCallback(response);
+        }
+        return response;
+      },
+    };
+    return wrapper;
+  },
 
-message(title, body, confirmText, cancelText) {
- return this.createConfirmation(title, body, confirmText, cancelText);
-},
+  message(title, body, confirmText, cancelText) {
+    return this.createConfirmation(title, body, confirmText, cancelText);
+  },
 
-createConfirmation(title, body) {
- const form = new MessageFormData();
- form.title(title);
- form.body(body);
+  createConfirmation(title, body) {
+    const form = new MessageFormData();
+    form.title(title);
+    form.body(body);
 
- const wrapper = {
- callbacks: [],
- buttonLabels: [],
+    const wrapper = {
+      callbacks: [],
+      buttonLabels: [],
 
- button(text, callback) {
-  this.buttonLabels.push(text);
-  this.callbacks.push(callback);
-  return this;
- },
+      button(text, callback) {
+        this.buttonLabels.push(text);
+        this.callbacks.push(callback);
+        return this;
+      },
 
- async show(player) {
-  if (this.buttonLabels.length > 0) form.button1(this.buttonLabels[0]);
-  if (this.buttonLabels.length > 1) form.button2(this.buttonLabels[1]);
+      async show(player) {
+        if (this.buttonLabels.length > 0) form.button1(this.buttonLabels[0]);
+        if (this.buttonLabels.length > 1) form.button2(this.buttonLabels[1]);
 
-  const response = await form.show(player);
-  if (response.canceled || response.selection === undefined) return response;
+        const response = await form.show(player);
+        if (response.canceled || response.selection === undefined)
+          return response;
 
-  const cb = this.callbacks[response.selection];
-  if (cb) cb();
+        const cb = this.callbacks[response.selection];
+        if (cb) cb();
 
-  return response;
- }
- };
- return wrapper;
-}
+        return response;
+      },
+    };
+    return wrapper;
+  },
 };

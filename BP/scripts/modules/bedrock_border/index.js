@@ -1,1 +1,1 @@
-import "./manager.js";
+import './manager.js';

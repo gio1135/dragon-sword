@@ -1,5 +1,3 @@
 {
-  "ui_defs": [
-    "ui/regen.json"
-  ]
+  "ui_defs": ["ui/regen.json"]
 }

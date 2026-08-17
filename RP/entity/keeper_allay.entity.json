@@ -12,15 +12,9 @@
       "geometry": {
         "default": "geometry.allay"
       },
-      "render_controllers": [
-        "controller.render.allay"
-      ],
+      "render_controllers": ["controller.render.allay"],
       "scripts": {
-        "animate": [
-          "bob",
-          "fly",
-          "look_at_target"
-        ]
+        "animate": ["bob", "fly", "look_at_target"]
       },
       "animations": {
         "bob": "animation.allay.idle",
