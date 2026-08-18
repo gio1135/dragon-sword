@@ -1,5 +1,0 @@
-{
-  "resource_pack_name": "ChessAddOn",
-  "texture_name": "atlas.items",
-  "texture_data": { "wamv": { "textures": "textures/ascent/chess/wsrw" } }
-}

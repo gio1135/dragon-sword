@@ -1,8 +1,12 @@
 Docs/
 *.zip
+*.mcaddon
+ContentLog*.txt
 .agentrules.md
 .cursorrules
 .gitignore
 GIT_WORKFLOW.md
 External packs/
 .agents/
+clean.py
+download_docs.bat
