@@ -733,5 +733,71 @@
   },
   "budding_amethyst": {
     "blockshape": "block"
+  },
+  "poppy": {
+    "blockshape": "cross"
+  },
+  "blue_orchid": {
+    "blockshape": "cross"
+  },
+  "allium": {
+    "blockshape": "cross"
+  },
+  "azure_bluet": {
+    "blockshape": "cross"
+  },
+  "red_tulip": {
+    "blockshape": "cross"
+  },
+  "orange_tulip": {
+    "blockshape": "cross"
+  },
+  "white_tulip": {
+    "blockshape": "cross"
+  },
+  "pink_tulip": {
+    "blockshape": "cross"
+  },
+  "oxeye_daisy": {
+    "blockshape": "cross"
+  },
+  "cornflower": {
+    "blockshape": "cross"
+  },
+  "lily_of_the_valley": {
+    "blockshape": "cross"
+  },
+  "dandelion": {
+    "blockshape": "cross"
+  },
+  "torchflower": {
+    "blockshape": "cross"
+  },
+  "wither_rose": {
+    "blockshape": "cross"
+  },
+  "sweet_berry_bush": {
+    "blockshape": "cross"
+  },
+  "sunflower": {
+    "blockshape": "double_plant"
+  },
+  "lilac": {
+    "blockshape": "double_plant"
+  },
+  "peony": {
+    "blockshape": "double_plant"
+  },
+  "rose_bush": {
+    "blockshape": "double_plant"
+  },
+  "tall_grass": {
+    "blockshape": "double_plant"
+  },
+  "large_fern": {
+    "blockshape": "double_plant"
+  },
+  "pitcher_plant": {
+    "blockshape": "double_plant"
   }
 }

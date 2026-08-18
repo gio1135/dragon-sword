@@ -53,8 +53,12 @@ static openMainMenu(player, targetData = null) {
  });
  }
 
- form.show(player).then(res => {
- if (res.canceled && targetData) this.openOpPlayerManageMenu(player, targetData);
+  form.button('Player settings', () => {
+    this.openPlayerSettings(player, pd, targetData);
+  });
+
+  form.show(player).then(res => {
+  if (res.canceled && targetData) this.openOpPlayerManageMenu(player, targetData);
  });
 }
 

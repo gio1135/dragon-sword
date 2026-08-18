@@ -8,7 +8,7 @@
   },
   "header": {
     "name": "Dragon sword",
-    "description": "Dragon sword rp v8.1.0",
+    "description": "Dragon sword rp v8.1.1",
     "min_engine_version": [
       1,
       26,
@@ -18,7 +18,7 @@
     "version": [
       8,
       1,
-      0
+      1
     ]
   },
   "modules": [
@@ -28,7 +28,7 @@
       "version": [
         8,
         1,
-        0
+        1
       ]
     }
   ]

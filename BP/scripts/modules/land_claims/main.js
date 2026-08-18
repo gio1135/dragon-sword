@@ -12,9 +12,24 @@ const { source: player, itemStack } = ev;
 if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.LAND_CLAIMS)) return;
 
 if (itemStack.typeId === SHOVEL_ID) {
- system.run(() => {
- ClaimUI.openMainMenu(player);
- });
+  ev.cancel = true;
+  system.run(() => {
+    if (player.isSneaking) {
+      const loc = {
+        x: Math.floor(player.location.x),
+        y: Math.floor(player.location.y),
+        z: Math.floor(player.location.z)
+      };
+      const pd = ClaimManager.getOrCreatePlayer(player);
+      if (!pd.firstPoint && pd.resizingClaimName === '') {
+        handleShovelInteraction(player, loc);
+      } else {
+        handleShovelInteraction(player, loc);
+      }
+    } else {
+      ClaimUI.openMainMenu(player);
+    }
+  });
 }
 });
 
@@ -53,17 +68,14 @@ if (itemStack?.typeId === SHOVEL_ID) {
   pd.resizingClaimName = claim.name;
   isResize = true;
 
-  player.sendMessage(`§aResizing '§f${claim.name}§a'. Select new corner`);
+  player.sendMessage(`§aResizing '§f${claim.name}§a'. Sneak + use shovel to set new corner`);
   player.playSound('random.orb');
   break;
   }
  }
 
  if (!isResize) {
-  if (!pd.firstPoint) {
-  pd.resizingClaimName = '';
-  }
-  handleShovelInteraction(player, block.location);
+  // Allow players to dig normally if they are not resizing
  }
  });
 }
@@ -80,7 +92,7 @@ if (!pd.firstPoint) {
  }
 
  pd.firstPoint = location;
- player.sendMessage('§aFirst corner set. Sneak + break second corner to claim');
+ player.sendMessage('§aFirst corner set. Sneak + use shovel to set second corner');
  player.playSound('random.orb');
 
  const min = ClaimManager.settings.claimMinimumWidth;
