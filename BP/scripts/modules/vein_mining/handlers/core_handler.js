@@ -164,6 +164,7 @@ export function ExecuteSingleBreak(player, blockList, targetTypeId, magnetPos) {
       const remainingDur = dur.maxDurability - dur.damage;
 
       if (remainingDur <= 1) {
+        player.playSound('note.bass');
         return StopMining(player, session);
       }
 

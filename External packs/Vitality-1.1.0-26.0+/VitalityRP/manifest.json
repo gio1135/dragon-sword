@@ -1,0 +1,26 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Vitality [RP]",
+    "description": "By Areed. Exact Java edition Food Regeneration and saturation parity, Even with same hearts animation",
+    "uuid": "e0c41748-7e99-4feb-ba04-bcb4c5c74c12",
+    "version": [1, 1, 0],
+    "min_engine_version": [1, 21, 130]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "ee3732c8-9416-4902-b5f6-46795057f9fd",
+      "version": [1, 0, 0]
+    }
+  ],
+  "dependencies": [
+    {
+      "uuid": "1b0b1c85-286f-413f-9c8f-a2060f64e430",
+      "version": [1, 0, 0]
+    }
+  ],
+      "capabilities" : [
+      "pbr"
+  ]
+}

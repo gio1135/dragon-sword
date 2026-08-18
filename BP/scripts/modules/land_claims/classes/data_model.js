@@ -126,6 +126,7 @@ export class Claim {
     this.end = end;
     this.permissions = new Permissions();
     this.particlesEnabled = true;
+    this.showTitle = true;
     this.playerPermissionsList = [];
   }
 
@@ -221,6 +222,7 @@ export class Claim {
     );
     c.particlesEnabled =
       data.particlesEnabled ?? data._particlesEnabled ?? true;
+    c.showTitle = data.showTitle ?? data._showTitle ?? true;
     c.permissions = Permissions.fromJSON(data.permissions ?? data._permissions);
 
     const ppl = data.playerPermissionsList ?? data._playerPermissionsList ?? [];
@@ -246,6 +248,7 @@ export class PlayerData {
     this.resizingClaimName = '';
     this.lastClaimBlockPayment = Date.now();
     this.playtimeTicks = 0;
+    this.showClaimParticles = false;
   }
 
   removeClaim(claim) {
@@ -279,6 +282,7 @@ export class PlayerData {
     pd.lastClaimBlockPayment =
       data.lastClaimBlockPayment ?? data._lastClaimBlockPayment ?? Date.now();
     pd.playtimeTicks = data.playtimeTicks ?? data._playtimeTicks ?? 0;
+    pd.showClaimParticles = data.showClaimParticles ?? data._showClaimParticles ?? false;
 
     return pd;
   }

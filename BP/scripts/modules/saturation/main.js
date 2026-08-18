@@ -87,7 +87,6 @@ function processPlayer(player) {
     }
   }
 
-  player.onScreenDisplay.setActionBar(`!js.${Math.floor(saturationVal)}`);
 }
 
 export function addExhaustion(player, amount) {

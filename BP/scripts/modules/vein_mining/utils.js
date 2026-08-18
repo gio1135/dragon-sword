@@ -31,47 +31,6 @@ export const GetLocId = (p) => {
 };
 
 export function DisplayActionBar(player, data) {
-  if (!player?.isValid) return;
-
-  let msg = '';
-
-  if (data.type === 'mining') {
-    const ratio = data.current / data.max;
-    const percent = Math.floor(ratio * 100);
-    const barLen = 5;
-    const filled = Math.floor(ratio * barLen);
-
-    let parts = [];
-    parts.push(`§e${percent}%`);
-    parts.push(`§a${'█'.repeat(filled)}§7${'░'.repeat(barLen - filled)}`);
-    parts.push(`§7(§f${data.current}§7/§f${data.max}§7)`);
-
-    msg = `§l§6Mining §r${parts.join(' ')}`;
-  } else if (data.type === 'scanning') {
-    const rawName = data.blockName
-      ? data.blockName.split(':').pop().replace(/_/g, ' ')
-      : 'block';
-
-    const name = rawName.charAt(0).toUpperCase() + rawName.slice(1);
-    const color = data.current >= data.max ? '§a' : '§6';
-
-    msg =
-      `§b${name}\n` + `${color}Scanned: §f${data.current} §7/ §f${data.max}`;
-  } else if (data.type === 'ready') {
-    const rawName = data.blockName
-      ? data.blockName.split(':').pop().replace(/_/g, ' ')
-      : 'block';
-
-    const name = rawName.charAt(0).toUpperCase() + rawName.slice(1);
-
-    msg = `§b${name}\n` + `§aReady: §f${data.current} §7/ §f${data.max}`;
-  } else if (data.type === 'finish') {
-    msg = `§aDone: §f${data.max} blocks`;
-  } else if (data.type === 'stop') {
-    msg = `§cStopped`;
-  }
-
-  player.onScreenDisplay.setActionBar(msg);
 }
 
 export const CONNECTION_OFFSETS = [

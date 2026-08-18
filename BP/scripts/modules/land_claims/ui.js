@@ -42,6 +42,10 @@ static openMainMenu(player, targetData = null) {
 
  const form = DS.ui.action(title, desc);
 
+ form.button('Player settings\nConfigure your UI', () => {
+  this.openPlayerSettings(player, pd, targetData);
+ });
+
  for (const claim of pd.claims) {
  if (!claim || !claim.start || !claim.end) continue;
  const dx = Math.abs(claim.start.x - claim.end.x) + 1;
@@ -74,22 +78,41 @@ static openClaimDetails(player, claim, targetData = null) {
  });
 }
 
+static openPlayerSettings(player, pd, targetData = null) {
+  DS.ui.modal('Player settings')
+  .toggle('Show other players\' claim particles', pd.showClaimParticles)
+  .submit(response => {
+    if (response.canceled) {
+      this.openMainMenu(player, targetData);
+      return;
+    }
+    const [showClaimParticles] = response.formValues;
+    pd.showClaimParticles = showClaimParticles;
+    ClaimManager.save();
+    player.sendMessage('§aSettings updated');
+    this.openMainMenu(player, targetData);
+  })
+  .show(player);
+}
+
 static openConfig(player, claim, targetData = null) {
  DS.ui.modal('Config')
  .textField('Claim name', 'Enter claim name', claim.name)
- .toggle('Show particles', claim.particlesEnabled)
+ .toggle('Show particles to others', claim.particlesEnabled)
+ .toggle('Show title to others', claim.showTitle)
  .submit(response => {
   if (response.canceled) {
   this.openClaimDetails(player, claim, targetData);
   return;
   }
-  const [newName, showParticles] = response.formValues;
+  const [newName, showParticles, showTitle] = response.formValues;
 
   if (claim.name !== newName && newName.trim() !== '') {
   claim.name = newName;
   player.sendMessage(`§aRenamed to §f${claim.name}`);
   }
   claim.particlesEnabled = showParticles;
+  claim.showTitle = showTitle;
   ClaimManager.save();
   player.sendMessage('§aConfig updated');
   this.openClaimDetails(player, claim, targetData);

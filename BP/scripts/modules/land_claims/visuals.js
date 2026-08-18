@@ -157,7 +157,7 @@ system.runInterval(() => {
       showClaimParticles(player, claim, pLoc, claimShovelOut);
     });
   }
-}, 40);
+}, 10);
 
 function showClaimParticles(player, claim, pLoc, claimShovelOut) {
   const isOwner = claim.getOwnerData(ClaimManager.database)?.id === player.id;
@@ -168,7 +168,12 @@ function showClaimParticles(player, claim, pLoc, claimShovelOut) {
   );
 
   const isClose = claim.isOverlap(pLoc, pLoc, 24);
-  const shouldRender = claimShovelOut || player.hasTag('debug_claims');
+  const playerData = ClaimManager.getOrCreatePlayer(player);
+  let shouldRender = claimShovelOut || player.hasTag('debug_claims') || (playerData && playerData.showClaimParticles);
+
+  if (!isOwner && !claim.particlesEnabled) {
+    shouldRender = false;
+  }
 
   if (shouldRender) {
     const particleType = !canEnter

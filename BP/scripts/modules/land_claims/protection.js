@@ -439,19 +439,23 @@ system.runInterval(() => {
 
       const ownerData = insideClaim.getOwnerData(ClaimManager.database);
       const ownerName = ownerData ? ownerData.name : 'Unknown';
-      const infoString = `${insideClaim.name}§r - ${ownerName}`;
+      
+      let infoString = '';
+      if (insideClaim.showTitle !== false || (ownerData && ownerData.id === player.id)) {
+        infoString = `${insideClaim.name}§r - ${ownerName}`;
+      }
 
       if (!canEnter) {
         const safePos = PLAYER_POSITIONS.get(player.id);
         if (safePos && !insideClaim.isOverlap(safePos)) {
           player.teleport(safePos, { dimension: player.dimension });
-          player.onScreenDisplay.setActionBar(infoString);
+          if (infoString) player.onScreenDisplay.setActionBar(infoString);
         } else {
-          player.onScreenDisplay.setActionBar(infoString);
+          if (infoString) player.onScreenDisplay.setActionBar(infoString);
           notify(player, "You don't have permission to enter this claim");
         }
       } else {
-        player.onScreenDisplay.setActionBar(infoString);
+        if (infoString) player.onScreenDisplay.setActionBar(infoString);
 
         const lastClaimId = player.getDynamicProperty('ds:last_claim_id');
         const currentSig = insideClaim.name + insideClaim.start.x;
