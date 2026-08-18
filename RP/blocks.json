@@ -515,7 +515,6 @@
     "blockshape": "dragon_egg"
   },
   "double_plant": {
-    "blockshape": "double_plant"
   },
   "daylight_detector_inverted": {
     "blockshape": "block"
@@ -780,7 +779,6 @@
     "blockshape": "cross"
   },
   "sunflower": {
-    "blockshape": "double_plant",
     "carried_textures": "sunflower_carried",
     "sound": "grass",
     "textures": {
@@ -790,7 +788,6 @@
     }
   },
   "lilac": {
-    "blockshape": "double_plant",
     "carried_textures": "lilac_carried",
     "sound": "grass",
     "textures": {
@@ -800,7 +797,6 @@
     }
   },
   "peony": {
-    "blockshape": "double_plant",
     "carried_textures": "peony_carried",
     "sound": "grass",
     "textures": {
@@ -810,7 +806,6 @@
     }
   },
   "rose_bush": {
-    "blockshape": "double_plant",
     "carried_textures": "rose_bush_carried",
     "sound": "grass",
     "textures": {
@@ -820,7 +815,6 @@
     }
   },
   "tall_grass": {
-    "blockshape": "double_plant",
     "carried_textures": "tall_grass_carried",
     "sound": "grass",
     "textures": {
@@ -830,7 +824,6 @@
     }
   },
   "large_fern": {
-    "blockshape": "double_plant",
     "carried_textures": "large_fern_carried",
     "sound": "grass",
     "textures": {
@@ -840,7 +833,6 @@
     }
   },
   "pitcher_plant": {
-    "blockshape": "double_plant",
     "carried_textures": "pitcher_plant_carried",
     "sound": "grass",
     "textures": {
