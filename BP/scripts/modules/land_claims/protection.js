@@ -93,7 +93,7 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
         cancelled = true;
         notify(player, "You don't have permission to use doors");
       }
-      return;
+      continue;
     }
     if (
       (id.includes('button') ||
@@ -112,7 +112,7 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
         cancelled = true;
         notify(player, "You don't have permission to use switches");
       }
-      return;
+      continue;
     }
     if (id.includes('bed') && !player.isSneaking) {
       if (
@@ -125,7 +125,7 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
         cancelled = true;
         notify(player, "You don't have permission to use beds");
       }
-      return;
+      continue;
     }
     if (id.includes('sign')) {
       if (
@@ -138,7 +138,7 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
         cancelled = true;
         notify(player, "You don't have permission to edit signs");
       }
-      return;
+      continue;
     }
     if (id === 'minecraft:tnt') {
       if (
@@ -156,7 +156,7 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
           notify(player, 'Explosions are disabled in this claim');
         }
       }
-      return;
+      continue;
     }
     const isContainer =
       block.getComponent('minecraft:inventory') ||
@@ -177,11 +177,11 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
           cancelled = true;
           notify(player, "You don't have permission to open containers");
         }
-        return;
+        continue;
       }
     }
 
-    if (itemStack?.typeId === SHOVEL_ID) return;
+    if (itemStack?.typeId === SHOVEL_ID) continue;
 
     if (isBlockPlacement) {
       if (itemStack.typeId === 'minecraft:tnt') {
@@ -197,7 +197,7 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
         }
       }
 
-      if (cancelled) return;
+      if (cancelled) break;
 
       if (
         !claim.hasPermission(

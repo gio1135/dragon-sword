@@ -27,6 +27,8 @@ function handleAdminTool(player, itemStack, cancelCallback) {
 
 world.beforeEvents.itemUse.subscribe((ev) => {
   const player = ev.source;
+  const ray = player.getBlockFromViewDirection({ maxDistance: 8 });
+  if (ray && ray.block && ray.block.typeId === 'minecraft:lodestone') return;
   handleAdminTool(player, ev.itemStack, () => {
     ev.cancel = true;
   });
