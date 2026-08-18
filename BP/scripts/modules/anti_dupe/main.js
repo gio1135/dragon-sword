@@ -1,8 +1,10 @@
 import { world, system, ItemStack } from '@minecraft/server';
 import { DS } from '../../core/ds.js';
+import { FeatureFlags } from '../../core/feature_flags.js';
 
 world.afterEvents.playerSpawn.subscribe(({ player, initialSpawn }) => {
   if (!initialSpawn || !player) return;
+  if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.ANTI_DUPE)) return;
 
   try {
     const cursor = player.getComponent('minecraft:cursor_inventory');
@@ -57,6 +59,7 @@ const OFFSETS = [
 ];
 
 world.afterEvents.pistonActivate.subscribe((event) => {
+  if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.ANTI_DUPE)) return;
   const { block } = event;
   const dim = block.dimension;
 
@@ -121,6 +124,7 @@ const HOPPER_RADIUS = 4;
 const SCAN_INTERVAL = 60;
 
 system.runInterval(() => {
+  if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.ANTI_DUPE)) return;
   try {
     for (const player of world.getAllPlayers()) {
       const dim = player.dimension;

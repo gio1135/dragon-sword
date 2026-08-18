@@ -16,7 +16,14 @@ async function setNaturalRegen(value) {
   }
 }
 
+import { FeatureFlags } from '../../core/feature_flags.js';
+
 system.runInterval(() => {
+  if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.SATURATION)) {
+    if (!world.gameRules.naturalRegeneration) setNaturalRegen(true);
+    return;
+  }
+
   if (world.gameRules.naturalRegeneration) {
     setNaturalRegen(false);
   }

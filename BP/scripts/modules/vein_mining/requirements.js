@@ -2,6 +2,7 @@ import { EquipmentSlot } from '@minecraft/server';
 import { IsBlockAllowedForTool } from './vein_registry.js';
 import { BLOCK_REQUIREMENTS } from './registry.js';
 import { addExhaustion } from '../saturation/main.js';
+import { FeatureFlags } from '../../core/feature_flags.js';
 
 export function GetBlockCategory(blockTypeId) {
   if (
@@ -35,6 +36,7 @@ export function GetBlockCategory(blockTypeId) {
 }
 
 export function IsActivated(player) {
+  if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.VEIN_MINING)) return false;
   if (player.hasTag('ds:disable_veinminer')) return false;
 
   const equipment = player.getComponent('minecraft:equippable');

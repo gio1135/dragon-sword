@@ -9,7 +9,6 @@ export const BedrockBorderUI = {
       return;
     }
 
-    player.runCommandAsync('damage @s 0');
 
     const form = DS.ui.action('World border');
 

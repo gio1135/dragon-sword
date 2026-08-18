@@ -2,6 +2,7 @@ import { world, system } from '@minecraft/server';
 import { DS } from '../../core/ds.js';
 import { Utils } from '../../core/utils.js';
 import { Lang } from '../../lang/Lang.js';
+import { FeatureFlags } from '../../core/feature_flags.js';
 
 const SETTINGS = {
   LOCK_NETHER: 'ds:lock_nether',
@@ -20,6 +21,7 @@ function isLocked(propertyId) {
 }
 
 world.afterEvents.playerDimensionChange.subscribe((event) => {
+  if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.DIMENSION_LOCK)) return;
   const { player, toDimension, fromDimension, fromLocation } = event;
 
   let locked = false;
@@ -102,6 +104,7 @@ function isPartofPortal(dim, pos, center) {
 }
 
 system.runInterval(() => {
+  if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.DIMENSION_LOCK)) return;
   const netherLocked = isLocked(SETTINGS.LOCK_NETHER);
   const endLocked = isLocked(SETTINGS.LOCK_END);
 
@@ -133,6 +136,7 @@ system.runInterval(() => {
 }, 30);
 
 world.beforeEvents.playerInteractWithBlock.subscribe((event) => {
+  if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.DIMENSION_LOCK)) return;
   const { player, itemStack, block } = event;
   if (!itemStack) return;
 
@@ -213,6 +217,7 @@ function kickPlayers(dimId) {
 }
 
 world.afterEvents.playerSpawn.subscribe((ev) => {
+  if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.DIMENSION_LOCK)) return;
   const { player } = ev;
   const dimId = player.dimension.id;
 

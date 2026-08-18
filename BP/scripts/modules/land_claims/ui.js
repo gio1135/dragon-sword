@@ -42,10 +42,6 @@ static openMainMenu(player, targetData = null) {
 
  const form = DS.ui.action(title, desc);
 
- form.button('Player settings\nConfigure your UI', () => {
-  this.openPlayerSettings(player, pd, targetData);
- });
-
  for (const claim of pd.claims) {
  if (!claim || !claim.start || !claim.end) continue;
  const dx = Math.abs(claim.start.x - claim.end.x) + 1;

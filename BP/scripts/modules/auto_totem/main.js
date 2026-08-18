@@ -5,7 +5,11 @@ const TOTEM = 'minecraft:totem_of_undying';
 const LOW_HEALTH = 6;
 const ALERT_TAG = 'ds:hp_alert';
 
+import { FeatureFlags } from '../../core/feature_flags.js';
+
 system.runInterval(() => {
+  if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.AUTO_TOTEM)) return;
+
   for (const player of world.getAllPlayers()) {
     try {
       const health = player.getComponent('minecraft:health');

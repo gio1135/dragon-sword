@@ -142,7 +142,8 @@ system.runInterval(() => {
     ClaimManager.runInAllClaims((claim) => {
       if (!claim || !claim.start || !claim.end) return;
 
-      if (!claimShovelOut && !player.hasTag('debug_claims')) return;
+      const shouldRenderLocal = claimShovelOut || player.hasTag('debug_claims') || (playerData && playerData.showClaimParticles);
+      if (!shouldRenderLocal) return;
 
       const claimCenter = {
         x: (claim.start.x + claim.end.x) / 2,

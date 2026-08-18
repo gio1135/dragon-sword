@@ -35,4 +35,40 @@ export const MODULES = [
     featureToggle: { defaultEnabled: true },
     adminUI: null,
   },
+  {
+    id: 'vein_mining',
+    name: 'Vein mining',
+    featureToggle: { defaultEnabled: true },
+    adminUI: null,
+  },
+  {
+    id: 'saturation',
+    name: 'Saturation',
+    featureToggle: { defaultEnabled: true },
+    adminUI: null,
+  },
+  {
+    id: 'tpa',
+    name: 'TPA',
+    featureToggle: { defaultEnabled: true },
+    adminUI: null,
+  },
+  {
+    id: 'anti_dupe',
+    name: 'Anti-dupe',
+    featureToggle: { defaultEnabled: true },
+    adminUI: null,
+  },
+  {
+    id: 'dimension_lock',
+    name: 'Dimension lock',
+    featureToggle: { defaultEnabled: true },
+    adminUI: null,
+  },
+  {
+    id: 'auto_totem',
+    name: 'Auto totem',
+    featureToggle: { defaultEnabled: true },
+    adminUI: null,
+  }
 ];

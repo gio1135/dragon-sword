@@ -9,6 +9,7 @@ const recentTeleports = new Map();
 world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
   const { player, block, itemStack } = ev;
   if (!itemStack) return;
+  if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.TPA)) return;
 
   if (block.typeId === 'minecraft:lodestone') {
     if (
