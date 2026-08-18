@@ -780,24 +780,73 @@
     "blockshape": "cross"
   },
   "sunflower": {
-    "blockshape": "double_plant"
+    "blockshape": "double_plant",
+    "carried_textures": "sunflower_carried",
+    "sound": "grass",
+    "textures": {
+      "down": "sunflower_bottom",
+      "side": "sunflower_additional",
+      "up": "sunflower_top"
+    }
   },
   "lilac": {
-    "blockshape": "double_plant"
+    "blockshape": "double_plant",
+    "carried_textures": "lilac_carried",
+    "sound": "grass",
+    "textures": {
+      "down": "lilac_bottom",
+      "side": "lilac_additional",
+      "up": "lilac_top"
+    }
   },
   "peony": {
-    "blockshape": "double_plant"
+    "blockshape": "double_plant",
+    "carried_textures": "peony_carried",
+    "sound": "grass",
+    "textures": {
+      "down": "peony_bottom",
+      "side": "sunflower_additional",
+      "up": "peony_top"
+    }
   },
   "rose_bush": {
-    "blockshape": "double_plant"
+    "blockshape": "double_plant",
+    "carried_textures": "rose_bush_carried",
+    "sound": "grass",
+    "textures": {
+      "down": "rose_bush_bottom",
+      "side": "sunflower_additional",
+      "up": "rose_bush_top"
+    }
   },
   "tall_grass": {
-    "blockshape": "double_plant"
+    "blockshape": "double_plant",
+    "carried_textures": "tall_grass_carried",
+    "sound": "grass",
+    "textures": {
+      "down": "tall_grass_bottom",
+      "side": "sunflower_additional",
+      "up": "tall_grass_top"
+    }
   },
   "large_fern": {
-    "blockshape": "double_plant"
+    "blockshape": "double_plant",
+    "carried_textures": "large_fern_carried",
+    "sound": "grass",
+    "textures": {
+      "down": "large_fern_bottom",
+      "side": "sunflower_additional",
+      "up": "large_fern_top"
+    }
   },
   "pitcher_plant": {
-    "blockshape": "double_plant"
+    "blockshape": "double_plant",
+    "carried_textures": "pitcher_plant_carried",
+    "sound": "grass",
+    "textures": {
+      "down": "pitcher_plant_bottom",
+      "side": "pitcher_plant_bottom",
+      "up": "pitcher_plant_top"
+    }
   }
 }
