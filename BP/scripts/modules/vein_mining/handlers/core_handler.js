@@ -14,21 +14,23 @@ export function RunChainBreak2(
   magnetPos,
   initialCount = null,
 ) {
-  const topDownBlocks = [
+  const gravityBlocks = [
     'minecraft:gravel',
     'minecraft:sand',
     'minecraft:red_sand',
+    'minecraft:suspicious_sand',
+    'minecraft:suspicious_gravel',
+  ];
+  const isGravity = gravityBlocks.includes(targetTypeId) || targetTypeId.includes('concrete_powder');
+
+  const topDownBlocks = [
     'minecraft:clay',
     'minecraft:snow_layer',
     'minecraft:twisting_vines',
     'minecraft:vine',
-    'minecraft:suspicious_sand',
-    'minecraft:suspicious_gravel',
     'minecraft:soul_sand',
   ];
-  const isTopDown =
-    topDownBlocks.includes(targetTypeId) ||
-    targetTypeId.includes('concrete_powder');
+  const isTopDown = topDownBlocks.includes(targetTypeId);
   const isDownUp = targetTypeId === 'minecraft:weeping_vines';
 
   if (isTopDown || isDownUp) {
@@ -40,6 +42,10 @@ export function RunChainBreak2(
   }
 
   let session = highlightManager.sessions.get(player.id);
+  if (session) {
+    session.isGravity = isGravity;
+  }
+
   if (!session || session.isStopped) return;
 
   if (initialCount === null) initialCount = blockList.length;
@@ -71,7 +77,7 @@ export function ProcessMiningStep(
   if (!session || session.isStopped) return;
 
   const remainingInList = blockList.length - session.currentIndex;
-  const blocksToBreak = Math.min(remainingInList, 12);
+  const blocksToBreak = session.isGravity ? remainingInList : Math.min(remainingInList, 12);
 
   system.run(() => {
     if (!player.isValid) return;

@@ -9,7 +9,7 @@ export function IsBlockAllowedForTool(
 
   const isLeaf = blockId.includes('leaves') || blockId.includes('_leaf');
   if (isLeaf) {
-    if (type === 'hoe' || type === 'shears') {
+    if (type === 'hoe' || type === 'shears' || type === 'axe' || hasSilkTouch) {
       return true;
     }
   }

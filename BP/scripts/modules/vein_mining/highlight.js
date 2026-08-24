@@ -1,22 +1,22 @@
-import { world, EquipmentSlot } from '@minecraft/server';
+import { world, EquipmentSlot } from "@minecraft/server";
 import {
   GetBlockCategory,
   IsActivated,
   IsBlockAllowed,
-} from './requirements.js';
-import { GetPattern } from './modes.js';
-import { GetLocId, DisplayActionBar, CONNECTION_OFFSETS } from './utils.js';
+} from "./requirements.js";
+import { GetPattern } from "./modes.js";
+import { GetLocId, DisplayActionBar, CONNECTION_OFFSETS } from "./utils.js";
 import {
   OUTLINE_STYLES,
   LIQUIDS,
   HOEBLOCK,
   SHOVELABLE_BLOCKS,
-} from './registry.js';
+} from "./registry.js";
 import {
   CheckModeActive,
   ValidateMining,
   RunChainBreak2,
-} from './break_handler.js';
+} from "./break_handler.js";
 
 const BREAK_QUEUE = new Map();
 
@@ -68,7 +68,7 @@ class HighlightManager {
     session.blockSet.delete(locId);
     if (session.blockSet.size === 0) {
       const player = world.getAllPlayers().find((p) => p.id === playerId);
-      if (player) player.onScreenDisplay.setActionBar('');
+      if (player) player.onScreenDisplay.setActionBar("");
     }
   }
 
@@ -91,11 +91,11 @@ class HighlightManager {
     BREAK_QUEUE.delete(playerId);
   }
 
-  isValidLocation(loc, dimensionId = 'minecraft:overworld') {
-    if (dimensionId === 'minecraft:nether') {
+  isValidLocation(loc, dimensionId = "minecraft:overworld") {
+    if (dimensionId === "minecraft:nether") {
       return loc.y >= 0 && loc.y <= 127;
     }
-    if (dimensionId === 'minecraft:the_end') {
+    if (dimensionId === "minecraft:the_end") {
       return loc.y >= 0 && loc.y <= 255;
     }
     return loc.y >= -64 && loc.y <= 320;
@@ -111,6 +111,29 @@ class HighlightManager {
       const breakData = queue.shift();
 
       if (session?.isMining) continue;
+
+      const gravityBlocks = [
+        "minecraft:gravel",
+        "minecraft:sand",
+        "minecraft:red_sand",
+        "minecraft:suspicious_sand",
+        "minecraft:suspicious_gravel",
+      ];
+      const isGravity =
+        gravityBlocks.includes(breakData.typeId) ||
+        breakData.typeId.includes("concrete_powder");
+
+      if (isGravity) {
+        const fallingBlocks = player.dimension.getEntities({
+          type: "minecraft:falling_block",
+          location: breakData.pos,
+          maxDistance: 8,
+        });
+        if (fallingBlocks.length > 0) {
+          queue.unshift(breakData);
+          return;
+        }
+      }
 
       if (session && session.blockSet.has(breakData.locId)) {
         const blockList = Array.from(session.blockSet);
@@ -167,7 +190,7 @@ class HighlightManager {
     } else if (extraFlags.isShovel) {
       this.expandShovelSearch(player, newSession, 256);
     } else {
-      this.expandSearch(player, newSession, 'standard_v3', 512);
+      this.expandSearch(player, newSession, "standard_v3", 512);
     }
 
     newSession.isFinished = true;
@@ -184,7 +207,7 @@ class HighlightManager {
     const faceMap = new Map();
 
     blockSet.forEach((locId) => {
-      const parts = locId.split(',');
+      const parts = locId.split(",");
       const x = parseInt(parts[0]);
       const y = parseInt(parts[1]);
       const z = parseInt(parts[2]);
@@ -209,12 +232,12 @@ class HighlightManager {
   }
 
   isFullyEnclosed(hiddenFaces) {
-    const n = hiddenFaces.has('ds:north');
-    const s = hiddenFaces.has('ds:south');
-    const e = hiddenFaces.has('ds:east');
-    const w = hiddenFaces.has('ds:west');
-    const u = hiddenFaces.has('ds:up');
-    const d = hiddenFaces.has('ds:down');
+    const n = hiddenFaces.has("ds:north");
+    const s = hiddenFaces.has("ds:south");
+    const e = hiddenFaces.has("ds:east");
+    const w = hiddenFaces.has("ds:west");
+    const u = hiddenFaces.has("ds:up");
+    const d = hiddenFaces.has("ds:down");
 
     return (
       (n && s && e && w && u && d) ||
@@ -228,7 +251,7 @@ class HighlightManager {
     if (!player) return;
     const session = this.sessions.get(player.id);
     if (session) {
-      player.onScreenDisplay.setActionBar('');
+      player.onScreenDisplay.setActionBar("");
       if (session.lightsMap) {
         session.lightsMap.forEach((ent) => {
           if (ent && ent.isValid) {
@@ -258,8 +281,8 @@ class HighlightManager {
       });
       if (entity) {
         this.trackedEntities.add(entity);
-        entity.setProperty('ds:style_id', colorIdx);
-        entity.setProperty('ds:opacity', 100);
+        entity.setProperty("ds:style_id", colorIdx);
+        entity.setProperty("ds:opacity", 100);
 
         hiddenFaces.forEach((prop) => {
           try {
@@ -276,8 +299,8 @@ class HighlightManager {
   updateOutline(entity, hiddenFaces, colorIdx, opacity) {
     if (!entity || !entity.isValid) return;
     try {
-      entity.setProperty('ds:style_id', colorIdx);
-      entity.setProperty('ds:opacity', opacity);
+      entity.setProperty("ds:style_id", colorIdx);
+      entity.setProperty("ds:opacity", opacity);
       for (const offset of CONNECTION_OFFSETS) {
         if (offset.prop) {
           entity.setProperty(offset.prop, true);
@@ -291,14 +314,14 @@ class HighlightManager {
 
   getActiveToolMode(player) {
     const tool = player
-      .getComponent('minecraft:equippable')
+      .getComponent("minecraft:equippable")
       ?.getEquipment(EquipmentSlot.Mainhand);
-    if (!tool) return 'none';
+    if (!tool) return "none";
 
-    if (tool.typeId.includes('_hoe')) return 'hoe';
-    if (tool.typeId.includes('_shovel')) return 'shovel';
-    if (tool.typeId === 'minecraft:bucket') return 'bucket';
-    return 'mining';
+    if (tool.typeId.includes("_hoe")) return "hoe";
+    if (tool.typeId.includes("_shovel")) return "shovel";
+    if (tool.typeId === "minecraft:bucket") return "bucket";
+    return "mining";
   }
 
   syncEntities(player, session) {
@@ -322,7 +345,7 @@ class HighlightManager {
         if (entity && entity.isValid) {
           this.updateOutline(entity, hiddenFaces, colorIdx, opacity);
         } else {
-          const parts = locId.split(',');
+          const parts = locId.split(",");
           const location = {
             x: parseInt(parts[0]),
             y: parseInt(parts[1]),
@@ -355,7 +378,7 @@ class HighlightManager {
     if (!player?.isValid) return;
 
     const tool = player
-      .getComponent('minecraft:equippable')
+      .getComponent("minecraft:equippable")
       ?.getEquipment(EquipmentSlot.Mainhand);
 
     let session = this.sessions.get(player.id);
@@ -377,7 +400,7 @@ class HighlightManager {
     if (session && !session.isMining) {
       if (
         !currentBlock ||
-        currentBlock.typeId === 'minecraft:air' ||
+        currentBlock.typeId === "minecraft:air" ||
         !session.blockSet.has(currentLocId)
       ) {
         const currentBlock = player.dimension.getBlock(session.origin);
@@ -394,7 +417,7 @@ class HighlightManager {
       }
     }
 
-    if (!session && currentBlock && currentBlock.typeId !== 'minecraft:air') {
+    if (!session && currentBlock && currentBlock.typeId !== "minecraft:air") {
       if (!IsBlockAllowed(player, currentBlock.typeId)) return;
       if (!GetBlockCategory(currentBlock.typeId)) return;
 
@@ -411,16 +434,16 @@ class HighlightManager {
     const prevSize = session.blockSet.size;
 
     if (!session.isFinished && session.blockSet.size < 256) {
-      this.expandSearch(player, session, 'standard_v3', 256);
+      this.expandSearch(player, session, "standard_v3", 256);
       if (session.queue.length === 0) {
         session.isFinished = true;
       }
     }
 
     if (true && !session.isMining) {
-      const blockName = session.blockType.split(':')[1].replace(/_/g, ' ');
+      const blockName = session.blockType.split(":")[1].replace(/_/g, " ");
       DisplayActionBar(player, {
-        type: session.isFinished ? 'ready' : 'scanning',
+        type: session.isFinished ? "ready" : "scanning",
         current: session.blockSet.size,
         max: 256,
         blockName,
@@ -453,14 +476,14 @@ class HighlightManager {
       return;
     }
 
-    const inventory = player.getComponent('minecraft:inventory').container;
+    const inventory = player.getComponent("minecraft:inventory").container;
     const tool = player
-      .getComponent('minecraft:equippable')
+      .getComponent("minecraft:equippable")
       ?.getEquipment(EquipmentSlot.Mainhand);
     const bucketTypes = [
-      'minecraft:bucket',
-      'minecraft:water_bucket',
-      'minecraft:lava_bucket',
+      "minecraft:bucket",
+      "minecraft:water_bucket",
+      "minecraft:lava_bucket",
     ];
 
     if (!bucketTypes.includes(tool?.typeId)) {
@@ -472,7 +495,7 @@ class HighlightManager {
     let emptyBucketCount = 0;
     for (let i = 0; i < inventory.size; i++) {
       const item = inventory.getItem(i);
-      if (item?.typeId === 'minecraft:bucket') {
+      if (item?.typeId === "minecraft:bucket") {
         emptyBucketCount += item.amount;
       }
     }
@@ -517,7 +540,7 @@ class HighlightManager {
     if (!session) return;
 
     if (!session.isFinished) {
-      this.expandSearch(player, session, 'standard_v3', scanLimit, scanLimit);
+      this.expandSearch(player, session, "standard_v3", scanLimit, scanLimit);
       session.isFinished = true;
     }
 
@@ -525,9 +548,9 @@ class HighlightManager {
       session.faceMap = this.buildFaceMap(session.blockSet);
       this.syncEntities(player, session);
 
-      const blockName = session.blockType.split(':')[1].replace(/_/g, ' ');
+      const blockName = session.blockType.split(":")[1].replace(/_/g, " ");
       DisplayActionBar(player, {
-        type: 'ready',
+        type: "ready",
         current: session.blockSet.size,
         max: scanLimit,
         blockName: blockName,
@@ -555,7 +578,7 @@ class HighlightManager {
     const lowerMode = mode.toLowerCase();
     const dimId = player.dimension.id;
 
-    if (!lowerMode.startsWith('standard')) {
+    if (!lowerMode.startsWith("standard")) {
       if (session.patternCalculated) return;
 
       const patternOffsets = GetPattern(
@@ -572,7 +595,7 @@ class HighlightManager {
       );
 
       const localQueue = [{ x: 0, y: 0, z: 0 }];
-      const localVisited = new Set(['0,0,0']);
+      const localVisited = new Set(["0,0,0"]);
 
       session.blockSet.clear();
       session.blockSet.add(GetLocId(session.origin));
@@ -653,7 +676,7 @@ class HighlightManager {
             if (nb && nb.typeId === session.blockType) {
               if (session.isLiquid) {
                 try {
-                  const depth = nb.permutation.getState('liquid_depth');
+                  const depth = nb.permutation.getState("liquid_depth");
                   if (depth !== 0) continue;
                 } catch (e) {}
               }
@@ -714,9 +737,9 @@ class HighlightManager {
   }
 
   getTargetRaycast(player) {
-    const equipment = player.getComponent('minecraft:equippable');
+    const equipment = player.getComponent("minecraft:equippable");
     const tool = equipment?.getEquipment(EquipmentSlot.Mainhand);
-    const isBucket = tool?.typeId === 'minecraft:bucket';
+    const isBucket = tool?.typeId === "minecraft:bucket";
 
     try {
       const raycast = player.getBlockFromViewDirection({
@@ -749,9 +772,9 @@ class HighlightManager {
     }
 
     const tool = player
-      .getComponent('minecraft:equippable')
+      .getComponent("minecraft:equippable")
       ?.getEquipment(EquipmentSlot.Mainhand);
-    if (!tool?.typeId.includes('_hoe')) {
+    if (!tool?.typeId.includes("_hoe")) {
       const session = this.sessions.get(player.id);
       if (session && session.isHoe) this.clearHighlights(player);
       return;
@@ -859,7 +882,7 @@ class HighlightManager {
             );
             if (
               above &&
-              (above.isAir || above.typeId === 'minecraft:snow_layer')
+              (above.isAir || above.typeId === "minecraft:snow_layer")
             ) {
               session.blockSet.add(nid);
               session.queue.push([nextPos, 0]);
@@ -880,9 +903,9 @@ class HighlightManager {
     }
 
     const tool = player
-      .getComponent('minecraft:equippable')
+      .getComponent("minecraft:equippable")
       ?.getEquipment(EquipmentSlot.Mainhand);
-    if (!tool?.typeId.includes('_shovel')) {
+    if (!tool?.typeId.includes("_shovel")) {
       const session = this.sessions.get(player.id);
       if (session && session.isShovel) this.clearHighlights(player);
       return;
@@ -991,7 +1014,7 @@ class HighlightManager {
           );
           if (
             above &&
-            (above.isAir || above.typeId === 'minecraft:snow_layer')
+            (above.isAir || above.typeId === "minecraft:snow_layer")
           ) {
             session.blockSet.add(nid);
             session.queue.push([nextPos, 0]);

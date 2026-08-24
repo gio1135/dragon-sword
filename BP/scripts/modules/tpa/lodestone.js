@@ -151,20 +151,13 @@ system.runInterval(() => {
     while (activeTeleports.size < 10 && tpQueue.length > 0) {
       const req = tpQueue.shift();
 
-      let finalBlock;
+      let chunkLoaded = false;
       try {
-        finalBlock = req.dimension.getBlock({ x: req.targetX, y: req.targetY, z: req.targetZ });
+        const finalBlock = req.dimension.getBlock({ x: req.targetX, y: req.targetY, z: req.targetZ });
+        if (finalBlock) chunkLoaded = true;
       } catch (e) {}
 
-    if (finalBlock) {
-      if (finalBlock.typeId !== 'minecraft:lodestone') {
-        try {
-          req.player.playSound('note.bass');
-        } catch (e) {}
-        req.player.sendMessage('§cTeleport failed: lodestone not found');
-        continue;
-      }
-    } else {
+    if (!chunkLoaded) {
       req.hasTickingArea = true;
       req.tickingAreaName = `lode_${req.playerId.replace(/-/g, '')}`;
       try {
@@ -189,12 +182,12 @@ system.runInterval(() => {
       Math.pow(currentLoc.z - req.startLoc.z, 2)
     );
 
-    if (dist > 2.0 && !req.canceled) {
-      req.canceled = true;
+    if (dist > 0.5 && !req.canceled) {
       try {
         req.player.playSound('note.bass');
       } catch (e) {}
-      req.player.sendMessage('§cTeleport canceled: you moved');
+      cleanUpReq(req);
+      continue;
     }
 
     if (req.ticks >= 100) {
@@ -208,7 +201,6 @@ system.runInterval(() => {
           try {
             req.player.playSound('note.bass');
           } catch (e) {}
-          req.player.sendMessage('§cTeleport failed: lodestone not found or area could not be loaded');
         } else {
           try {
             req.player.teleport(
@@ -230,9 +222,9 @@ system.runInterval(() => {
       }
       try {
         req.player.dimension.spawnParticle('minecraft:shriek_particle', {
-          x: req.player.location.x,
-          y: req.player.location.y + 0.1,
-          z: req.player.location.z
+          x: req.startLoc.x,
+          y: req.startLoc.y + 0.1,
+          z: req.startLoc.z
         });
       } catch (e) {}
     }

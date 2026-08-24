@@ -79,6 +79,14 @@ export function BreakBlockLogic(
     }
   }
 
+  const isLeaf = blockId.includes('leaves') || blockId.includes('_leaf');
+  if (hasSilk && (SILK_LIST.includes(blockId) || isLeaf)) {
+    if (safeSpawnItem(dimension, blockId, 1, targetPos)) {
+      destroyWithNoDrops(dimension, pos);
+      return;
+    }
+  }
+
   const fortLvl =
     (
       enchant?.getEnchantment('fortune') ||
@@ -101,13 +109,6 @@ export function BreakBlockLogic(
     }
 
     if (safeSpawnItem(dimension, data.id, count, targetPos)) {
-      destroyWithNoDrops(dimension, pos);
-      return;
-    }
-  }
-
-  if (hasSilk && SILK_LIST.includes(blockId)) {
-    if (safeSpawnItem(dimension, blockId, 1, targetPos)) {
       destroyWithNoDrops(dimension, pos);
       return;
     }
