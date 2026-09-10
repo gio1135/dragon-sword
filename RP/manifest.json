@@ -5,7 +5,7 @@
   },
   "header": {
     "name": "Dragon sword",
-    "description": "Dragon sword rp v8.1.22",
+    "description": "Dragon sword rp v9.0.2",
     "min_engine_version": [
       1,
       26,
@@ -13,9 +13,9 @@
     ],
     "uuid": "877901f7-e59d-4a03-acf8-b71b32238fa8",
     "version": [
-      8,
-      1,
-      22
+      9,
+      0,
+      2
     ]
   },
   "modules": [
@@ -23,9 +23,9 @@
       "type": "resources",
       "uuid": "8bb667df-02fd-42a3-8454-c7e4b0b7ee54",
       "version": [
-        8,
-        1,
-        22
+        9,
+        0,
+        2
       ]
     }
   ]

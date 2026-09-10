@@ -94,6 +94,9 @@ function openAdminMenu(player) {
     .button('Statistics', () => {
       showAdminStatsMenu(player);
     })
+    .button('Villager news settings', () => {
+      player.runCommand('scriptevent ds:open_vn');
+    })
     .button(serverLocked ? 'Unlock server' : 'Lock server', () => {
       const newVal = ServerLock.toggle();
       player.sendMessage(

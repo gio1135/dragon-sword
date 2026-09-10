@@ -52,6 +52,12 @@ export const PermissionTypes = {
   USE_THROWABLE_WEAPONS: 'useThrowableWeapons',
   USE_SPEARS: 'useSpears',
   ALLOW_OUTLAWS: 'allowOutlaws',
+  PROTECT_PASSIVE_MOBS: 'protectPassiveMobs',
+  PROTECT_HOSTILE_MOBS: 'protectHostileMobs',
+  PROTECT_NEUTRAL_MOBS: 'protectNeutralMobs',
+  PROTECT_PETS: 'protectPets',
+  PROTECT_UTILITY_ENTITIES: 'protectUtilityEntities',
+  ALLOW_PLAYER_COMBAT: 'allowPlayerCombat',
 };
 
 export class Permissions {

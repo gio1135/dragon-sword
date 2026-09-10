@@ -140,6 +140,16 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
       }
       continue;
     }
+    if (id === 'minecraft:frame' || id === 'minecraft:glow_frame') {
+      const isProtected = claim.permissions.get(PermissionTypes.PROTECT_UTILITY_ENTITIES);
+      const ownerData = claim.getOwnerData(ClaimManager.database);
+      const isOwner = ownerData && ownerData.id === player.id;
+      if (isProtected && !isOwner) {
+        cancelled = true;
+        notify(player, "Utility entities are protected in this claim");
+      }
+      continue;
+    }
     if (id === 'minecraft:tnt') {
       if (
         itemStack?.typeId === 'minecraft:flint_and_steel' ||
@@ -571,4 +581,98 @@ world.afterEvents.pistonActivate.subscribe((ev) => {
       } catch (e) {}
     });
   }
+});
+
+world.beforeEvents.entityHurt.subscribe((ev) => {
+  if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.LAND_CLAIMS)) return;
+  const { damageSource, hurtEntity } = ev;
+  const damager = damageSource.damagingEntity;
+
+  if (hurtEntity.dimension.id !== 'minecraft:overworld') return;
+  if (!damager || damager.typeId !== 'minecraft:player') return;
+
+  const claims = ClaimManager.getClaimsAt(hurtEntity.location);
+  if (claims.length === 0) return;
+
+  const claim = claims[0];
+  let cancelled = false;
+
+  const ownerData = claim.getOwnerData(ClaimManager.database);
+  const isOwner = ownerData && ownerData.id === damager.id;
+  const isPlayer = hurtEntity.typeId === 'minecraft:player';
+
+  if (isPlayer) {
+    const allowPvp = claim.permissions.get(PermissionTypes.ALLOW_PLAYER_COMBAT);
+    if (!allowPvp) {
+      cancelled = true;
+      notify(damager, "Player combat is disabled in this claim");
+    }
+  } else {
+    const utilityTypes = [
+      'minecraft:armor_stand',
+      'minecraft:boat',
+      'minecraft:chest_boat',
+      'minecraft:minecart',
+      'minecraft:chest_minecart',
+      'minecraft:hopper_minecart',
+      'minecraft:tnt_minecart',
+      'minecraft:painting',
+      'minecraft:item_frame',
+      'minecraft:glow_item_frame',
+      'minecraft:end_crystal'
+    ];
+
+    if (utilityTypes.includes(hurtEntity.typeId) || hurtEntity.typeId.includes('boat')) {
+      const isProtected = claim.permissions.get(PermissionTypes.PROTECT_UTILITY_ENTITIES);
+      if (isProtected && !isOwner) {
+        cancelled = true;
+        notify(damager, "Utility entities are protected in this claim");
+      }
+    } else {
+      const isTameableComp = hurtEntity.getComponent('minecraft:tameable');
+      const isTamed = isTameableComp ? isTameableComp.tamedToPlayer : false;
+      const isLeashedComp = hurtEntity.getComponent('minecraft:leashable');
+      const isLeashed = isLeashedComp ? isLeashedComp.isLeashed : false;
+      const familyComp = hurtEntity.getComponent('minecraft:type_family');
+      const isMonster = familyComp ? familyComp.hasTypeFamily('monster') : false;
+      const isMob = familyComp ? familyComp.hasTypeFamily('mob') : false;
+      
+      const tameComponent = hurtEntity.getComponent('minecraft:tameable');
+      const hasTameData = tameComponent && tameComponent.tamedToPlayer;
+      
+      if (hasTameData || hurtEntity.typeId === 'minecraft:wolf' || hurtEntity.typeId === 'minecraft:cat' || hurtEntity.typeId === 'minecraft:parrot' || hurtEntity.typeId === 'minecraft:horse') {
+        const isProtected = claim.permissions.get(PermissionTypes.PROTECT_PETS);
+        if (isProtected && !isOwner) {
+          cancelled = true;
+          notify(damager, "Pets are protected in this claim");
+        }
+      } else if (isMonster) {
+        const isProtected = claim.permissions.get(PermissionTypes.PROTECT_HOSTILE_MOBS);
+        if (isProtected && !isOwner) {
+          cancelled = true;
+          notify(damager, "Hostile mobs are protected in this claim");
+        }
+      } else if (hurtEntity.typeId === 'minecraft:bee' || hurtEntity.typeId === 'minecraft:iron_golem' || hurtEntity.typeId === 'minecraft:snow_golem' || hurtEntity.typeId === 'minecraft:polar_bear' || hurtEntity.typeId === 'minecraft:llama' || hurtEntity.typeId === 'minecraft:panda') {
+        const isProtected = claim.permissions.get(PermissionTypes.PROTECT_NEUTRAL_MOBS);
+        if (isProtected && !isOwner) {
+          cancelled = true;
+          notify(damager, "Neutral mobs are protected in this claim");
+        }
+      } else if (isMob) {
+        const isProtected = claim.permissions.get(PermissionTypes.PROTECT_PASSIVE_MOBS);
+        if (isProtected && !isOwner) {
+          cancelled = true;
+          notify(damager, "Passive mobs are protected in this claim");
+        }
+      } else {
+        const isProtected = claim.permissions.get(PermissionTypes.PROTECT_PASSIVE_MOBS);
+        if (isProtected && !isOwner) {
+          cancelled = true;
+          notify(damager, "Entities are protected in this claim");
+        }
+      }
+    }
+  }
+
+  if (cancelled) ev.cancel = true;
 });

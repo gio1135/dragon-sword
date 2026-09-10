@@ -84,7 +84,7 @@ export class ServerLock {
 
   static kick(player) {
     try {
-      player.runCommandAsync(
+      player.runCommand(
         `kick "${player.name}" §cServer is in LOCKDOWN MODE. Only Operators may join.`,
       );
     } catch (e) {

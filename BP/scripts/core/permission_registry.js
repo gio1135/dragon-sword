@@ -32,7 +32,7 @@ PermissionRegistry.register('useDoors', 'Use doors and gates', true);
 PermissionRegistry.register('useSwitches', 'Use switches and levers', false);
 PermissionRegistry.register('openContainers', 'Open containers', false);
 PermissionRegistry.register('useBeds', 'Use beds', false);
-PermissionRegistry.register('allowTnt', 'Allow TNT', false, true);
+PermissionRegistry.register('allowTnt', 'Allow tnt', false, true);
 PermissionRegistry.register('editSigns', 'Edit signs', false);
 PermissionRegistry.register('useFishingRods', 'Use fishing rods', false);
 PermissionRegistry.register('useThrowableWeapons', 'Throw potions', false);
@@ -42,3 +42,9 @@ PermissionRegistry.register(
   false,
 );
 PermissionRegistry.register('useSpears', 'Use spears', false);
+PermissionRegistry.register('protectPassiveMobs', 'Protect passive mobs', true, true);
+PermissionRegistry.register('protectHostileMobs', 'Protect hostile mobs', false, true);
+PermissionRegistry.register('protectNeutralMobs', 'Protect neutral mobs', true, true);
+PermissionRegistry.register('protectPets', 'Protect pets', true, true);
+PermissionRegistry.register('protectUtilityEntities', 'Protect utility entities', true, true);
+PermissionRegistry.register('allowPlayerCombat', 'Allow pvp', false, true);
