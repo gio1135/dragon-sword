@@ -1,4 +1,4 @@
-name: Build and Release .mcaddon
+name: Build mcaddon
 
 on:
   push:
@@ -21,27 +21,28 @@ jobs:
 
       - name: Build .mcaddon
         run: |
-          # Create the Behavior Pack mcpack
-          cd BP
-          zip -r ../DragonSword_BP.mcpack *
-          cd ..
+          # Extract version from BP/manifest.json
+          VERSION_ARRAY=$(jq -c '.header.version' BP/manifest.json)
+          VERSION=$(echo $VERSION_ARRAY | jq -r 'join(".")')
+          echo "Building version: v$VERSION"
           
-          # Create the Resource Pack mcpack
-          cd RP
-          zip -r ../DragonSword_RP.mcpack *
-          cd ..
+          # Rename folders for packaging
+          cp -r BP "Dragon sword v${VERSION} BP"
+          cp -r RP "Dragon sword v${VERSION} RP"
           
           # Combine them into a single .mcaddon
-          zip DragonSword.mcaddon DragonSword_BP.mcpack DragonSword_RP.mcpack
+          zip -r "Dragon_sword_v${VERSION}.mcaddon" "Dragon sword v${VERSION} BP" "Dragon sword v${VERSION} RP"
+          
+          echo "MCADDON_FILE=Dragon_sword_v${VERSION}.mcaddon" >> $GITHUB_ENV
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: DragonSword-MCAddon
-          path: DragonSword.mcaddon
+          path: ${{ env.MCADDON_FILE }}
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: DragonSword.mcaddon
+          files: ${{ env.MCADDON_FILE }}
