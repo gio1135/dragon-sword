@@ -99,7 +99,7 @@ def build_mounts():
     source_path = os.path.join(samples_dir, mount)
     try:
       if not os.path.exists(source_path):
-        print(f"  Skipped {mount}: not found in local samples.")
+        print(f"  Skipped {mount}: not found in local samples")
         continue
       with open(source_path, 'r', encoding='utf-8') as f:
         content = f.read()
@@ -133,7 +133,7 @@ def build_mounts():
 
       def scale_ai_speed(obj):
         for k, v in obj.items():
-          if k.startswith("minecraft:behavior.") and isinstance(v, dict):
+          if k.startswith("minecraft:behavior") and isinstance(v, dict):
             if "speed_multiplier" in v:
               v["speed_multiplier"] *= ai_mult
 
@@ -164,7 +164,7 @@ def main():
   bp_data = read_manifest(bp_manifest_path)
   rp_data = read_manifest(rp_manifest_path)
   if not bp_data or not rp_data:
-    print("Error: Could not find manifest.json in BP or RP folders.")
+    print("Error: Could not find manifest.json in BP or RP folders")
     sys.exit(1)
 
   old_version_array = bp_data['header']['version'].copy()
@@ -196,7 +196,7 @@ def main():
         data['header']['description'] = re.sub(r'v?\d+\.\d+\.\d+', f'v{new_version_str}', data['header']['description'])
     write_manifest(bp_manifest_path, bp_data)
     write_manifest(rp_manifest_path, rp_data)
-    print("Updated manifest.json files.")
+    print("Updated manifest.json files")
 
   current_zip_path = os.path.join(PROJECT_DIR, f"Dragon_sword_v{new_version_str}.zip")
   current_mcaddon_path = os.path.join(PROJECT_DIR, f"Dragon_sword_v{new_version_str}.mcaddon")
@@ -251,7 +251,7 @@ def main():
 
       write_manifest(manifest_path, data)
 
-  print("Deployed updated BP and RP to Minecraft development folders.")
+  print("Deployed updated BP and RP to Minecraft development folders")
 
 if __name__ == "__main__":
   main()

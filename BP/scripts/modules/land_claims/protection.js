@@ -674,5 +674,14 @@ world.beforeEvents.entityHurt.subscribe((ev) => {
     }
   }
 
-  if (cancelled) ev.cancel = true;
+  if (cancelled) {
+    ev.cancel = true;
+    system.run(() => {
+      try {
+        if (hurtEntity.isValid) {
+          hurtEntity.extinguishFire(true);
+        }
+      } catch (e) {}
+    });
+  }
 });
