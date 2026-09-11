@@ -1,0 +1,47 @@
+name: Build and Release .mcaddon
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build .mcaddon
+        run: |
+          # Create the Behavior Pack mcpack
+          cd BP
+          zip -r ../DragonSword_BP.mcpack *
+          cd ..
+          
+          # Create the Resource Pack mcpack
+          cd RP
+          zip -r ../DragonSword_RP.mcpack *
+          cd ..
+          
+          # Combine them into a single .mcaddon
+          zip DragonSword.mcaddon DragonSword_BP.mcpack DragonSword_RP.mcpack
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DragonSword-MCAddon
+          path: DragonSword.mcaddon
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: DragonSword.mcaddon
