@@ -1,0 +1,16 @@
+[[Structure loot]]
+
+## Drops
+- [[book]]
+- [[bread]]
+- [[bucket]]
+- [[copper_horse_armor]]
+- [[golden_apple]]
+- [[gunpowder]]
+- [[horsearmorgold]]
+- [[horsearmoriron]]
+- [[iron_ingot]]
+- [[name_tag]]
+- [[redstone]]
+- [[string]]
+- [[wheat]]

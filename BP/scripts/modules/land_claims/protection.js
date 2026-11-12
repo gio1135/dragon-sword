@@ -78,77 +78,86 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
     if (cancelled) break;
 
     const id = block.typeId;
+    const isTryingToPlace = player.isSneaking && isBlockPlacement;
 
     if (
-      (id.includes('door') || id.includes('fence_gate')) &&
-      !player.isSneaking
+      (id.includes('door') || id.includes('fence_gate'))
     ) {
-      if (
-        !claim.hasPermission(
-          PermissionTypes.USE_DOORS,
-          player,
-          ClaimManager.database,
-        )
-      ) {
-        cancelled = true;
-        notify(player, "You don't have permission to use doors");
+      if (!isTryingToPlace) {
+        if (
+          !claim.hasPermission(
+            PermissionTypes.USE_DOORS,
+            player,
+            ClaimManager.database,
+          )
+        ) {
+          cancelled = true;
+          notify(player, "You don't have permission to use doors");
+        }
+        continue;
       }
-      continue;
     }
     if (
       (id.includes('button') ||
         id.includes('lever') ||
         id.includes('repeater') ||
-        id.includes('comparator')) &&
-      !player.isSneaking
+        id.includes('comparator'))
     ) {
-      if (
-        !claim.hasPermission(
-          PermissionTypes.USE_SWITCHES,
-          player,
-          ClaimManager.database,
-        )
-      ) {
-        cancelled = true;
-        notify(player, "You don't have permission to use switches");
+      if (!isTryingToPlace) {
+        if (
+          !claim.hasPermission(
+            PermissionTypes.USE_SWITCHES,
+            player,
+            ClaimManager.database,
+          )
+        ) {
+          cancelled = true;
+          notify(player, "You don't have permission to use switches");
+        }
+        continue;
       }
-      continue;
     }
-    if (id.includes('bed') && !player.isSneaking) {
-      if (
-        !claim.hasPermission(
-          PermissionTypes.USE_BEDS,
-          player,
-          ClaimManager.database,
-        )
-      ) {
-        cancelled = true;
-        notify(player, "You don't have permission to use beds");
+    if (id.includes('bed') || id.includes('cushion')) {
+      if (!isTryingToPlace) {
+        if (
+          !claim.hasPermission(
+            PermissionTypes.USE_BEDS,
+            player,
+            ClaimManager.database,
+          )
+        ) {
+          cancelled = true;
+          notify(player, "You don't have permission to use beds and cushions");
+        }
+        continue;
       }
-      continue;
     }
     if (id.includes('sign')) {
-      if (
-        !claim.hasPermission(
-          PermissionTypes.EDIT_SIGNS,
-          player,
-          ClaimManager.database,
-        )
-      ) {
-        cancelled = true;
-        notify(player, "You don't have permission to edit signs");
+      if (!isTryingToPlace) {
+        if (
+          !claim.hasPermission(
+            PermissionTypes.EDIT_SIGNS,
+            player,
+            ClaimManager.database,
+          )
+        ) {
+          cancelled = true;
+          notify(player, "You don't have permission to edit signs");
+        }
+        continue;
       }
-      continue;
     }
     if (id === 'minecraft:frame' || id === 'minecraft:glow_frame') {
-      const isProtected = claim.permissions.get(PermissionTypes.PROTECT_UTILITY_ENTITIES);
-      const ownerData = claim.getOwnerData(ClaimManager.database);
-      const isOwner = ownerData && ownerData.id === player.id;
-      if (isProtected && !isOwner) {
-        cancelled = true;
-        notify(player, "Utility entities are protected in this claim");
+      if (!isTryingToPlace) {
+        const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_UTILITY_ENTITIES);
+        const ownerData = claim.getOwnerData(ClaimManager.database);
+        const isOwner = ownerData && ownerData.id === player.id;
+        if (!allowAttack && !isOwner) {
+          cancelled = true;
+          notify(player, "Utility entities are protected in this claim");
+        }
+        continue;
       }
-      continue;
     }
     if (id === 'minecraft:tnt') {
       if (
@@ -174,8 +183,6 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
       id.includes('barrel') ||
       id.includes('shulker');
     if (isContainer) {
-      const isTryingToPlace = player.isSneaking && isBlockPlacement;
-
       if (!isTryingToPlace) {
         if (
           !claim.hasPermission(
@@ -377,6 +384,42 @@ world.beforeEvents.itemUse.subscribe((ev) => {
   if (cancelled) ev.cancel = true;
 });
 
+world.beforeEvents.playerInteractWithEntity.subscribe((ev) => {
+  if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.LAND_CLAIMS)) return;
+  const { player, target } = ev;
+  if (player.dimension.id !== 'minecraft:overworld') return;
+
+  const claims = ClaimManager.getClaimsAt(target.location);
+  if (claims.length === 0) return;
+
+  const claim = claims[0];
+  let cancelled = false;
+  const ownerData = claim.getOwnerData(ClaimManager.database);
+  const isOwner = ownerData && ownerData.id === player.id;
+
+  const utilityTypes = [
+    'minecraft:armor_stand',
+    'minecraft:boat',
+    'minecraft:chest_boat',
+    'minecraft:minecart',
+    'minecraft:chest_minecart',
+    'minecraft:hopper_minecart',
+    'minecraft:tnt_minecart',
+  ];
+
+  if (utilityTypes.includes(target.typeId) || target.typeId.includes('boat')) {
+    const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_UTILITY_ENTITIES);
+    if (!allowAttack && !isOwner) {
+      cancelled = true;
+      notify(player, "Utility entities are protected in this claim");
+    }
+  }
+
+  if (cancelled) {
+    ev.cancel = true;
+  }
+});
+
 world.beforeEvents.explosion.subscribe((ev) => {
   if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.LAND_CLAIMS)) return;
   const affectedBlocks = ev.getImpactedBlocks();
@@ -467,11 +510,11 @@ system.runInterval(() => {
       } else {
         if (infoString) player.onScreenDisplay.setActionBar(infoString);
 
-        const lastClaimId = player.getDynamicProperty('ds:last_claim_id');
+        const lastClaimId = player.getDynamicProperty('32k:last_claim_id');
         const currentSig = insideClaim.name + insideClaim.start.x;
 
         if (lastClaimId !== currentSig) {
-          player.setDynamicProperty('ds:last_claim_id', currentSig);
+          player.setDynamicProperty('32k:last_claim_id', currentSig);
         }
         PLAYER_POSITIONS.set(player.id, currentPos);
       }
@@ -623,8 +666,8 @@ world.beforeEvents.entityHurt.subscribe((ev) => {
     ];
 
     if (utilityTypes.includes(hurtEntity.typeId) || hurtEntity.typeId.includes('boat')) {
-      const isProtected = claim.permissions.get(PermissionTypes.PROTECT_UTILITY_ENTITIES);
-      if (isProtected && !isOwner) {
+      const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_UTILITY_ENTITIES);
+      if (!allowAttack && !isOwner) {
         cancelled = true;
         notify(damager, "Utility entities are protected in this claim");
       }
@@ -641,32 +684,32 @@ world.beforeEvents.entityHurt.subscribe((ev) => {
       const hasTameData = tameComponent && tameComponent.tamedToPlayer;
       
       if (hasTameData || hurtEntity.typeId === 'minecraft:wolf' || hurtEntity.typeId === 'minecraft:cat' || hurtEntity.typeId === 'minecraft:parrot' || hurtEntity.typeId === 'minecraft:horse') {
-        const isProtected = claim.permissions.get(PermissionTypes.PROTECT_PETS);
-        if (isProtected && !isOwner) {
+        const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_PETS);
+        if (!allowAttack && !isOwner) {
           cancelled = true;
           notify(damager, "Pets are protected in this claim");
         }
       } else if (isMonster) {
-        const isProtected = claim.permissions.get(PermissionTypes.PROTECT_HOSTILE_MOBS);
-        if (isProtected && !isOwner) {
+        const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_HOSTILE_MOBS);
+        if (!allowAttack && !isOwner) {
           cancelled = true;
           notify(damager, "Hostile mobs are protected in this claim");
         }
       } else if (hurtEntity.typeId === 'minecraft:bee' || hurtEntity.typeId === 'minecraft:iron_golem' || hurtEntity.typeId === 'minecraft:snow_golem' || hurtEntity.typeId === 'minecraft:polar_bear' || hurtEntity.typeId === 'minecraft:llama' || hurtEntity.typeId === 'minecraft:panda') {
-        const isProtected = claim.permissions.get(PermissionTypes.PROTECT_NEUTRAL_MOBS);
-        if (isProtected && !isOwner) {
+        const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_NEUTRAL_MOBS);
+        if (!allowAttack && !isOwner) {
           cancelled = true;
           notify(damager, "Neutral mobs are protected in this claim");
         }
       } else if (isMob) {
-        const isProtected = claim.permissions.get(PermissionTypes.PROTECT_PASSIVE_MOBS);
-        if (isProtected && !isOwner) {
+        const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_PASSIVE_MOBS);
+        if (!allowAttack && !isOwner) {
           cancelled = true;
           notify(damager, "Passive mobs are protected in this claim");
         }
       } else {
-        const isProtected = claim.permissions.get(PermissionTypes.PROTECT_PASSIVE_MOBS);
-        if (isProtected && !isOwner) {
+        const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_PASSIVE_MOBS);
+        if (!allowAttack && !isOwner) {
           cancelled = true;
           notify(damager, "Entities are protected in this claim");
         }

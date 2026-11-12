@@ -21,7 +21,7 @@ async function openFeatureTogglesUI(player) {
 
   const res = await form.submit().show(player);
   if (res.canceled) {
-    DS.events.emit('ds:admin_open', { player });
+    DS.events.emit('32k:admin_open', { player });
     return;
   }
 
@@ -63,7 +63,7 @@ function openDimensionManagement(player) {
     .show(player);
 }
 
-DS.events.on('ds:admin_open', (data) => {
+DS.events.on('32k:admin_open', (data) => {
   const { player } = data;
   if (player.commandPermissionLevel < 1) return;
   openAdminMenu(player);
@@ -95,7 +95,7 @@ function openAdminMenu(player) {
       showAdminStatsMenu(player);
     })
     .button('Villager news settings', () => {
-      player.runCommand('scriptevent ds:open_vn');
+      player.runCommand('scriptevent 32k:open_vn');
     })
     .button(serverLocked ? 'Unlock server' : 'Lock server', () => {
       const newVal = ServerLock.toggle();

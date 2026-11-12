@@ -4,37 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "3c817524f928e11e",
+        "id": "9f36776a45da4151",
         "type": "tabs",
         "children": [
           {
-            "id": "4f4af6c69e21955e",
+            "id": "87e29f446ed5e7b2",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Economy/Loot tables.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Loot tables"
-            }
-          }
-        ]
-      },
-      {
-        "id": "acaf6c9ce3ea934f",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "cedd8bbfc89be738",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
+              "type": "empty",
               "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
         ]
@@ -115,7 +95,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Economy/Loot tables.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -177,7 +156,6 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Welcome.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -186,7 +164,8 @@
               "title": "Outline"
             }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -204,15 +183,43 @@
       "bases:Create new base": false
     }
   },
-  "active": "4f4af6c69e21955e",
+  "active": "87e29f446ed5e7b2",
   "lastOpenFiles": [
-    "Economy/Player archetypes.md",
     "Economy/Resource flow.md",
     "Economy/Loot tables.md",
-    "Economy/Builder contract system.md",
+    "Economy/Loot Sources/gameplay/entities/sniffer_seeds.md",
+    "Economy/Loot Sources/gameplay/entities/mooshroom_milking.md",
+    "Economy/Loot Sources/gameplay/Bartering.md",
+    "raid_farm.md",
+    "Economy/Modified Loot/Vaults mapping.md",
+    "Economy/Loot Sources/gameplay/fishing/jungle_junk.md",
+    "Economy/Loot Sources/gameplay/fishing/jungle_fish.md",
+    "Economy/Farms.md",
+    "witch_farm.md",
+    "slime_farm.md",
+    "iron_farm.md",
+    "gold_farm.md",
+    "drowned_farm.md",
+    "creeper_farm.md",
+    "Economy/Loot Sources/entities/creeper.md",
+    "entities/vindicator.md",
+    "entities",
     "Features/Planned features.md",
-    "Welcome.md",
-    "Features",
-    "Economy"
+    "Economy/Archetypes/Technical player.md",
+    "Economy/Loot Sources/trading/economy_trades/weapon_smith_trades.md",
+    "Economy/Loot Sources/trading/economy_trades/fletcher_trades.md",
+    "Economy/Loot Sources/trading/economy_trades/farmer_trades.md",
+    "Economy/Loot Sources/trading/economy_trades/cartographer_trades.md",
+    "Economy/Loot Sources/trading/economy_trades/armorer_trades.md",
+    "Economy/Modified Loot/Gameplay loot (Modified).md",
+    "Economy/Loot Sources/trading/economy_trades",
+    "Economy/Loot Sources/trading",
+    "Economy/Loot Sources/gameplay/fishing",
+    "Economy/Loot Sources/gameplay/entities",
+    "Economy/Loot Sources/gameplay",
+    "Economy/Loot Sources/entities",
+    "Economy/Loot Sources/chests/village",
+    "Economy/Loot Sources/chests/trial_chambers",
+    "Economy/Loot Sources/chests"
   ]
 }

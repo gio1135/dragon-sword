@@ -1,0 +1,17 @@
+[[Structure loot]]
+
+## Drops
+- [[coal]]
+- [[copper_nautilus_armor]]
+- [[diamond_nautilus_armor]]
+- [[emerald]]
+- [[fishing_rod]]
+- [[golden_helmet]]
+- [[golden_nautilus_armor]]
+- [[iron_nautilus_armor]]
+- [[leather_chestplate]]
+- [[map]]
+- [[rotten_flesh]]
+- [[stone_axe]]
+- [[stone_spear]]
+- [[wheat]]

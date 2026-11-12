@@ -4,7 +4,7 @@ import { FeatureFlags } from '../../core/feature_flags.js';
 import { DS } from '../../core/ds.js';
 
 export function initOutlawSystem() {
-  DS.events.on('ds:op_player_manage_ui', (payload) => {
+  DS.events.on('32k:op_player_manage_ui', (payload) => {
     if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.OUTLAW)) return;
 
     const targetData = payload.targetData;
@@ -87,10 +87,10 @@ export function initOutlawSystem() {
       const killer = data.damageSource.damagingEntity;
 
       const tags = victim.getTags();
-      const mountTag = tags.find((t) => t.startsWith('ds:mount_'));
+      const mountTag = tags.find((t) => t.startsWith('32k:mount_'));
 
       if (mountTag) {
-        const ownerId = mountTag.replace('ds:mount_', '');
+        const ownerId = mountTag.replace('32k:mount_', '');
 
         if (ownerId !== killer.id) {
           const killerData = ClaimManager.getOrCreatePlayer(killer);

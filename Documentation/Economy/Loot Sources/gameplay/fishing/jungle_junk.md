@@ -1,0 +1,15 @@
+[[Gameplay loot]]
+
+## Drops
+- [[bamboo]]
+- [[bone]]
+- [[bowl]]
+- [[dye]]
+- [[fishing_rod]]
+- [[leather]]
+- [[leather_boots]]
+- [[potion]]
+- [[rotten_flesh]]
+- [[stick]]
+- [[string]]
+- [[tripwire_hook]]

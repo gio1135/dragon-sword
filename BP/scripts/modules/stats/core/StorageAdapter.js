@@ -1,15 +1,15 @@
 export const STORAGE_KEYS = [
-  'ds:stats_core',
-  'ds:stats_travel',
-  'ds:stats_combat',
-  'ds:stats_blocks',
-  'ds:stats_items',
-  'ds:stats_interactions',
-  'ds:stats_misc',
+  '32k:stats_core',
+  '32k:stats_travel',
+  '32k:stats_combat',
+  '32k:stats_blocks',
+  '32k:stats_items',
+  '32k:stats_interactions',
+  '32k:stats_misc',
 ];
 
 export const DEFAULT_DATA = {
-  'ds:stats_core': {
+  '32k:stats_core': {
     time: {
       played: 0,
       session: 0,
@@ -34,7 +34,7 @@ export const DEFAULT_DATA = {
     sleep: { total: 0 },
   },
 
-  'ds:stats_travel': {
+  '32k:stats_travel': {
     distance: {
       walked: 0,
       sprinted: 0,
@@ -61,7 +61,7 @@ export const DEFAULT_DATA = {
     portals: { total: 0, transitions: {} },
   },
 
-  'ds:stats_combat': {
+  '32k:stats_combat': {
     kills: {
       mobs: { total: 0, byType: {} },
       players: { total: 0, byPlayer: {} },
@@ -87,12 +87,12 @@ export const DEFAULT_DATA = {
     tools: { totalBroken: 0, byType: {} },
   },
 
-  'ds:stats_blocks': {
+  '32k:stats_blocks': {
     mined: { total: 0, byType: {} },
     placed: { total: 0, byType: {} },
   },
 
-  'ds:stats_items': {
+  '32k:stats_items': {
     used: { total: 0, byType: {} },
     crafted: { total: 0, byType: {} },
     broken: { total: 0, byType: {} },
@@ -102,7 +102,7 @@ export const DEFAULT_DATA = {
     enchanted: { total: 0 },
   },
 
-  'ds:stats_interactions': {
+  '32k:stats_interactions': {
     chest: 0,
     enderChest: 0,
     barrel: 0,
@@ -150,11 +150,11 @@ export const DEFAULT_DATA = {
     animals: { bred: 0 },
   },
 
-  'ds:stats_misc': {
+  '32k:stats_misc': {
     effects: { total: 0, unique: [], byType: {} },
     chat: { messages: 0, characters: 0, longest: 0, average: 0 },
     emotes: { total: 0 },
-    raids: { triggered: 0, won: 0 },
+    rai32k: { triggered: 0, won: 0 },
     targetBlock: { hit: 0 },
   },
 };

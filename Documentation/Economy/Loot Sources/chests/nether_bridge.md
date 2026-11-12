@@ -1,0 +1,17 @@
+[[Structure loot]]
+
+## Drops
+- [[copper_horse_armor]]
+- [[diamond]]
+- [[flint_and_steel]]
+- [[gold_ingot]]
+- [[golden_chestplate]]
+- [[golden_sword]]
+- [[horsearmordiamond]]
+- [[horsearmorgold]]
+- [[horsearmoriron]]
+- [[iron_ingot]]
+- [[nether_wart]]
+- [[obsidian]]
+- [[rib_armor_trim_smithing_template]]
+- [[saddle]]

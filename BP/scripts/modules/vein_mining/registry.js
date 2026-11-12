@@ -303,7 +303,7 @@ export const OUTLINE_STYLES = [
     id: 0,
     langKey: 'outline_variants',
     icon: 'textures/items/paper',
-    entity: 'ds:vein_outline',
+    entity: '32k:vein_outline',
   },
 ];
 

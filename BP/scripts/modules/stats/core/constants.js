@@ -1,13 +1,13 @@
 export const VERSION = '1.0.0';
 
 export const STORAGE_KEYS = {
-  CORE: 'ds:stats_core',
-  TRAVEL: 'ds:stats_travel',
-  COMBAT: 'ds:stats_combat',
-  BLOCKS: 'ds:stats_blocks',
-  ITEMS: 'ds:stats_items',
-  INTERACTIONS: 'ds:stats_interactions',
-  MISC: 'ds:stats_misc',
+  CORE: '32k:stats_core',
+  TRAVEL: '32k:stats_travel',
+  COMBAT: '32k:stats_combat',
+  BLOCKS: '32k:stats_blocks',
+  ITEMS: '32k:stats_items',
+  INTERACTIONS: '32k:stats_interactions',
+  MISC: '32k:stats_misc',
 };
 
 export const UPDATE_INTERVALS = {

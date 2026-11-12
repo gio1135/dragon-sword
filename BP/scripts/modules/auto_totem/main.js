@@ -3,7 +3,7 @@ import { DS } from '../../core/ds.js';
 
 const TOTEM = 'minecraft:totem_of_undying';
 const LOW_HEALTH = 6;
-const ALERT_TAG = 'ds:hp_alert';
+const ALERT_TAG = '32k:hp_alert';
 
 import { FeatureFlags } from '../../core/feature_flags.js';
 

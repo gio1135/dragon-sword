@@ -60,7 +60,7 @@ function* scanArea(player) {
             if (
               id === 'minecraft:info_update' ||
               id === 'minecraft:info_update2' ||
-              id.includes('ds:connected_') ||
+              id.includes('32k:connected_') ||
               id.includes('kwz:') ||
               id.includes('connected_glass') ||
               id === 'minecraft:unknown'

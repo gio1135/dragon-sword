@@ -232,12 +232,12 @@ class HighlightManager {
   }
 
   isFullyEnclosed(hiddenFaces) {
-    const n = hiddenFaces.has("ds:north");
-    const s = hiddenFaces.has("ds:south");
-    const e = hiddenFaces.has("ds:east");
-    const w = hiddenFaces.has("ds:west");
-    const u = hiddenFaces.has("ds:up");
-    const d = hiddenFaces.has("ds:down");
+    const n = hiddenFaces.has("32k:north");
+    const s = hiddenFaces.has("32k:south");
+    const e = hiddenFaces.has("32k:east");
+    const w = hiddenFaces.has("32k:west");
+    const u = hiddenFaces.has("32k:up");
+    const d = hiddenFaces.has("32k:down");
 
     return (
       (n && s && e && w && u && d) ||
@@ -281,8 +281,8 @@ class HighlightManager {
       });
       if (entity) {
         this.trackedEntities.add(entity);
-        entity.setProperty("ds:style_id", colorIdx);
-        entity.setProperty("ds:opacity", 100);
+        entity.setProperty("32k:style_id", colorIdx);
+        entity.setProperty("32k:opacity", 100);
 
         hiddenFaces.forEach((prop) => {
           try {
@@ -299,8 +299,8 @@ class HighlightManager {
   updateOutline(entity, hiddenFaces, colorIdx, opacity) {
     if (!entity || !entity.isValid) return;
     try {
-      entity.setProperty("ds:style_id", colorIdx);
-      entity.setProperty("ds:opacity", opacity);
+      entity.setProperty("32k:style_id", colorIdx);
+      entity.setProperty("32k:opacity", opacity);
       for (const offset of CONNECTION_OFFSETS) {
         if (offset.prop) {
           entity.setProperty(offset.prop, true);

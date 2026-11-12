@@ -1,0 +1,16 @@
+[[Structure loot]]
+
+## Drops
+- [[arrow]]
+- [[book]]
+- [[carrot]]
+- [[crossbow]]
+- [[dark_oak_log]]
+- [[experience_bottle]]
+- [[goat_horn]]
+- [[iron_ingot]]
+- [[potato]]
+- [[sentry_armor_trim_smithing_template]]
+- [[string]]
+- [[tripwire_hook]]
+- [[wheat]]

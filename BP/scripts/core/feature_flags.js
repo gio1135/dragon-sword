@@ -3,7 +3,7 @@ import { MODULES } from './generated_registry.js';
 
 export class FeatureFlags {
   static get KEY() {
-    return 'ds:features';
+    return '32k:features';
   }
 
   static get FEATURES() {

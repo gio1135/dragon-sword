@@ -33,6 +33,32 @@ if (itemStack.typeId === SHOVEL_ID) {
 }
 });
 
+world.beforeEvents.playerInteractWithBlock.subscribe(ev => {
+const { player, itemStack, block } = ev;
+if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.LAND_CLAIMS)) return;
+
+if (itemStack?.typeId === SHOVEL_ID) {
+  ev.cancel = true;
+  system.run(() => {
+    if (player.isSneaking) {
+      const loc = {
+        x: Math.floor(player.location.x),
+        y: Math.floor(player.location.y),
+        z: Math.floor(player.location.z)
+      };
+      const pd = ClaimManager.getOrCreatePlayer(player);
+      if (!pd.firstPoint && pd.resizingClaimName === '') {
+        handleShovelInteraction(player, loc);
+      } else {
+        handleShovelInteraction(player, loc);
+      }
+    } else {
+      ClaimUI.openMainMenu(player);
+    }
+  });
+}
+});
+
 world.afterEvents.playerSpawn.subscribe(ev => {
 ClaimManager.getOrCreatePlayer(ev.player);
 });

@@ -31,7 +31,7 @@ export const BedrockBorderUI = {
 
     form.show(player).then((response) => {
       if (response.canceled) {
-        DS.events.emit('ds:admin_open', { player });
+        DS.events.emit('32k:admin_open', { player });
         return;
       }
       const dimensions = ['overworld', 'nether', 'end'];

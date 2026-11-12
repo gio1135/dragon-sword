@@ -37,7 +37,7 @@ export function GetBlockCategory(blockTypeId) {
 
 export function IsActivated(player) {
   if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.VEIN_MINING)) return false;
-  if (player.hasTag('ds:disable_veinminer')) return false;
+  if (player.hasTag('32k:disable_veinminer')) return false;
 
   const equipment = player.getComponent('minecraft:equippable');
   const heldItem = equipment?.getEquipment(EquipmentSlot.Mainhand);
@@ -52,7 +52,7 @@ export function IsActivated(player) {
 }
 
 export function IsBlockAllowed(player, blockTypeId) {
-  if (player.hasTag('ds:disable_veinminer')) return false;
+  if (player.hasTag('32k:disable_veinminer')) return false;
 
   const equipment = player.getComponent('minecraft:equippable');
   const heldItem = equipment?.getEquipment(EquipmentSlot.Mainhand);

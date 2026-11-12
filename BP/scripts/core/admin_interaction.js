@@ -27,7 +27,7 @@ function handleAdminTool(player, itemStack, cancelCallback, isLookingAtLodestone
     if (player.commandPermissionLevel < 1) return
     if (cancelCallback) cancelCallback()
     system.run(() => {
-      DS.events.emit('ds:admin_open', { player })
+      DS.events.emit('32k:admin_open', { player })
     })
   }
 }

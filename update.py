@@ -22,9 +22,32 @@ def read_manifest(path):
   with open(path, 'r', encoding='utf-8') as f:
     return json.load(f)
 
+def format_json_compact(obj, indent=0):
+  sp = '  ' * indent
+  sp1 = '  ' * (indent + 1)
+  if isinstance(obj, dict):
+    if not obj:
+      return '{}'
+    items = []
+    for k, v in obj.items():
+      items.append(f'{sp1}{json.dumps(k)}: {format_json_compact(v, indent + 1)}')
+    return '{\n' + ',\n'.join(items) + '\n' + sp + '}'
+  elif isinstance(obj, list):
+    if len(obj) <= 3 and all(isinstance(x, (int, float)) for x in obj):
+      inner = ', '.join(json.dumps(x) for x in obj)
+      return f'[ {inner} ]'
+    if not obj:
+      return '[]'
+    items = []
+    for v in obj:
+      items.append(f'{sp1}{format_json_compact(v, indent + 1)}')
+    return '[\n' + ',\n'.join(items) + '\n' + sp + ']'
+  else:
+    return json.dumps(obj)
+
 def write_manifest(path, data):
   with open(path, 'w', encoding='utf-8') as f:
-    json.dump(data, f, indent=2)
+    f.write(format_json_compact(data) + '\n')
 
 def bump_version(version_array, bump_type):
   if bump_type == 'major':
@@ -89,10 +112,11 @@ def strip_json_comments(text):
 def build_mounts():
   print("Building mounts from local bedrock-samples...")
   mounts = ['horse.json', 'camel.json', 'camel_husk.json', 'donkey.json', 'mule.json']
-  samples_dir = os.path.join(PROJECT_DIR, "Docs", "bedrock-samples-v1.26.30.5-full", "behavior_pack", "entities")
+  samples_dir = os.path.join(PROJECT_DIR, "Docs", "bedrock-samples-v1.26.50.4-full", "behavior_pack", "entities")
 
   speed_mult = 2.0
   jump_mult = 1.5
+  health_mult = 2.0
   ai_mult = 0.5
 
   for mount in mounts:
@@ -126,10 +150,12 @@ def build_mounts():
 
       modify_range(components, "minecraft:movement", speed_mult)
       modify_range(components, "minecraft:horse.jump_strength", jump_mult)
+      modify_range(components, "minecraft:health", health_mult)
 
       for cg_name, cg in component_groups.items():
         modify_range(cg, "minecraft:movement", speed_mult)
         modify_range(cg, "minecraft:horse.jump_strength", jump_mult)
+        modify_range(cg, "minecraft:health", health_mult)
 
       def scale_ai_speed(obj):
         for k, v in obj.items():
@@ -140,6 +166,71 @@ def build_mounts():
       scale_ai_speed(components)
       for cg_name, cg in component_groups.items():
         scale_ai_speed(cg)
+
+      def update_float(obj):
+        for k, v in obj.items():
+          if k == "minecraft:behavior.float" and isinstance(v, dict):
+            v["time_under_water_to_dismount_passengers"] = 999999.0
+
+      update_float(components)
+      for cg_name, cg in component_groups.items():
+        update_float(cg)
+
+      if mount == "horse.json":
+        if "minecraft:damage_sensor" not in components:
+          components["minecraft:damage_sensor"] = {"triggers": []}
+        triggers = components["minecraft:damage_sensor"].get("triggers", [])
+        if isinstance(triggers, dict):
+          triggers = [triggers]
+          components["minecraft:damage_sensor"]["triggers"] = triggers
+        triggers.append({
+          "cause": "fall",
+          "deals_damage": False,
+          "on_damage": {
+            "filters": {
+              "test": "has_equipment",
+              "domain": "any",
+              "subject": "self",
+              "value": "horsearmorleather"
+            }
+          }
+        })
+        triggers.append({
+          "cause": "fall",
+          "deals_damage": False,
+          "on_damage": {
+            "filters": {
+              "test": "has_equipment",
+              "domain": "any",
+              "subject": "self",
+              "value": "horsearmoriron"
+            }
+          }
+        })
+        triggers.append({
+          "cause": "fall",
+          "deals_damage": False,
+          "on_damage": {
+            "filters": {
+              "test": "has_equipment",
+              "domain": "any",
+              "subject": "self",
+              "value": "horsearmorgold"
+            }
+          }
+        })
+        triggers.append({
+          "cause": "fall",
+          "deals_damage": False,
+          "on_damage": {
+            "filters": {
+              "test": "has_equipment",
+              "domain": "any",
+              "subject": "self",
+              "value": "horsearmordiamond"
+            }
+          }
+        })
 
       out_path = os.path.join(BP_DIR, "entities", mount)
       os.makedirs(os.path.dirname(out_path), exist_ok=True)
@@ -158,6 +249,10 @@ def main():
   bump_type = sys.argv[1]
 
   build_mounts()
+  build_items()
+  build_other_entities()
+  build_loot_tables()
+  build_trades()
 
   bp_manifest_path = os.path.join(BP_DIR, "manifest.json")
   rp_manifest_path = os.path.join(RP_DIR, "manifest.json")
@@ -187,7 +282,7 @@ def main():
         module['version'] = list(bp_data['header']['version'])
     if 'dependencies' in rp_data:
       for dep in rp_data['dependencies']:
-        if 'version' in dep and 'uuid' in dep and dep['uuid'] == bp_data['header']['uuid']:
+        if 'version' in dep and 'uuid' in dep:
           dep['version'] = list(bp_data['header']['version'])
     new_version_str = ".".join(map(str, bp_data['header']['version']))
     print(f"New version: {new_version_str}")
@@ -200,7 +295,7 @@ def main():
 
   current_zip_path = os.path.join(PROJECT_DIR, f"Dragon_sword_v{new_version_str}.zip")
   current_mcaddon_path = os.path.join(PROJECT_DIR, f"Dragon_sword_v{new_version_str}.mcaddon")
-  
+
   with zipfile.ZipFile(current_mcaddon_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
     if os.path.exists(BP_DIR):
       zip_directory(BP_DIR, zipf, "BP")
@@ -218,16 +313,16 @@ def main():
   if os.path.exists(DEV_RP_DIR):
     shutil.rmtree(DEV_RP_DIR)
 
-  shutil.copytree(BP_DIR, DEV_BP_DIR)
-  shutil.copytree(RP_DIR, DEV_RP_DIR)
+  shutil.copytree(BP_DIR, DEV_BP_DIR, ignore=shutil.ignore_patterns('*.zip', '*.mcaddon'))
+  shutil.copytree(RP_DIR, DEV_RP_DIR, ignore=shutil.ignore_patterns('*.zip', '*.mcaddon'))
 
   if bump_type != 'dev':
     if os.path.exists(REGULAR_BP_DIR):
       shutil.rmtree(REGULAR_BP_DIR)
     if os.path.exists(REGULAR_RP_DIR):
       shutil.rmtree(REGULAR_RP_DIR)
-    shutil.copytree(BP_DIR, REGULAR_BP_DIR)
-    shutil.copytree(RP_DIR, REGULAR_RP_DIR)
+    shutil.copytree(BP_DIR, REGULAR_BP_DIR, ignore=shutil.ignore_patterns('*.zip', '*.mcaddon'))
+    shutil.copytree(RP_DIR, REGULAR_RP_DIR, ignore=shutil.ignore_patterns('*.zip', '*.mcaddon'))
 
   def devify_uuid(u):
     char = u[0]
@@ -253,5 +348,132 @@ def main():
 
   print("Deployed updated BP and RP to Minecraft development folders")
 
-if __name__ == "__main__":
+
+
+def build_items():
+  print("Building items...")
+  items = ["honey_bottle.json", "suspicious_stew.json"]
+  for item in items:
+    source_path = os.path.join(PROJECT_DIR, "Docs", "bedrock-samples-v1.26.50.4-full", "behavior_pack", "items", item)
+    if not os.path.exists(source_path): continue
+    with open(source_path, "r", encoding="utf-8") as f: content = strip_json_comments(f.read())
+    data = json.loads(content)
+    if item == "honey_bottle.json":
+      data["format_version"] = 1.1
+      data["minecraft:item"]["components"]["minecraft:max_stack_size"] = 64
+    elif item == "suspicious_stew.json":
+      data["format_version"] = "1.1"
+      data["minecraft:item"]["components"]["minecraft:max_stack_size"] = 16
+      use_anim = data["minecraft:item"]["components"].get("minecraft:use_animation", {})
+      if "on_use_action" in use_anim: del use_anim["on_use_action"]
+      if "can_always_eat" in use_anim: del use_anim["can_always_eat"]
+    out_path = os.path.join(BP_DIR, "items", item)
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f: json.dump(data, f, indent=2)
+def build_other_entities():
+  print("Building other entities...")
+  ents = ["skeleton_horse.json", "strider.json"]
+  for ent in ents:
+    source_path = os.path.join(PROJECT_DIR, "Docs", "bedrock-samples-v1.26.50.4-full", "behavior_pack", "entities", ent)
+    if not os.path.exists(source_path): continue
+    with open(source_path, "r", encoding="utf-8") as f: content = strip_json_comments(f.read())
+    data = json.loads(content)
+    comps = data.get("minecraft:entity", {}).get("components", {})
+    if ent == "skeleton_horse.json":
+      comps["minecraft:underwater_mount_breathing"] = {}
+      comps["minecraft:mob_effect"] = {"mob_effect": "breath_of_the_nautilus", "ambient": True, "effect_range": 1.6, "effect_time": 2, "entity_filter": {"all_of": [{"test": "is_family", "subject": "other", "value": "player"}, {"test": "is_riding_self", "subject": "other"}]}}
+      if "minecraft:movement" in comps: comps["minecraft:movement"]["value"] = 0.1
+      if "minecraft:horse.jump_strength" in comps: comps["minecraft:horse.jump_strength"]["value"] = 0.8
+    elif ent == "strider.json":
+      comps["minecraft:mob_effect"] = {"mob_effect": "fire_resistance", "ambient": True, "effect_range": 1.6, "effect_time": 2, "entity_filter": {"all_of": [{"test": "is_family", "subject": "other", "value": "player"}, {"test": "is_riding_self", "subject": "other"}]}}
+    out_path = os.path.join(BP_DIR, "entities", ent)
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f: json.dump(data, f, indent=2)
+def build_loot_tables():
+  print("Building loot tables...")
+  out_path = os.path.join(BP_DIR, "loot_tables", "chests", "ancient_city.json")
+  os.makedirs(os.path.dirname(out_path), exist_ok=True)
+  with open(out_path, "w", encoding="utf-8") as f: json.dump({'pools': [{'rolls': {'min': 2, 'max': 6}, 'entries': [{'type': 'item', 'name': 'minecraft:iron_ingot', 'functions': [{'function': 'set_count', 'count': {'min': 1, 'max': 5}}], 'weight': 20}, {'type': 'item', 'name': 'minecraft:arrow', 'functions': [{'function': 'set_count', 'count': {'min': 5, 'max': 15}}], 'weight': 25}, {'type': 'item', 'name': 'minecraft:bread', 'functions': [{'function': 'set_count', 'count': {'min': 2, 'max': 6}}], 'weight': 20}, {'type': 'item', 'name': 'minecraft:golden_apple', 'weight': 5}, {'type': 'item', 'name': 'minecraft:bone', 'functions': [{'function': 'set_count', 'count': {'min': 4, 'max': 6}}], 'weight': 30}]}]}, f, indent=2)
+  out_path = os.path.join(BP_DIR, "loot_tables", "chests", "ancient_city_ice_box.json")
+  os.makedirs(os.path.dirname(out_path), exist_ok=True)
+  with open(out_path, "w", encoding="utf-8") as f: json.dump({'pools': [{'rolls': {'min': 2, 'max': 6}, 'entries': [{'type': 'item', 'name': 'minecraft:iron_ingot', 'functions': [{'function': 'set_count', 'count': {'min': 1, 'max': 5}}], 'weight': 20}, {'type': 'item', 'name': 'minecraft:arrow', 'functions': [{'function': 'set_count', 'count': {'min': 5, 'max': 15}}], 'weight': 25}, {'type': 'item', 'name': 'minecraft:bread', 'functions': [{'function': 'set_count', 'count': {'min': 2, 'max': 6}}], 'weight': 20}, {'type': 'item', 'name': 'minecraft:golden_apple', 'weight': 5}, {'type': 'item', 'name': 'minecraft:bone', 'functions': [{'function': 'set_count', 'count': {'min': 4, 'max': 6}}], 'weight': 30}]}]}, f, indent=2)
+  out_path = os.path.join(BP_DIR, "loot_tables", "chests", "bastion_other.json")
+  os.makedirs(os.path.dirname(out_path), exist_ok=True)
+  with open(out_path, "w", encoding="utf-8") as f: json.dump({'pools': [{'rolls': {'min': 2, 'max': 6}, 'entries': [{'type': 'item', 'name': 'minecraft:iron_ingot', 'functions': [{'function': 'set_count', 'count': {'min': 1, 'max': 5}}], 'weight': 20}, {'type': 'item', 'name': 'minecraft:arrow', 'functions': [{'function': 'set_count', 'count': {'min': 5, 'max': 15}}], 'weight': 25}, {'type': 'item', 'name': 'minecraft:bread', 'functions': [{'function': 'set_count', 'count': {'min': 2, 'max': 6}}], 'weight': 20}, {'type': 'item', 'name': 'minecraft:golden_apple', 'weight': 5}, {'type': 'item', 'name': 'minecraft:bone', 'functions': [{'function': 'set_count', 'count': {'min': 4, 'max': 6}}], 'weight': 30}]}]}, f, indent=2)
+  out_path = os.path.join(BP_DIR, "loot_tables", "chests", "bastion_treasure.json")
+  os.makedirs(os.path.dirname(out_path), exist_ok=True)
+  with open(out_path, "w", encoding="utf-8") as f: json.dump({'pools': [{'rolls': {'min': 2, 'max': 6}, 'entries': [{'type': 'item', 'name': 'minecraft:iron_ingot', 'functions': [{'function': 'set_count', 'count': {'min': 1, 'max': 5}}], 'weight': 20}, {'type': 'item', 'name': 'minecraft:arrow', 'functions': [{'function': 'set_count', 'count': {'min': 5, 'max': 15}}], 'weight': 25}, {'type': 'item', 'name': 'minecraft:bread', 'functions': [{'function': 'set_count', 'count': {'min': 2, 'max': 6}}], 'weight': 20}, {'type': 'item', 'name': 'minecraft:golden_apple', 'weight': 5}, {'type': 'item', 'name': 'minecraft:bone', 'functions': [{'function': 'set_count', 'count': {'min': 4, 'max': 6}}], 'weight': 30}]}]}, f, indent=2)
+  out_path = os.path.join(BP_DIR, "loot_tables", "chests", "desert_pyramid.json")
+  os.makedirs(os.path.dirname(out_path), exist_ok=True)
+  with open(out_path, "w", encoding="utf-8") as f: json.dump({'pools': [{'rolls': {'min': 2, 'max': 6}, 'entries': [{'type': 'item', 'name': 'minecraft:iron_ingot', 'functions': [{'function': 'set_count', 'count': {'min': 1, 'max': 5}}], 'weight': 20}, {'type': 'item', 'name': 'minecraft:arrow', 'functions': [{'function': 'set_count', 'count': {'min': 5, 'max': 15}}], 'weight': 25}, {'type': 'item', 'name': 'minecraft:bread', 'functions': [{'function': 'set_count', 'count': {'min': 2, 'max': 6}}], 'weight': 20}, {'type': 'item', 'name': 'minecraft:golden_apple', 'weight': 5}, {'type': 'item', 'name': 'minecraft:rotten_flesh', 'functions': [{'function': 'set_count', 'count': {'min': 3, 'max': 7}}], 'weight': 30}]}]}, f, indent=2)
+  out_path = os.path.join(BP_DIR, "loot_tables", "chests", "jungle_temple.json")
+  os.makedirs(os.path.dirname(out_path), exist_ok=True)
+  with open(out_path, "w", encoding="utf-8") as f: json.dump({'pools': [{'rolls': {'min': 2, 'max': 6}, 'entries': [{'type': 'item', 'name': 'minecraft:iron_ingot', 'functions': [{'function': 'set_count', 'count': {'min': 1, 'max': 5}}], 'weight': 20}, {'type': 'item', 'name': 'minecraft:arrow', 'functions': [{'function': 'set_count', 'count': {'min': 5, 'max': 15}}], 'weight': 25}, {'type': 'item', 'name': 'minecraft:bread', 'functions': [{'function': 'set_count', 'count': {'min': 2, 'max': 6}}], 'weight': 20}, {'type': 'item', 'name': 'minecraft:golden_apple', 'weight': 5}, {'type': 'item', 'name': 'minecraft:bone', 'functions': [{'function': 'set_count', 'count': {'min': 4, 'max': 6}}], 'weight': 30}]}]}, f, indent=2)
+  out_path = os.path.join(BP_DIR, "loot_tables", "entities", "wither_boss.json")
+  os.makedirs(os.path.dirname(out_path), exist_ok=True)
+  with open(out_path, "w", encoding="utf-8") as f: json.dump({'pools': [{'rolls': 1, 'entries': [{'type': 'item', 'name': 'minecraft:nether_star', 'weight': 1}]}, {'rolls': 1, 'entries': [{'type': 'item', 'name': 'minecraft:bone_block', 'weight': 1}]}, {'rolls': 1, 'conditions': [{'condition': 'random_chance', 'chance': 0.5}], 'entries': [{'type': 'item', 'name': 'minecraft:ominous_bottle', 'weight': 1, 'functions': [{'function': 'set_data', 'data': {'min': 2, 'max': 4}}]}]}]}, f, indent=2)
+def build_trades():
+  print("Building trades...")
+  source_path = os.path.join(PROJECT_DIR, "Docs", "bedrock-samples-v1.26.50.4-full", "behavior_pack", "trading", "armorer_trades.json")
+  if os.path.exists(source_path):
+    with open(source_path, "r", encoding="utf-8") as f: data = json.loads(strip_json_comments(f.read()))
+    if 4 < len(data["tiers"]):
+      data["tiers"][4] = {'trades': [{'wants': [{'item': 'minecraft:emerald', 'quantity': 32}, {'item': 'minecraft:heavy_core', 'quantity': 1}], 'gives': [{'item': 'minecraft:diamond_chestplate', 'quantity': 1, 'functions': [{'function': 'enchant_randomly'}]}]}, {'wants': [{'item': 'minecraft:emerald', 'quantity': 32}, {'item': 'minecraft:heavy_core', 'quantity': 1}], 'gives': [{'item': 'minecraft:diamond_chestplate', 'quantity': 1, 'functions': [{'function': 'enchant_randomly'}]}]}]}
+    else:
+      data["tiers"].append({'trades': [{'wants': [{'item': 'minecraft:emerald', 'quantity': 32}, {'item': 'minecraft:heavy_core', 'quantity': 1}], 'gives': [{'item': 'minecraft:diamond_chestplate', 'quantity': 1, 'functions': [{'function': 'enchant_randomly'}]}]}, {'wants': [{'item': 'minecraft:emerald', 'quantity': 32}, {'item': 'minecraft:heavy_core', 'quantity': 1}], 'gives': [{'item': 'minecraft:diamond_chestplate', 'quantity': 1, 'functions': [{'function': 'enchant_randomly'}]}]}]})
+    out_path = os.path.join(BP_DIR, "trading", "armorer_trades.json")
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f: json.dump(data, f, indent=2)
+  source_path = os.path.join(PROJECT_DIR, "Docs", "bedrock-samples-v1.26.50.4-full", "behavior_pack", "trading", "cleric_trades.json")
+  if os.path.exists(source_path):
+    with open(source_path, "r", encoding="utf-8") as f: data = json.loads(strip_json_comments(f.read()))
+    if 3 < len(data["tiers"]):
+      data["tiers"][3] = {'groups': [{'num_to_select': -1, 'trades': [{'wants': [{'choice': [{'quantity': {'min': 3, 'max': 11}, 'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:experience_bottle', 'functions': []}]}]}, {'wants': [{'item': 'minecraft:emerald', 'quantity': 16}, {'item': 'minecraft:ominous_bottle', 'quantity': 1}], 'gives': [{'item': 'minecraft:slime_ball', 'quantity': 12}]}]}], 'total_exp_required': 3}
+    else:
+      data["tiers"].append({'groups': [{'num_to_select': -1, 'trades': [{'wants': [{'choice': [{'quantity': {'min': 3, 'max': 11}, 'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:experience_bottle', 'functions': []}]}]}, {'wants': [{'item': 'minecraft:emerald', 'quantity': 16}, {'item': 'minecraft:ominous_bottle', 'quantity': 1}], 'gives': [{'item': 'minecraft:slime_ball', 'quantity': 12}]}]}], 'total_exp_required': 3})
+    out_path = os.path.join(BP_DIR, "trading", "cleric_trades.json")
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f: json.dump(data, f, indent=2)
+  source_path = os.path.join(PROJECT_DIR, "Docs", "bedrock-samples-v1.26.50.4-full", "behavior_pack", "trading", "farmer_trades.json")
+  if os.path.exists(source_path):
+    with open(source_path, "r", encoding="utf-8") as f: data = json.loads(strip_json_comments(f.read()))
+    if 0 < len(data["tiers"]):
+      data["tiers"][0] = {'groups': [{'num_to_select': -1, 'trades': [{'wants': [{'choice': [{'quantity': {'min': 18, 'max': 22}, 'item': 'minecraft:wheat', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'min': 15, 'max': 19}, 'item': 'minecraft:potato', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'min': 15, 'max': 19}, 'item': 'minecraft:carrot', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}]}, {'wants': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'quantity': {'min': 2, 'max': 4}, 'item': 'minecraft:bread', 'functions': []}]}]}]}, {'num_to_select': -1, 'trades': [{'wants': [{'item': 'minecraft:wheat', 'quantity': 64}], 'gives': [{'item': 'minecraft:emerald', 'quantity': 1}]}]}], 'total_exp_required': 0}
+    else:
+      data["tiers"].append({'groups': [{'num_to_select': -1, 'trades': [{'wants': [{'choice': [{'quantity': {'min': 18, 'max': 22}, 'item': 'minecraft:wheat', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'min': 15, 'max': 19}, 'item': 'minecraft:potato', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'min': 15, 'max': 19}, 'item': 'minecraft:carrot', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}]}, {'wants': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'quantity': {'min': 2, 'max': 4}, 'item': 'minecraft:bread', 'functions': []}]}]}]}, {'num_to_select': -1, 'trades': [{'wants': [{'item': 'minecraft:wheat', 'quantity': 64}], 'gives': [{'item': 'minecraft:emerald', 'quantity': 1}]}]}], 'total_exp_required': 0})
+    out_path = os.path.join(BP_DIR, "trading", "farmer_trades.json")
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f: json.dump(data, f, indent=2)
+  source_path = os.path.join(PROJECT_DIR, "Docs", "bedrock-samples-v1.26.50.4-full", "behavior_pack", "trading", "fletcher_trades.json")
+  if os.path.exists(source_path):
+    with open(source_path, "r", encoding="utf-8") as f: data = json.loads(strip_json_comments(f.read()))
+    if 1 < len(data["tiers"]):
+      data["tiers"][1] = {'groups': [{'num_to_select': -1, 'trades': [{'wants': [{'choice': [{'quantity': {'min': 10, 'max': 10}, 'item': 'minecraft:gravel', 'functions': []}]}, {'choice': [{'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'quantity': {'min': 6, 'max': 10}, 'item': 'minecraft:flint', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'min': 2, 'max': 3}, 'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:bow', 'functions': []}]}]}]}, {'num_to_select': -1, 'trades': [{'wants': [{'item': 'minecraft:emerald', 'quantity': 12}, {'item': 'minecraft:phantom_membrane', 'quantity': 1}], 'gives': [{'item': 'minecraft:arrow', 'quantity': 64, 'functions': [{'function': 'set_data', 'data': 17}]}]}]}], 'total_exp_required': 1}
+    else:
+      data["tiers"].append({'groups': [{'num_to_select': -1, 'trades': [{'wants': [{'choice': [{'quantity': {'min': 10, 'max': 10}, 'item': 'minecraft:gravel', 'functions': []}]}, {'choice': [{'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'quantity': {'min': 6, 'max': 10}, 'item': 'minecraft:flint', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'min': 2, 'max': 3}, 'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:bow', 'functions': []}]}]}]}, {'num_to_select': -1, 'trades': [{'wants': [{'item': 'minecraft:emerald', 'quantity': 12}, {'item': 'minecraft:phantom_membrane', 'quantity': 1}], 'gives': [{'item': 'minecraft:arrow', 'quantity': 64, 'functions': [{'function': 'set_data', 'data': 17}]}]}]}], 'total_exp_required': 1})
+    out_path = os.path.join(BP_DIR, "trading", "fletcher_trades.json")
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f: json.dump(data, f, indent=2)
+  source_path = os.path.join(PROJECT_DIR, "Docs", "bedrock-samples-v1.26.50.4-full", "behavior_pack", "trading", "librarian_trades.json")
+  if os.path.exists(source_path):
+    with open(source_path, "r", encoding="utf-8") as f: data = json.loads(strip_json_comments(f.read()))
+    if 4 < len(data["tiers"]):
+      data["tiers"][4] = {'trades': [{'wants': [{'item': 'minecraft:emerald', 'quantity': {'min': 5, 'max': 64}}, {'item': 'minecraft:book', 'quantity': 1}], 'gives': [{'item': 'minecraft:enchanted_book', 'functions': [{'function': 'enchant_book_for_trading', 'base_cost': 2, 'base_random_cost': 5, 'per_level_random_cost': 10, 'per_level_cost': 3}]}]}, {'wants': [{'item': 'minecraft:emerald', 'quantity': 24}, {'item': 'minecraft:trial_key', 'quantity': 1}], 'gives': [{'item': 'minecraft:enchanted_book', 'quantity': 1, 'functions': [{'function': 'specific_enchants', 'enchants': ['mending']}]}]}]}
+    else:
+      data["tiers"].append({'trades': [{'wants': [{'item': 'minecraft:emerald', 'quantity': {'min': 5, 'max': 64}}, {'item': 'minecraft:book', 'quantity': 1}], 'gives': [{'item': 'minecraft:enchanted_book', 'functions': [{'function': 'enchant_book_for_trading', 'base_cost': 2, 'base_random_cost': 5, 'per_level_random_cost': 10, 'per_level_cost': 3}]}]}, {'wants': [{'item': 'minecraft:emerald', 'quantity': 24}, {'item': 'minecraft:trial_key', 'quantity': 1}], 'gives': [{'item': 'minecraft:enchanted_book', 'quantity': 1, 'functions': [{'function': 'specific_enchants', 'enchants': ['mending']}]}]}]})
+    out_path = os.path.join(BP_DIR, "trading", "librarian_trades.json")
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f: json.dump(data, f, indent=2)
+  source_path = os.path.join(PROJECT_DIR, "Docs", "bedrock-samples-v1.26.50.4-full", "behavior_pack", "trading", "stone_mason_trades.json")
+  if os.path.exists(source_path):
+    with open(source_path, "r", encoding="utf-8") as f: data = json.loads(strip_json_comments(f.read()))
+    if 2 < len(data["tiers"]):
+      data["tiers"][2] = {'groups': [{'num_to_select': -1, 'trades': [{'wants': [{'choice': [{'quantity': {'min': 16, 'max': 21}, 'item': 'minecraft:stone:1', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'min': 16, 'max': 21}, 'item': 'minecraft:stone:5', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'min': 16, 'max': 21}, 'item': 'minecraft:stone:3', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'max': 2}, 'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'quantity': {'min': 4, 'max': 4}, 'item': 'minecraft:stone:2', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'max': 2}, 'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'quantity': {'min': 4, 'max': 4}, 'item': 'minecraft:stone:6', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'max': 2}, 'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'quantity': {'min': 4, 'max': 4}, 'item': 'minecraft:stone:4', 'functions': []}]}]}]}], 'total_exp_required': 2, 'trades': [{'wants': [{'item': 'minecraft:echo_shard', 'quantity': 1}], 'gives': [{'item': 'minecraft:quartz_block', 'quantity': 64, 'functions': [{'function': 'set_data', 'data': 1}]}]}]}
+    else:
+      data["tiers"].append({'groups': [{'num_to_select': -1, 'trades': [{'wants': [{'choice': [{'quantity': {'min': 16, 'max': 21}, 'item': 'minecraft:stone:1', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'min': 16, 'max': 21}, 'item': 'minecraft:stone:5', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'min': 16, 'max': 21}, 'item': 'minecraft:stone:3', 'functions': []}]}], 'gives': [{'choice': [{'item': 'minecraft:emerald', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'max': 2}, 'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'quantity': {'min': 4, 'max': 4}, 'item': 'minecraft:stone:2', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'max': 2}, 'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'quantity': {'min': 4, 'max': 4}, 'item': 'minecraft:stone:6', 'functions': []}]}]}, {'wants': [{'choice': [{'quantity': {'max': 2}, 'item': 'minecraft:emerald', 'functions': []}]}], 'gives': [{'choice': [{'quantity': {'min': 4, 'max': 4}, 'item': 'minecraft:stone:4', 'functions': []}]}]}]}], 'total_exp_required': 2, 'trades': [{'wants': [{'item': 'minecraft:echo_shard', 'quantity': 1}], 'gives': [{'item': 'minecraft:quartz_block', 'quantity': 64, 'functions': [{'function': 'set_data', 'data': 1}]}]}]})
+    out_path = os.path.join(BP_DIR, "trading", "stone_mason_trades.json")
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f: json.dump(data, f, indent=2)
+
+if __name__ == '__main__':
   main()

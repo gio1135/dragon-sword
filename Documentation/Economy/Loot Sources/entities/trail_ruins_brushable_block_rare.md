@@ -1,0 +1,15 @@
+[[Mob loot]]
+
+## Drops
+- [[burn_pottery_sherd]]
+- [[danger_pottery_sherd]]
+- [[friend_pottery_sherd]]
+- [[heart_pottery_sherd]]
+- [[heartbreak_pottery_sherd]]
+- [[host_armor_trim_smithing_template]]
+- [[howl_pottery_sherd]]
+- [[music_disc_relic]]
+- [[raiser_armor_trim_smithing_template]]
+- [[shaper_armor_trim_smithing_template]]
+- [[sheaf_pottery_sherd]]
+- [[wayfinder_armor_trim_smithing_template]]

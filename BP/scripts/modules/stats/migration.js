@@ -2,7 +2,7 @@ import { world } from '@minecraft/server';
 import { getStatsManager } from './core/StatsManager.js';
 import { STORAGE_KEYS } from './core/constants.js';
 
-const OLD_PREFIXES = ['ds:', 'bs:'];
+const OLD_PREFIXES = ['32k:', 'bs:'];
 const OLD_CATEGORIES = [
   'custom',
   'mined',

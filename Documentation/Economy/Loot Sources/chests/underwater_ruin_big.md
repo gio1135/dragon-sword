@@ -1,0 +1,18 @@
+[[Structure loot]]
+
+## Drops
+- [[book]]
+- [[coal]]
+- [[copper_nautilus_armor]]
+- [[diamond_nautilus_armor]]
+- [[emerald]]
+- [[fishing_rod]]
+- [[gold_nugget]]
+- [[golden_apple]]
+- [[golden_helmet]]
+- [[golden_nautilus_armor]]
+- [[iron_nautilus_armor]]
+- [[leather_chestplate]]
+- [[map]]
+- [[stone_spear]]
+- [[wheat]]

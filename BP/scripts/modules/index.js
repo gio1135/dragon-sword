@@ -12,7 +12,6 @@ import './outlaw/main.js';
 import './bedrock_border/index.js';
 import './vein_mining/main.js';
 import './mobs/enderman.js';
-import './dungeons/main.js';
 import './tpa/lodestone.js';
 
 import './economy/main.js';

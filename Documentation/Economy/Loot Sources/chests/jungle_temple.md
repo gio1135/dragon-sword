@@ -1,0 +1,17 @@
+[[Structure loot]]
+
+## Drops
+- [[bamboo]]
+- [[bone]]
+- [[book]]
+- [[copper_horse_armor]]
+- [[diamond]]
+- [[emerald]]
+- [[gold_ingot]]
+- [[horsearmordiamond]]
+- [[horsearmorgold]]
+- [[horsearmoriron]]
+- [[iron_ingot]]
+- [[leather]]
+- [[rotten_flesh]]
+- [[wild_armor_trim_smithing_template]]
