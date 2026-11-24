@@ -3,7 +3,7 @@ import { DS } from '../../core/ds.js';
 
 export class ServerLock {
   static get PROPERTY_ID() {
-    return 'ds:server_locked';
+    return '32k:server_locked';
   }
 
   static isLocked() {

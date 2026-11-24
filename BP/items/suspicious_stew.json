@@ -10,7 +10,9 @@
       "minecraft:food": {
         "nutrition": 6,
         "saturation_modifier": "normal",
-        "using_converts_to": "bowl"
+        "using_converts_to": "bowl",
+        "on_use_action": "suspicious_stew_effect",
+        "can_always_eat": true
       }
     }
   }

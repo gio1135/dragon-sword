@@ -1,5 +1,5 @@
 {
-  "format_version": "1.26.30",
+  "format_version": "1.26.50",
   "minecraft:entity": {
     "description": {
       "identifier": "minecraft:horse",
@@ -62,7 +62,7 @@
         },
         "minecraft:behavior.follow_parent": {
           "priority": 4,
-          "speed_multiplier": 0.5
+          "speed_multiplier": 1.0
         },
         "minecraft:collision_box": {
           "width": 1.96,
@@ -77,14 +77,16 @@
         "minecraft:loot": {
           "table": "loot_tables/entities/horse.json"
         },
-        "minecraft:leashable_to": {},
+        "minecraft:leashable_to": {
+          "unleash_on_removal": false
+        },
         "minecraft:behavior.run_around_like_crazy": {
           "priority": 1,
-          "speed_multiplier": 0.6
+          "speed_multiplier": 1.2
         },
         "minecraft:behavior.breed": {
           "priority": 2,
-          "speed_multiplier": 0.5
+          "speed_multiplier": 1.0
         }
       },
       "minecraft:horse_wild": {
@@ -105,7 +107,7 @@
         },
         "minecraft:behavior.mount_pathing": {
           "priority": 2,
-          "speed_multiplier": 0.75,
+          "speed_multiplier": 1.5,
           "target_dist": 0.0,
           "track_target": true
         },
@@ -140,7 +142,7 @@
               "temper_mod": 10
             },
             {
-              "item": "appleEnchanted",
+              "item": "appleenchanted",
               "temper_mod": 10
             }
           ],
@@ -220,7 +222,9 @@
               },
               "equip_item_slot": "1",
               "interact_text": "action.interact.equiphorsearmor",
-              "play_sounds": "armor.equip_generic"
+              "play_sounds": [
+                "armor.equip_generic"
+              ]
             },
             {
               "on_interact": {
@@ -256,7 +260,9 @@
               "drop_item_slot": "1",
               "drop_item_y_offset": 1.1,
               "interact_text": "action.interact.removehorsearmor",
-              "play_sounds": "armor.unequip_generic",
+              "play_sounds": [
+                "armor.unequip_generic"
+              ],
               "vibration": "shear"
             },
             {
@@ -322,7 +328,9 @@
               "drop_item_slot": "0",
               "drop_item_y_offset": 1.1,
               "interact_text": "action.interact.removesaddle",
-              "play_sounds": "unsaddle",
+              "play_sounds": [
+                "unsaddle"
+              ],
               "vibration": "shear"
             }
           ]
@@ -413,7 +421,17 @@
     },
     "components": {
       "minecraft:is_hidden_when_invisible": {},
-      "minecraft:ambient_sound_interval": {},
+      "minecraft:ambient_sound_interval": {
+        "event_name": "ambient",
+        "event_names": [
+          {
+            "condition": "query.is_baby",
+            "event_name": "ambient.baby"
+          }
+        ],
+        "range": 16.0,
+        "value": 12.0
+      },
       "minecraft:equippable": {
         "slots": [
           {
@@ -477,14 +495,15 @@
       },
       "minecraft:movement": {
         "value": {
-          "range_min": 0.225,
-          "range_max": 0.675
+          "range_min": 0.12,
+          "range_max": 0.25
         }
       },
       "minecraft:navigation.walk": {
         "can_path_over_water": true,
         "avoid_water": true,
-        "avoid_damage_blocks": true
+        "avoid_damage_blocks": true,
+        "using_door_annotation": true
       },
       "minecraft:movement.basic": {},
       "minecraft:jump.static": {},
@@ -517,8 +536,8 @@
       "minecraft:spawn_egg_interaction": {},
       "minecraft:horse.jump_strength": {
         "value": {
-          "range_min": 0.6000000000000001,
-          "range_max": 1.5
+          "range_min": 0.6,
+          "range_max": 0.95
         }
       },
       "minecraft:leashable": {
@@ -531,7 +550,8 @@
             },
             "spring_type": "quad_dampened"
           }
-        ]
+        ],
+        "unleash_on_removal": false
       },
       "minecraft:balloonable": {},
       "minecraft:healable": {
@@ -576,7 +596,7 @@
       "minecraft:behavior.float": {
         "priority": 0,
         "chance_per_tick_to_float": 0.0,
-        "time_under_water_to_dismount_passengers": 2.0
+        "time_under_water_to_dismount_passengers": 999999.0
       },
       "minecraft:buoyant": {
         "base_buoyancy": 1.0,
@@ -592,11 +612,11 @@
       },
       "minecraft:behavior.panic": {
         "priority": 3,
-        "speed_multiplier": 0.6
+        "speed_multiplier": 1.2
       },
       "minecraft:behavior.tempt": {
         "priority": 5,
-        "speed_multiplier": 0.6,
+        "speed_multiplier": 1.2,
         "items": [
           "golden_apple",
           "appleEnchanted",
@@ -605,7 +625,7 @@
       },
       "minecraft:behavior.random_stroll": {
         "priority": 6,
-        "speed_multiplier": 0.35
+        "speed_multiplier": 0.7
       },
       "minecraft:behavior.look_at_player": {
         "priority": 7,
@@ -645,7 +665,15 @@
         ]
       },
       "minecraft:pushable_by_block": {},
-      "minecraft:conditional_bandwidth_optimization": {}
+      "minecraft:conditional_bandwidth_optimization": {},
+      "minecraft:damage_sensor": {
+        "triggers": [
+          {
+            "cause": "fall",
+            "deals_damage": "no"
+          }
+        ]
+      }
     },
     "events": {
       "minecraft:entity_spawned": {

@@ -24,7 +24,7 @@ export function validateNumericInput(value, min, max, fieldName) {
 }
 
 export function hasBypassPermission(player) {
-  const gameMode = player.getGameMode();
+  const gameMode = String(player.getGameMode()).toLowerCase();
   return (
     gameMode === 'creative' ||
     gameMode === 'spectator' ||

@@ -35,7 +35,7 @@ export class BorderCleanupJob {
 
       system.run(() => {
         try {
-          dimension.runCommandAsync(
+          dimension.runCommand(
             `tickingarea add ${xMin} 0 ${zMin} ${xMax} 0 ${zMax} ${areaName}`,
           );
         } catch (e) {}
@@ -44,7 +44,7 @@ export class BorderCleanupJob {
           try {
             const y = dimension.id === 'minecraft:overworld' ? -64 : 0;
 
-            dimension.runCommandAsync(
+            dimension.runCommand(
               `fill ${xMin} ${y} ${zMin} ${xMax} ${y} ${zMax} bedrock replace border_block`,
             );
           } catch (e) {
@@ -53,7 +53,7 @@ export class BorderCleanupJob {
 
           system.run(() => {
             try {
-              dimension.runCommandAsync(`tickingarea remove ${areaName}`);
+              dimension.runCommand(`tickingarea remove ${areaName}`);
             } catch (e) {}
 
             this.processQueue();

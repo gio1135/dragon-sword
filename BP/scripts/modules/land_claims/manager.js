@@ -18,12 +18,12 @@ class ClaimManagerClass {
       if (!pd.claims) continue;
       for (const claim of pd.claims) {
         if (!claim || !claim.start || !claim.end) continue;
-        
+
         const minX = Math.floor(Math.min(claim.start.x, claim.end.x) / 16);
         const maxX = Math.floor(Math.max(claim.start.x, claim.end.x) / 16);
         const minZ = Math.floor(Math.min(claim.start.z, claim.end.z) / 16);
         const maxZ = Math.floor(Math.max(claim.start.z, claim.end.z) / 16);
-        
+
         for (let cx = minX; cx <= maxX; cx++) {
           for (let cz = minZ; cz <= maxZ; cz++) {
             const key = `${cx},${cz}`;
@@ -154,14 +154,14 @@ class ClaimManagerClass {
 
   getClaimsAt(location) {
     if (!this.spatialCache) return [];
-    
+
     const cx = Math.floor(location.x / 16);
     const cz = Math.floor(location.z / 16);
     const key = `${cx},${cz}`;
-    
+
     const claimsInChunk = this.spatialCache.get(key);
     if (!claimsInChunk) return [];
-    
+
     const hits = [];
     for (const c of claimsInChunk) {
       if (c.isOverlap(location)) hits.push(c);

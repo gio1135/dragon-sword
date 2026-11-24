@@ -1,0 +1,25 @@
+[[Trades]]
+
+## Sells
+- [[bell]]
+- [[chainmail_boots]]
+- [[chainmail_chestplate]]
+- [[chainmail_helmet]]
+- [[chainmail_leggings]]
+- [[diamond_boots]]
+- [[diamond_chestplate]]
+- [[diamond_helmet]]
+- [[diamond_leggings]]
+- [[emerald]]
+- [[iron_boots]]
+- [[iron_chestplate]]
+- [[iron_helmet]]
+- [[iron_leggings]]
+- [[shield]]
+
+## Buys
+- [[bucket]]
+- [[coal]]
+- [[diamond]]
+- [[emerald]]
+- [[iron_ingot]]

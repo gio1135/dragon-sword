@@ -26,9 +26,11 @@ class CoreCraftAPI {
   static addForm(data) {
     return __async(this, null, function* () {
       system.runTimeout(() => {
-        world
-          .getDimension('overworld')
-          .runCommandAsync(`scriptevent cc:add_form ${JSON.stringify(data)}`);
+        try {
+          world
+            .getDimension('overworld')
+            .runCommand(`scriptevent cc:add_form ${JSON.stringify(data)}`);
+        } catch {}
       });
     });
   }

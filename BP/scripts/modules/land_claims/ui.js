@@ -191,13 +191,14 @@ static openPlayerList(player, claim, targetData = null) {
 static openPlayerSpecificPermissions(player, claim, pp, targetData = null) {
  const form = DS.ui.modal(pp.name + ' permissions');
 
- const permissions = PermissionRegistry.getAll();
- for (const perm of permissions) {
- if (perm.globalOnly) continue;
- form.toggle(perm.label, pp.get(perm.key));
- }
+  const permissions = PermissionRegistry.getAll();
+  const playerPermissions = permissions.filter(p => !p.globalOnly);
 
- const isTrusted = claim.playerPermissionsList.some(p => p.id === pp.id);
+  for (const perm of playerPermissions) {
+    form.toggle(perm.label, pp.get(perm.key));
+  }
+
+  const isTrusted = claim.playerPermissionsList.some(p => p.id === pp.id);
  form.toggle('Remove player', !isTrusted);
 
  form.submit(response => {
@@ -217,12 +218,12 @@ static openPlayerSpecificPermissions(player, claim, pp, targetData = null) {
   return;
  }
 
- for (let i = 0; i < permissions.length; i++) {
-  const perm = permissions[i];
-  pp.set(perm.key, formValues[i]);
- }
+  for (let i = 0; i < playerPermissions.length; i++) {
+   const perm = playerPermissions[i];
+   pp.set(perm.key, formValues[i]);
+  }
 
- ClaimManager.save();
+  ClaimManager.save();
  player.sendMessage(`§aUpdated §f${pp.name}`);
  this.openPlayerList(player, claim, targetData);
  });
@@ -277,7 +278,7 @@ static openAdminMenu(player) {
  .button('General settings', () => this.openAdminConfigMenu(player))
  .button('Disallowed blocks', () => this.openDisallowedBlocksMenu(player))
  .show(player).then(res => {
-  if (res.canceled) DS.events.emit('ds:admin_open', { player });
+  if (res.canceled) DS.events.emit('32k:admin_open', { player });
  });
 }
 
@@ -294,7 +295,7 @@ static openOpPlayerList(player) {
  }
 
  form.show(player).then(res => {
- if (res.canceled) DS.events.emit('ds:admin_open', { player });
+ if (res.canceled) DS.events.emit('32k:admin_open', { player });
  });
 }
 
@@ -308,7 +309,7 @@ static openOpPlayerManageMenu(player, targetData) {
     buttons: []
   };
 
-  DS.events.emit('ds:op_player_manage_ui', eventPayload);
+  DS.events.emit('32k:op_player_manage_ui', eventPayload);
 
   const form = DS.ui.action(`Manage: §e${targetData.name}`, eventPayload.body)
     .button('Manage claims', () => {

@@ -110,9 +110,11 @@ export function ProcessMiningStepLazer(
 
     SpawnLaser(player, centerPos);
 
-    player.dimension.runCommandAsync(
-      `playsound random.orb @a ${centerPos.x} ${centerPos.y} ${centerPos.z} 0.6 2`,
-    );
+    try {
+      player.dimension.runCommand(
+        `playsound random.orb @a ${centerPos.x} ${centerPos.y} ${centerPos.z} 0.6 2`,
+      );
+    } catch {}
 
     const tool = player
       .getComponent('minecraft:equippable')

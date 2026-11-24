@@ -5,8 +5,8 @@ import { Lang } from '../../lang/Lang.js';
 import { FeatureFlags } from '../../core/feature_flags.js';
 
 const SETTINGS = {
-  LOCK_NETHER: 'ds:lock_nether',
-  LOCK_END: 'ds:lock_end',
+  LOCK_NETHER: '32k:lock_nether',
+  LOCK_END: '32k:lock_end',
 };
 
 const DIMENSIONS = {

@@ -26,9 +26,11 @@ function getBlocks(block) {
 }
 function destroyBlock(block) {
   const loc = block.location;
-  block.dimension.runCommandAsync(
-    `setblock ${loc.x} ${loc.y} ${loc.z} air destroy`,
-  );
+  try {
+    block.dimension.runCommand(
+      `setblock ${loc.x} ${loc.y} ${loc.z} air destroy`,
+    );
+  } catch {}
 }
 function getBlockToolLevel(tags) {
   let level = 0;

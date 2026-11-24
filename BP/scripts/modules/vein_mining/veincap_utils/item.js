@@ -2,7 +2,7 @@ import {
   ItemDurabilityComponent,
   ItemEnchantableComponent,
 } from '@minecraft/server';
-import { randomNum } from './math';
+import { randomNum } from './math.js';
 function calculateFortune(enchantLevel, levels) {
   let extraItems = 0;
   if (enchantLevel > 3) {

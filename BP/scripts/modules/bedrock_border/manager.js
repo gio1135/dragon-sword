@@ -127,8 +127,10 @@ class WorldBorderManagerClass {
 
     const sizeBlocks = this.chunksToBlocks(borderConfig.sizeChunks);
 
-    const minSafe = borderConfig.centerX - sizeBlocks;
-    const maxSafe = borderConfig.centerX + sizeBlocks;
+    const minSafeX = borderConfig.centerX - sizeBlocks;
+    const maxSafeX = borderConfig.centerX + sizeBlocks;
+    const minSafeZ = borderConfig.centerZ - sizeBlocks;
+    const maxSafeZ = borderConfig.centerZ + sizeBlocks;
 
     const x = location.x;
     const z = location.z;
@@ -136,21 +138,20 @@ class WorldBorderManagerClass {
 
     let outside = false;
 
-    if (x <= minSafe || x >= maxSafe || z <= minSafe || z >= maxSafe) {
+    if (x <= minSafeX || x >= maxSafeX || z <= minSafeZ || z >= maxSafeZ) {
       outside = true;
     }
 
     if (outside) {
-      if (hasBypass) {
-      } else {
+      if (!hasBypass) {
         this.teleportPlayerBack(
           player,
           location,
           borderConfig,
-          minSafe,
-          maxSafe,
-          minSafe,
-          maxSafe,
+          minSafeX,
+          maxSafeX,
+          minSafeZ,
+          maxSafeZ,
         );
         this.events.emit(BorderEvents.PLAYER_CROSS_BORDER, {
           player,
@@ -160,7 +161,15 @@ class WorldBorderManagerClass {
     }
   }
 
-  teleportPlayerBack(player, currentLocation, borderConfig, minSafe, maxSafe) {
+  teleportPlayerBack(
+    player,
+    currentLocation,
+    borderConfig,
+    minSafeX,
+    maxSafeX,
+    minSafeZ,
+    maxSafeZ,
+  ) {
     const x = currentLocation.x;
     const z = currentLocation.z;
     const y = currentLocation.y;
@@ -168,10 +177,10 @@ class WorldBorderManagerClass {
     let newX = x;
     let newZ = z;
 
-    if (x <= minSafe) newX = minSafe + 1;
-    if (x >= maxSafe) newX = maxSafe - 1;
-    if (z <= minSafe) newZ = minSafe + 1;
-    if (z >= maxSafe) newZ = maxSafe - 1;
+    if (x <= minSafeX) newX = minSafeX + 3;
+    if (x >= maxSafeX) newX = maxSafeX - 3;
+    if (z <= minSafeZ) newZ = minSafeZ + 3;
+    if (z >= maxSafeZ) newZ = maxSafeZ - 3;
 
     const safeY = findSafeY(player, newX, newZ, y);
 
@@ -180,6 +189,7 @@ class WorldBorderManagerClass {
         { x: newX, y: safeY, z: newZ },
         {
           dimension: player.dimension,
+          checkForBlocks: false,
         },
       );
       player.playSound(SOUNDS.BORDER_HIT, { volume: 0.5, pitch: 0.8 });
@@ -188,7 +198,21 @@ class WorldBorderManagerClass {
         from: currentLocation,
         to: { x: newX, y: safeY, z: newZ },
       });
-    } catch (error) {}
+    } catch {
+      try {
+        player.runCommand(
+          `tp @s ${Math.floor(newX)} ${Math.floor(safeY)} ${Math.floor(newZ)}`,
+        );
+        player.playSound(SOUNDS.BORDER_HIT, { volume: 0.5, pitch: 0.8 });
+        this.events.emit(BorderEvents.PLAYER_TELEPORTED, {
+          player,
+          from: currentLocation,
+          to: { x: newX, y: safeY, z: newZ },
+        });
+      } catch (cmdError) {
+        DS.log(`Failed to teleport player back: ${cmdError}`);
+      }
+    }
   }
 
   showWallParticles(player) {

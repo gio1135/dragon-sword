@@ -170,10 +170,16 @@ function showClaimParticles(player, claim, pLoc, claimShovelOut) {
 
   const isClose = claim.isOverlap(pLoc, pLoc, 24);
   const playerData = ClaimManager.getOrCreatePlayer(player);
-  let shouldRender = claimShovelOut || player.hasTag('debug_claims') || (playerData && playerData.showClaimParticles);
+  let shouldRender = false;
+  const debug = player.hasTag('debug_claims');
+  const prefersOn = playerData && playerData.showClaimParticles;
 
-  if (!isOwner && !claim.particlesEnabled) {
-    shouldRender = false;
+  if (debug) {
+    shouldRender = true;
+  } else if (claimShovelOut && isOwner) {
+    shouldRender = true;
+  } else if ((claimShovelOut || prefersOn) && claim.particlesEnabled) {
+    shouldRender = true;
   }
 
   if (shouldRender) {

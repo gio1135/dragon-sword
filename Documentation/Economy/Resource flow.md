@@ -4,38 +4,38 @@ This document maps out the minimal set of base items that can be processed/craft
 
 ## Wood
 Supplying these 6 base logs allows crafting of all planks, slabs, stairs, fences, doors, trapdoors, signs, and boats for those wood types
-- Oak log
-- Spruce log
-- Birch log
-- Jungle log
-- Acacia log
-- Dark oak log
-(Note: Mangrove, cherry, crimson, and warped can also be added as premium/exploration woods)
+- [[oak_log]]
+- [[spruce_log]]
+- [[birch_log]]
+- [[jungle_log]]
+- [[acacia_log]]
+- [[dark_oak_log]]
+(Note: [[mangrove_log]], [[cherry_log]], [[crimson_stem]], and [[warped_stem]] can also be added as premium/exploration woods)
 
 ## Stone variants
 By supplying these base blocks, players can craft their polished, brick, slab, stair, and wall variants
-- Cobblestone (smelts to stone -> smooth stone, stone bricks)
-- Deepslate (crafts to cobbled deepslate -> polished -> bricks -> tiles)
-- Diorite
-- Andesite
-- Granite
-- Tuff
-- Calcite
-- Dripstone block
-- Basalt
-- Blackstone
+- [[cobblestone]] (smelts to [[stone]] -> [[smooth_stone]], [[stone_brick]])
+- [[deepslate]] (crafts to [[cobbled_deepslate]] -> polished -> bricks -> tiles)
+- [[diorite]]
+- [[andesite]]
+- [[granite]]
+- [[tuff]]
+- [[calcite]]
+- [[dripstone_block]]
+- [[basalt]]
+- [[blackstone]]
 
 ## Colors & dyes
-Supplying these allows coloring of wool, terracotta, concrete, glass, and beds
-- White dye / bonemeal: Crucial base for mixing
-- Primary dyes: Red, yellow, blue (lapis), black (ink), brown (cocoa)
+Supplying these allows coloring of [[wool]], terracotta, concrete, [[glass]], and beds
+- [[white_dye]] / [[bone_meal]]: Crucial base for mixing
+- Primary dyes: [[red_dye]], [[yellow_dye]], [[blue_dye]] ([[lapis_lazuli]]), [[black_dye]] ([[ink_sac]]), [[brown_dye]] ([[cocoa_beans]])
 - Secondary/tertiary: Can be crafted if primary dyes are available, or sold directly for convenience
 
 ## Glass & concrete
-- Sand: Smelts to glass, crafts to concrete powder
-- Gravel: Crafts to concrete powder
+- [[sand]]: Smelts to [[glass]], crafts to concrete powder
+- [[gravel]]: Crafts to concrete powder
 
 ## Specialty blocks
-- Nether quartz: Essential for quartz blocks, pillars, bricks
-- Clay: Essential for bricks and terracotta
-- Copper: Essential for copper building blocks and oxidation stages
+- [[quartz]]: Essential for quartz blocks, pillars, bricks
+- [[clay_ball]]: Essential for bricks and terracotta
+- [[copper_ingot]]: Essential for copper building blocks and oxidation stages

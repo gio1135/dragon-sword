@@ -1,0 +1,16 @@
+[[Mob loot]]
+
+## Drops
+- [[gunpowder]]
+- [[record_11]]
+- [[record_13]]
+- [[record_blocks]]
+- [[record_cat]]
+- [[record_chirp]]
+- [[record_far]]
+- [[record_mall]]
+- [[record_mellohi]]
+- [[record_stal]]
+- [[record_strad]]
+- [[record_wait]]
+- [[record_ward]]

@@ -1,0 +1,30 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "bt:bb.slabs.andesite"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "group": "slabs_to_blocks",
+    "priority": -1,
+    "pattern": [
+      "##"
+    ],
+    "key": {
+      "#": {
+        "item": "minecraft:andesite_slab"
+      }
+    },
+    "unlock": [
+      {
+        "item": "minecraft:andesite_slab"
+      }
+    ],
+    "result": {
+      "item": "minecraft:andesite",
+      "count": 1
+    }
+  }
+}

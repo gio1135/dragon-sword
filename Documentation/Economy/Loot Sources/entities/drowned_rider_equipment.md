@@ -1,0 +1,4 @@
+[[Mob loot]]
+
+## Drops
+- [[trident]]

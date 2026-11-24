@@ -10,9 +10,11 @@ async function setNaturalRegen(value) {
   try {
     world.gameRules.naturalRegeneration = value;
   } catch (e) {
-    await world
-      .getDimension('overworld')
-      .runCommandAsync(`gamerule naturalregeneration ${value}`);
+    try {
+      world
+        .getDimension('overworld')
+        .runCommand(`gamerule naturalregeneration ${value}`);
+    } catch {}
   }
 }
 
@@ -105,7 +107,7 @@ export function addExhaustion(player, amount) {
 
   const hungerComp = player.getComponent('minecraft:player.hunger');
   const saturationComp = player.getComponent('minecraft:player.saturation');
-  
+
   if (hungerComp && saturationComp) {
     let drops = 0;
     while (state.exhaustion >= 4.0) {
@@ -116,14 +118,14 @@ export function addExhaustion(player, amount) {
     if (drops > 0) {
       let satVal = saturationComp.currentValue;
       let hungerVal = hungerComp.currentValue;
-      
+
       if (satVal > 0) {
         const satDrop = Math.min(satVal, drops);
         satVal -= satDrop;
         drops -= satDrop;
         try { saturationComp.setCurrentValue(satVal); } catch (e) {}
       }
-      
+
       if (drops > 0 && hungerVal > 0) {
         const newHunger = Math.max(0, hungerVal - drops);
         try { hungerComp.setCurrentValue(newHunger); } catch (e) {}

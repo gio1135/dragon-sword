@@ -1,0 +1,60 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "32k:vein_outline",
+      "materials": {
+        "default": "glow_in_walls"
+      },
+      "textures": {
+        "default": "textures/particles/selected_block"
+      },
+      "geometry": {
+        "default": "geometry.selected_block"
+      },
+      "animations": {
+        "offset": "animation.selected_block.offset"
+      },
+      "scripts": {
+        "scale": "1.00",
+        "pre_animation": [
+          "v.north = !q.property('32k:north');",
+          "v.south = !q.property('32k:south');",
+          "v.east  = !q.property('32k:east');",
+          "v.west  = !q.property('32k:west');",
+          "v.up    = !q.property('32k:up');",
+          "v.down  = !q.property('32k:down');",
+          "v.ne = !q.property('32k:ne');",
+          "v.nw = !q.property('32k:nw');",
+          "v.se = !q.property('32k:se');",
+          "v.sw = !q.property('32k:sw');",
+          "v.bn = !q.property('32k:bn');",
+          "v.bs = !q.property('32k:bs');",
+          "v.tn = !q.property('32k:tn');",
+          "v.ts = !q.property('32k:ts');",
+          "v.be = !q.property('32k:be');",
+          "v.bw = !q.property('32k:bw');",
+          "v.te = !q.property('32k:te');",
+          "v.tw = !q.property('32k:tw');",
+          "v.visible_ne = ( (!v.north && !v.east) || (v.north && v.east && !v.ne) || (!v.north && v.east && v.ne) || (v.north && !v.east && v.ne) );",
+          "v.visible_nw = ( (!v.north && !v.west) || (v.north && v.west && !v.nw) || (!v.north && v.west && v.nw) || (v.north && !v.west && v.nw) );",
+          "v.visible_se = ( (!v.south && !v.east) || (v.south && v.east && !v.se) || (!v.south && v.east && v.se) || (v.south && !v.east && v.se) );",
+          "v.visible_sw = ( (!v.south && !v.west) || (v.south && v.west && !v.sw) || (!v.south && v.west && v.sw) || (v.south && !v.west && v.sw) );",
+          "v.visible_bn = ( (!v.north && !v.down) || (v.down && v.bn && !v.north) || (!v.down && v.bn && v.north) );",
+          "v.visible_bs = ( (!v.south && !v.down) || (v.down && v.bs && !v.south) || (!v.down && v.bs && v.south) );",
+          "v.visible_tn = ( (!v.north && !v.up)   || (v.up && v.tn && !v.north)   || (!v.up && v.tn && v.north) );",
+          "v.visible_ts = ( (!v.south && !v.up)   || (v.up && v.ts && !v.south)   || (!v.up && v.ts && v.south) );",
+          "v.visible_be = ( (!v.down && !v.east) || (v.down && v.be && !v.east) || (!v.down && v.be) );",
+          "v.visible_bw = ( (!v.down && !v.west) || (v.down && v.bw && !v.west) || (!v.down && v.bw) );",
+          "v.visible_te = ( (!v.up   && !v.east) || (v.up   && v.te && !v.east) || (!v.up   && v.te) );",
+          "v.visible_tw = ( (!v.up   && !v.west) || (v.up   && v.tw && !v.west) || (!v.up   && v.tw) );",
+          "v.r = 1.0; v.g = 1.0; v.b = 1.0;",
+          "v.opacity = q.property('32k:opacity') / 100.0;",
+          "v.a = v.opacity;"
+        ],
+        "animate": ["offset"]
+      },
+      "render_controllers": ["controller.render.32k.vein_outline"]
+    }
+  }
+}

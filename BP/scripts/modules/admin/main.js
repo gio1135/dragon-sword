@@ -1,4 +1,4 @@
-import { system } from '@minecraft/server';
+import { system, world } from '@minecraft/server';
 import { DS } from '../../core/ds.js';
 import { DimensionLock } from '../dimension_lock/main.js';
 import { ServerLock } from './server_lock.js';
@@ -21,7 +21,7 @@ async function openFeatureTogglesUI(player) {
 
   const res = await form.submit().show(player);
   if (res.canceled) {
-    DS.events.emit('ds:admin_open', { player });
+    DS.events.emit('32k:admin_open', { player });
     return;
   }
 
@@ -63,7 +63,45 @@ function openDimensionManagement(player) {
     .show(player);
 }
 
-DS.events.on('ds:admin_open', (data) => {
+function purgeLegacyStructures(player) {
+  try {
+    const allIds = world.structureManager.getWorldStructureIds();
+    const legacy = allIds.filter((id) => id.startsWith('slc:') || id.startsWith('ds_kits:') || id.startsWith('32k:'));
+    if (!legacy.length) {
+      player.sendMessage('§eNo legacy structures found in world database');
+      return;
+    }
+    player.sendMessage(`§ePurging ${legacy.length} legacy structures in background`);
+    let index = 0;
+    let ticks = 0;
+    const intervalHandle = system.runInterval(() => {
+      try {
+        const start = Date.now();
+        while (index < legacy.length && Date.now() - start < 25) {
+          try {
+            world.structureManager.delete(legacy[index]);
+          } catch {
+          }
+          index++;
+        }
+        ticks++;
+        if (ticks % 20 === 0 && index < legacy.length) {
+          player.sendMessage(`§ePurged ${index}/${legacy.length} legacy structures`);
+        }
+        if (index >= legacy.length) {
+          system.clearRun(intervalHandle);
+          player.sendMessage(`§aPurged ${legacy.length} legacy structures from world database`);
+        }
+      } catch {
+        system.clearRun(intervalHandle);
+      }
+    }, 1);
+  } catch {
+    player.sendMessage('§cFailed to purge legacy structures');
+  }
+}
+
+DS.events.on('32k:admin_open', (data) => {
   const { player } = data;
   if (player.commandPermissionLevel < 1) return;
   openAdminMenu(player);
@@ -95,7 +133,10 @@ function openAdminMenu(player) {
       showAdminStatsMenu(player);
     })
     .button('Villager news settings', () => {
-      player.runCommand('scriptevent ds:open_vn');
+      player.runCommand('scriptevent 32k:open_vn');
+    })
+    .button('Purge legacy structures', () => {
+      purgeLegacyStructures(player);
     })
     .button(serverLocked ? 'Unlock server' : 'Lock server', () => {
       const newVal = ServerLock.toggle();

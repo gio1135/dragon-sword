@@ -4,9 +4,9 @@ import { StorageAdapter, STORAGE_KEYS } from './StorageAdapter.js';
 const MAX_BY_TYPE_ENTRIES = 20;
 
 export const WORLD_KEYS = {
-  REGISTRY: 'ds:stats_registry',
+  REGISTRY: '32k:stats_registry',
   playerSnapshotKey(playerId) {
-    return `ds:stats_p:${playerId}`;
+    return `32k:stats_p:${playerId}`;
   },
 };
 
@@ -118,9 +118,9 @@ export class WorldStorageAdapter {
       trimByType(trimmed[key]);
     }
 
-    if (trimmed['ds:stats_core']?.biomes?.discovered?.length > 50) {
-      trimmed['ds:stats_core'].biomes.discovered = trimmed[
-        'ds:stats_core'
+    if (trimmed['32k:stats_core']?.biomes?.discovered?.length > 50) {
+      trimmed['32k:stats_core'].biomes.discovered = trimmed[
+        '32k:stats_core'
       ].biomes.discovered.slice(0, 50);
     }
 

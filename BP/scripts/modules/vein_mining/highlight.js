@@ -5,7 +5,7 @@ import {
   IsBlockAllowed,
 } from "./requirements.js";
 import { GetPattern } from "./modes.js";
-import { GetLocId, DisplayActionBar, CONNECTION_OFFSETS } from "./utils.js";
+import { GetLocId, IdToPos, DisplayActionBar, CONNECTION_OFFSETS } from "./utils.js";
 import {
   OUTLINE_STYLES,
   LIQUIDS,
@@ -232,12 +232,12 @@ class HighlightManager {
   }
 
   isFullyEnclosed(hiddenFaces) {
-    const n = hiddenFaces.has("ds:north");
-    const s = hiddenFaces.has("ds:south");
-    const e = hiddenFaces.has("ds:east");
-    const w = hiddenFaces.has("ds:west");
-    const u = hiddenFaces.has("ds:up");
-    const d = hiddenFaces.has("ds:down");
+    const n = hiddenFaces.has("32k:north");
+    const s = hiddenFaces.has("32k:south");
+    const e = hiddenFaces.has("32k:east");
+    const w = hiddenFaces.has("32k:west");
+    const u = hiddenFaces.has("32k:up");
+    const d = hiddenFaces.has("32k:down");
 
     return (
       (n && s && e && w && u && d) ||
@@ -251,7 +251,9 @@ class HighlightManager {
     if (!player) return;
     const session = this.sessions.get(player.id);
     if (session) {
-      player.onScreenDisplay.setActionBar("");
+      try {
+        player.onScreenDisplay.setActionBar("");
+      } catch (e) {}
       if (session.lightsMap) {
         session.lightsMap.forEach((ent) => {
           if (ent && ent.isValid) {
@@ -260,6 +262,7 @@ class HighlightManager {
             } catch (e) {}
           }
         });
+        session.lightsMap.clear();
       }
       if (session.blockCache) {
         session.blockCache.clear();
@@ -281,8 +284,8 @@ class HighlightManager {
       });
       if (entity) {
         this.trackedEntities.add(entity);
-        entity.setProperty("ds:style_id", colorIdx);
-        entity.setProperty("ds:opacity", 100);
+        entity.setProperty("32k:style_id", colorIdx);
+        entity.setProperty("32k:opacity", 100);
 
         hiddenFaces.forEach((prop) => {
           try {
@@ -299,8 +302,8 @@ class HighlightManager {
   updateOutline(entity, hiddenFaces, colorIdx, opacity) {
     if (!entity || !entity.isValid) return;
     try {
-      entity.setProperty("ds:style_id", colorIdx);
-      entity.setProperty("ds:opacity", opacity);
+      entity.setProperty("32k:style_id", colorIdx);
+      entity.setProperty("32k:opacity", opacity);
       for (const offset of CONNECTION_OFFSETS) {
         if (offset.prop) {
           entity.setProperty(offset.prop, true);
@@ -398,19 +401,38 @@ class HighlightManager {
     const currentLocId = currentBlock ? GetLocId(currentBlock.location) : null;
 
     if (session && !session.isMining) {
-      if (
-        !currentBlock ||
-        currentBlock.typeId === "minecraft:air" ||
-        !session.blockSet.has(currentLocId)
-      ) {
-        const currentBlock = player.dimension.getBlock(session.origin);
-        if (
-          !session.isMining &&
-          (!currentBlock || currentBlock.typeId !== session.blockType)
-        ) {
-          this.sessions.delete(player.id);
+      let changed = false;
+      for (const locId of session.blockSet) {
+        const pos = IdToPos(locId);
+        try {
+          const b = player.dimension.getBlock(pos);
+          if (!b || b.typeId !== session.blockType) {
+            this.removeBlockHighlight(player.id, locId);
+            changed = true;
+          }
+        } catch (e) {
+          this.removeBlockHighlight(player.id, locId);
+          changed = true;
+        }
+      }
+
+      if (session.blockSet.size === 0) {
+        this.clearHighlights(player);
+        session = null;
+      } else if (changed) {
+        session.faceMap = this.buildFaceMap(session.blockSet);
+        if (enableVisual) {
+          this.syncEntities(player, session);
+        }
+      }
+    }
+
+    if (session && !session.isMining) {
+      if (!currentBlock || currentBlock.typeId === "minecraft:air" || !session.blockSet.has(currentLocId)) {
+        session.switchTimer = (session.switchTimer || 0) + 1;
+        if (session.switchTimer >= 3) {
           this.clearHighlights(player);
-          return;
+          session = null;
         }
       } else {
         session.switchTimer = 0;
@@ -711,18 +733,15 @@ class HighlightManager {
       }
     }
 
-    const now = Date.now();
-    if (now - this.lastHeavyCleanup < 300000) return;
-    this.lastHeavyCleanup = now;
-
     const allEntityTypes = OUTLINE_STYLES.map((s) => s.entity);
     for (const player of world.getAllPlayers()) {
+      if (!player.isValid) continue;
       try {
         for (const typeId of allEntityTypes) {
           const nearby = player.dimension.getEntities({
             type: typeId,
             location: player.location,
-            maxDistance: 8 + 10,
+            maxDistance: 32,
           });
           for (const entity of nearby) {
             if (!validIds.has(entity.id)) {

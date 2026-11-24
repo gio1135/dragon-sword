@@ -18,10 +18,10 @@ function percent(value, total) {
 
 export class StatsRenderer {
   static renderGeneral(stats) {
-    const core = stats['ds:stats_core'] || {};
-    const combat = stats['ds:stats_combat'] || {};
-    const blocks = stats['ds:stats_blocks'] || {};
-    const items = stats['ds:stats_items'] || {};
+    const core = stats['32k:stats_core'] || {};
+    const combat = stats['32k:stats_combat'] || {};
+    const blocks = stats['32k:stats_blocks'] || {};
+    const items = stats['32k:stats_items'] || {};
 
     const timePlayed = core.time?.played || 0;
     const deaths = core.deaths?.total || 0;
@@ -54,8 +54,8 @@ export class StatsRenderer {
   }
 
   static renderCombat(stats) {
-    const combat = stats['ds:stats_combat'] || {};
-    const core = stats['ds:stats_core'] || {};
+    const combat = stats['32k:stats_combat'] || {};
+    const core = stats['32k:stats_core'] || {};
     const timePlayed = core.time?.played || 0;
 
     let text = '§l§c- Combat statistics -§r\n\n';
@@ -114,8 +114,8 @@ export class StatsRenderer {
   }
 
   static renderBuilding(stats) {
-    const blocks = stats['ds:stats_blocks'] || {};
-    const interactions = stats['ds:stats_interactions'] || {};
+    const blocks = stats['32k:stats_blocks'] || {};
+    const interactions = stats['32k:stats_interactions'] || {};
 
     let text = '§l§6- Building statistics -§r\n\n';
 
@@ -148,7 +148,7 @@ export class StatsRenderer {
     text += `§7• §fSmokers: §e${formatNumber(interactions.smoker || 0)}§r\n`;
     text += `§7• §fAnvils: §e${formatNumber(interactions.anvil || 0)}§r\n`;
     text += `§7• §fEnchanting tables: §d${formatNumber(interactions.enchantingTable || 0)}§r\n`;
-    text += `§7• §fBrewing stands: §d${formatNumber(interactions.brewingStand || 0)}§r\n`;
+    text += `§7• §fBrewing stan32k: §d${formatNumber(interactions.brewingStand || 0)}§r\n`;
     text += `§7• §fGrindstones: §e${formatNumber(interactions.grindstone || 0)}§r\n`;
     text += `§7• §fStonecutters: §e${formatNumber(interactions.stonecutter || 0)}§r\n`;
     text += `§7• §fLooms: §e${formatNumber(interactions.loom || 0)}§r\n`;
@@ -168,8 +168,8 @@ export class StatsRenderer {
   }
 
   static renderExploration(stats) {
-    const travel = stats['ds:stats_travel'] || {};
-    const core = stats['ds:stats_core'] || {};
+    const travel = stats['32k:stats_travel'] || {};
+    const core = stats['32k:stats_core'] || {};
 
     let text = '§l§b- Exploration statistics -§r\n\n';
 
@@ -296,11 +296,11 @@ export class StatsRenderer {
   }
 
   static renderSurvival(stats) {
-    const items = stats['ds:stats_items'] || {};
-    const interactions = stats['ds:stats_interactions'] || {};
-    const misc = stats['ds:stats_misc'] || {};
-    const combat = stats['ds:stats_combat'] || {};
-    const core = stats['ds:stats_core'] || {};
+    const items = stats['32k:stats_items'] || {};
+    const interactions = stats['32k:stats_interactions'] || {};
+    const misc = stats['32k:stats_misc'] || {};
+    const combat = stats['32k:stats_combat'] || {};
+    const core = stats['32k:stats_core'] || {};
 
     let text = '§l§a- Survival statistics -§r\n\n';
 
@@ -382,8 +382,8 @@ export class StatsRenderer {
   }
 
   static renderMisc(stats) {
-    const misc = stats['ds:stats_misc'] || {};
-    const interactions = stats['ds:stats_interactions'] || {};
+    const misc = stats['32k:stats_misc'] || {};
+    const interactions = stats['32k:stats_interactions'] || {};
 
     let text = '§l§d- Miscellaneous statistics -§r\n\n';
 
@@ -420,7 +420,7 @@ export class StatsRenderer {
   }
 
   static renderCombatDetails(stats) {
-    const combat = stats['ds:stats_combat'] || {};
+    const combat = stats['32k:stats_combat'] || {};
     let text = '';
 
     const allMobs = getAllEntries(combat.kills?.mobs?.byType);
@@ -456,7 +456,7 @@ export class StatsRenderer {
   }
 
   static renderBuildingDetails(stats) {
-    const blocks = stats['ds:stats_blocks'] || {};
+    const blocks = stats['32k:stats_blocks'] || {};
     let text = '';
 
     const allMined = getAllEntries(blocks.mined?.byType);
@@ -481,9 +481,9 @@ export class StatsRenderer {
   }
 
   static renderSurvivalDetails(stats) {
-    const items = stats['ds:stats_items'] || {};
-    const misc = stats['ds:stats_misc'] || {};
-    const combat = stats['ds:stats_combat'] || {};
+    const items = stats['32k:stats_items'] || {};
+    const misc = stats['32k:stats_misc'] || {};
+    const combat = stats['32k:stats_combat'] || {};
     let text = '';
 
     const allFood = getAllEntries(items.food?.byType);

@@ -1,0 +1,4 @@
+[[Boss loot]]
+
+## Drops
+- [[netherStar]]

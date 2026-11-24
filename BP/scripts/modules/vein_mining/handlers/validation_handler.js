@@ -6,7 +6,7 @@ export function CheckModeActive(player) {
 }
 
 export function ValidateMining(player, targetTypeId) {
-  if (player.hasTag('ds:disable_veinminer')) return false;
+  if (player.hasTag('32k:disable_veinminer')) return false;
   if (!IsBlockAllowed(player, targetTypeId)) return false;
   if (!CheckHunger(player)) return false;
   return true;

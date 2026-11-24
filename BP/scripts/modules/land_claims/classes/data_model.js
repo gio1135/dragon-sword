@@ -41,6 +41,7 @@ export const PermissionTypes = {
   ENTER_CLAIM: 'enterClaim',
   BREAK_BLOCKS: 'breakBlocks',
   USE_ITEMS_ON_BLOCKS: 'useItemsOnBlocks',
+  ALLOW_PLACING_BUILDS: 'allowPlacingBuilds',
   USE_DOORS: 'useDoors',
   USE_SWITCHES: 'useSwitches',
   OPEN_CONTAINERS: 'openContainers',
@@ -52,11 +53,11 @@ export const PermissionTypes = {
   USE_THROWABLE_WEAPONS: 'useThrowableWeapons',
   USE_SPEARS: 'useSpears',
   ALLOW_OUTLAWS: 'allowOutlaws',
-  PROTECT_PASSIVE_MOBS: 'protectPassiveMobs',
-  PROTECT_HOSTILE_MOBS: 'protectHostileMobs',
-  PROTECT_NEUTRAL_MOBS: 'protectNeutralMobs',
-  PROTECT_PETS: 'protectPets',
-  PROTECT_UTILITY_ENTITIES: 'protectUtilityEntities',
+  ALLOW_ATTACKING_PASSIVE_MOBS: 'allowAttackingPassiveMobs',
+  ALLOW_ATTACKING_HOSTILE_MOBS: 'allowAttackingHostileMobs',
+  ALLOW_ATTACKING_NEUTRAL_MOBS: 'allowAttackingNeutralMobs',
+  ALLOW_ATTACKING_PETS: 'allowAttackingPets',
+  ALLOW_ATTACKING_UTILITY_ENTITIES: 'allowAttackingUtilityEntities',
   ALLOW_PLAYER_COMBAT: 'allowPlayerCombat',
 };
 
@@ -79,10 +80,28 @@ export class Permissions {
   static fromJSON(data) {
     const p = new Permissions();
     if (!data) return p;
-    const source = data.permissions ?? data._permissions ?? {};
+    // data might be the permissions object itself if called from Claim.fromJSON, or it might be wrapped
+    const source = data.permissions ?? data._permissions ?? data;
 
     for (const key of Object.keys(source)) {
-      p.permissions[key] = source[key];
+      if (p.permissions[key] !== undefined) {
+        p.permissions[key] = source[key];
+      }
+    }
+
+    const migrations = {
+      'protectPassiveMobs': 'allowAttackingPassiveMobs',
+      'protectHostileMobs': 'allowAttackingHostileMobs',
+      'protectNeutralMobs': 'allowAttackingNeutralMobs',
+      'protectPets': 'allowAttackingPets',
+      'protectUtilityEntities': 'allowAttackingUtilityEntities'
+    };
+    for (const [oldKey, newKey] of Object.entries(migrations)) {
+      if (source[oldKey] !== undefined) {
+        if (source[newKey] === undefined) {
+          p.permissions[newKey] = !source[oldKey];
+        }
+      }
     }
 
     if (
@@ -90,7 +109,6 @@ export class Permissions {
       p.permissions['allowTnt'] === undefined
     ) {
       p.permissions['allowTnt'] = source['useTNT'];
-      delete p.permissions['useTNT'];
     }
 
     for (const { key, defaultValue } of PermissionRegistry.getAll()) {
@@ -120,6 +138,28 @@ export class PlayerPermissions extends Permissions {
       if (source[key] !== undefined) {
         pp.permissions[key] = source[key];
       }
+    }
+
+    const migrations = {
+      'protectPassiveMobs': 'allowAttackingPassiveMobs',
+      'protectHostileMobs': 'allowAttackingHostileMobs',
+      'protectNeutralMobs': 'allowAttackingNeutralMobs',
+      'protectPets': 'allowAttackingPets',
+      'protectUtilityEntities': 'allowAttackingUtilityEntities'
+    };
+    for (const [oldKey, newKey] of Object.entries(migrations)) {
+      if (source[oldKey] !== undefined) {
+        if (source[newKey] === undefined) {
+          pp.permissions[newKey] = !source[oldKey];
+        }
+      }
+    }
+
+    if (
+      source['useTNT'] !== undefined &&
+      source['allowTnt'] === undefined
+    ) {
+      pp.permissions['allowTnt'] = source['useTNT'];
     }
     return pp;
   }

@@ -70,5 +70,11 @@ export const MODULES = [
     name: 'Auto totem',
     featureToggle: { defaultEnabled: true },
     adminUI: null,
+  },
+  {
+    id: 'keepinventory',
+    name: 'Keep inventory',
+    featureToggle: { defaultEnabled: true },
+    adminUI: null,
   }
 ];

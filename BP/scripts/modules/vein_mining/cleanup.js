@@ -1,7 +1,18 @@
 import { world } from '@minecraft/server';
 import { OUTLINE_STYLES } from './registry.js';
+import { highlightManager } from './highlight.js';
 
 export function CheckGlobalHighlights() {
+  const activeEntityIds = new Set();
+  for (const session of highlightManager.sessions.values()) {
+    if (!session.lightsMap) continue;
+    for (const entity of session.lightsMap.values()) {
+      if (entity?.isValid) {
+        activeEntityIds.add(entity.id);
+      }
+    }
+  }
+
   const dims = ['overworld', 'nether', 'the_end'];
   for (const dimId of dims) {
     try {
@@ -9,21 +20,7 @@ export function CheckGlobalHighlights() {
       for (const style of OUTLINE_STYLES) {
         const entities = dim.getEntities({ type: style.entity });
         for (const entity of entities) {
-          let hasOwner = false;
-          for (const player of world.getAllPlayers()) {
-            if (player.dimension.id === dim.id) {
-              const dist = Math.sqrt(
-                Math.pow(entity.location.x - player.location.x, 2) +
-                  Math.pow(entity.location.y - player.location.y, 2) +
-                  Math.pow(entity.location.z - player.location.z, 2),
-              );
-              if (dist < 30) {
-                hasOwner = true;
-                break;
-              }
-            }
-          }
-          if (!hasOwner) {
+          if (!activeEntityIds.has(entity.id)) {
             try {
               entity.remove();
             } catch (e) {}

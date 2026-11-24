@@ -1,0 +1,31 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "bt:ms.quartz_stairs"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "priority": -1,
+    "pattern": [
+      "#",
+      "##",
+      "###"
+    ],
+    "key": {
+      "#": {
+        "item": "minecraft:quartz_block"
+      }
+    },
+    "unlock": [
+      {
+        "item": "minecraft:quartz_block"
+      }
+    ],
+    "result": {
+      "item": "minecraft:quartz_stairs",
+      "count": 8
+    }
+  }
+}

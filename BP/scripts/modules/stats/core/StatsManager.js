@@ -82,12 +82,12 @@ export class StatsManager {
     this.loadPlayerStats(player);
 
     const now = Date.now();
-    this.set(player, 'ds:stats_core', 'time.sessionStart', now);
-    this.increment(player, 'ds:stats_core', 'sessions.total', 1);
+    this.set(player, '32k:stats_core', 'time.sessionStart', now);
+    this.increment(player, '32k:stats_core', 'sessions.total', 1);
 
-    const firstJoined = this.get(player, 'ds:stats_core', 'time.firstJoined');
+    const firstJoined = this.get(player, '32k:stats_core', 'time.firstJoined');
     if (!firstJoined) {
-      this.set(player, 'ds:stats_core', 'time.firstJoined', now);
+      this.set(player, '32k:stats_core', 'time.firstJoined', now);
     }
 
     try {
@@ -235,9 +235,9 @@ export class StatsManager {
     this.loadPlayerStats(player);
 
     const now = Date.now();
-    this.set(player, 'ds:stats_core', 'time.sessionStart', now);
-    this.set(player, 'ds:stats_core', 'time.firstJoined', now);
-    this.set(player, 'ds:stats_core', 'sessions.total', 1);
+    this.set(player, '32k:stats_core', 'time.sessionStart', now);
+    this.set(player, '32k:stats_core', 'time.firstJoined', now);
+    this.set(player, '32k:stats_core', 'sessions.total', 1);
   }
 
   adminResetPlayer(playerId, playerName) {

@@ -1,0 +1,4 @@
+[[Structure loot]]
+
+## Drops
+- [[bundle]]

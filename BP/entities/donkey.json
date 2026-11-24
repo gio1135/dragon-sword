@@ -62,7 +62,7 @@
         },
         "minecraft:behavior.follow_parent": {
           "priority": 4,
-          "speed_multiplier": 0.5
+          "speed_multiplier": 1.0
         }
       },
       "minecraft:donkey_adult": {
@@ -76,11 +76,11 @@
         "minecraft:leashable_to": {},
         "minecraft:behavior.run_around_like_crazy": {
           "priority": 1,
-          "speed_multiplier": 0.6
+          "speed_multiplier": 1.2
         },
         "minecraft:behavior.breed": {
           "priority": 2,
-          "speed_multiplier": 0.5
+          "speed_multiplier": 1.0
         }
       },
       "minecraft:donkey_wild": {
@@ -101,7 +101,7 @@
         },
         "minecraft:behavior.mount_pathing": {
           "priority": 2,
-          "speed_multiplier": 0.75,
+          "speed_multiplier": 1.5,
           "target_dist": 0.0,
           "track_target": true
         },
@@ -507,7 +507,10 @@
         ]
       },
       "minecraft:movement": {
-        "value": 0.35
+        "value": {
+          "range_min": 0.16,
+          "range_max": 0.4
+        }
       },
       "minecraft:navigation.walk": {
         "can_path_over_water": true,
@@ -529,7 +532,10 @@
       },
       "minecraft:spawn_egg_interaction": {},
       "minecraft:horse.jump_strength": {
-        "value": 0.75
+        "value": {
+          "range_min": 0.3,
+          "range_max": 0.5
+        }
       },
       "minecraft:leashable": {
         "presets": [
@@ -586,7 +592,7 @@
       "minecraft:behavior.float": {
         "priority": 0,
         "chance_per_tick_to_float": 0.0,
-        "time_under_water_to_dismount_passengers": 2.0
+        "time_under_water_to_dismount_passengers": 999999.0
       },
       "minecraft:buoyant": {
         "base_buoyancy": 1.0,
@@ -602,11 +608,11 @@
       },
       "minecraft:behavior.panic": {
         "priority": 1,
-        "speed_multiplier": 0.6
+        "speed_multiplier": 1.2
       },
       "minecraft:behavior.tempt": {
         "priority": 5,
-        "speed_multiplier": 0.6,
+        "speed_multiplier": 1.2,
         "items": [
           "golden_apple",
           "appleEnchanted",
@@ -615,7 +621,7 @@
       },
       "minecraft:behavior.random_stroll": {
         "priority": 6,
-        "speed_multiplier": 0.35
+        "speed_multiplier": 0.7
       },
       "minecraft:behavior.look_at_player": {
         "priority": 7,

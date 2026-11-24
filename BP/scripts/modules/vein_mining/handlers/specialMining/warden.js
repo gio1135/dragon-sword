@@ -110,9 +110,11 @@ export function ProcessMiningStepWarden(
     const clusterSize = partitionIndex - startIndex;
 
     SpawnWardenVisual(player, centerPos);
-    player.dimension.runCommandAsync(
-      `playsound mob.warden.sonic_boom @a ${centerPos.x} ${centerPos.y} ${centerPos.z} 0.5 1.2`,
-    );
+    try {
+      player.dimension.runCommand(
+        `playsound mob.warden.sonic_boom @a ${centerPos.x} ${centerPos.y} ${centerPos.z} 0.5 1.2`,
+      );
+    } catch {}
 
     const tool = player
       .getComponent('minecraft:equippable')

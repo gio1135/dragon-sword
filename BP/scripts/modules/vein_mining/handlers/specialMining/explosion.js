@@ -71,9 +71,11 @@ export function ProcessMiningStepCluster(
     dim.spawnParticle('minecraft:huge_explosion_emitter', visualCenter);
     dim.spawnParticle('minecraft:sonic_explosion', visualCenter);
 
-    dim.runCommandAsync(
-      `playsound random.explode @a ${visualCenter.x} ${visualCenter.y} ${visualCenter.z} 1 0.8`,
-    );
+    try {
+      dim.runCommand(
+        `playsound random.explode @a ${visualCenter.x} ${visualCenter.y} ${visualCenter.z} 1 0.8`,
+      );
+    } catch {}
 
     const tool = player
       .getComponent('minecraft:equippable')

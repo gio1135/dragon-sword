@@ -1,0 +1,16 @@
+[[Gameplay loot]]
+
+## Drops
+- [[bone]]
+- [[bowl]]
+- [[dye]]
+- [[fishing_rod]]
+- [[ink_sac]]
+- [[leather]]
+- [[leather_boots]]
+- [[potion]]
+- [[rotten_flesh]]
+- [[stick]]
+- [[string]]
+- [[tripwire_hook]]
+- [[waterlily]]
