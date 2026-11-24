@@ -12,7 +12,7 @@ export function initOutlawSystem() {
 
     if (targetData.outlawStatus && targetData.outlawStatus.stage > 0) {
       payload.body += `\n§cOutlaw: §f${targetData.outlawStatus.stage} stars (${targetData.outlawStatus.timeRemaining}m)`;
-      
+
       payload.buttons.push({
         text: 'Remove 1 Star',
         action: (uiCtx) => {

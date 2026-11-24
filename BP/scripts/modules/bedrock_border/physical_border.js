@@ -130,9 +130,11 @@ class PhysicalBorderManager {
       const zLineStart = Math.max(zStart, minZ);
       const zLineEnd = Math.min(zEnd, maxZ);
       if (zLineStart <= zLineEnd) {
-        dimension.runCommandAsync(
-          `fill ${minX} ${y} ${zLineStart} ${minX} ${y} ${zLineEnd} border_block replace bedrock`,
-        );
+        try {
+          dimension.runCommand(
+            `fill ${minX} ${y} ${zLineStart} ${minX} ${y} ${zLineEnd} border_block replace bedrock`,
+          );
+        } catch {}
       }
     }
 
@@ -140,9 +142,11 @@ class PhysicalBorderManager {
       const zLineStart = Math.max(zStart, minZ);
       const zLineEnd = Math.min(zEnd, maxZ);
       if (zLineStart <= zLineEnd) {
-        dimension.runCommandAsync(
-          `fill ${maxX} ${y} ${zLineStart} ${maxX} ${y} ${zLineEnd} border_block replace bedrock`,
-        );
+        try {
+          dimension.runCommand(
+            `fill ${maxX} ${y} ${zLineStart} ${maxX} ${y} ${zLineEnd} border_block replace bedrock`,
+          );
+        } catch {}
       }
     }
 
@@ -150,9 +154,11 @@ class PhysicalBorderManager {
       const xLineStart = Math.max(xStart, minX);
       const xLineEnd = Math.min(xEnd, maxX);
       if (xLineStart <= xLineEnd) {
-        dimension.runCommandAsync(
-          `fill ${xLineStart} ${y} ${minZ} ${xLineEnd} ${y} ${minZ} border_block replace bedrock`,
-        );
+        try {
+          dimension.runCommand(
+            `fill ${xLineStart} ${y} ${minZ} ${xLineEnd} ${y} ${minZ} border_block replace bedrock`,
+          );
+        } catch {}
       }
     }
 
@@ -160,9 +166,11 @@ class PhysicalBorderManager {
       const xLineStart = Math.max(xStart, minX);
       const xLineEnd = Math.min(xEnd, maxX);
       if (xLineStart <= xLineEnd) {
-        dimension.runCommandAsync(
-          `fill ${xLineStart} ${y} ${maxZ} ${xLineEnd} ${y} ${maxZ} border_block replace bedrock`,
-        );
+        try {
+          dimension.runCommand(
+            `fill ${xLineStart} ${y} ${maxZ} ${xLineEnd} ${y} ${maxZ} border_block replace bedrock`,
+          );
+        } catch {}
       }
     }
 
@@ -361,7 +369,7 @@ class PhysicalBorderManager {
 
       system.run(() => {
         try {
-          dimension.runCommandAsync(
+          dimension.runCommand(
             `tickingarea add ${cx * 16} 0 ${cz * 16} ${cx * 16 + 15} 0 ${cz * 16 + 15} ${areaName}`,
           );
         } catch (e) {}
@@ -369,7 +377,7 @@ class PhysicalBorderManager {
         system.run(() => {
           try {
             rects.forEach((r) => {
-              dimension.runCommandAsync(
+              dimension.runCommand(
                 `fill ${r.xMin} ${y} ${r.zMin} ${r.xMax} ${y} ${r.zMax} bedrock replace border_block`,
               );
             });
@@ -377,7 +385,7 @@ class PhysicalBorderManager {
 
           system.run(() => {
             try {
-              dimension.runCommandAsync(`tickingarea remove ${areaName}`);
+              dimension.runCommand(`tickingarea remove ${areaName}`);
             } catch (e) {}
 
             this.processChunkQueue(dimId, queue);

@@ -110,10 +110,10 @@
         ]
       },
       "minecraft:movement": {
-        "value": 0.1
+        "value": 0.28
       },
       "minecraft:underwater_movement": {
-        "value": 0.08
+        "value": 0.12
       },
       "minecraft:navigation.walk": {
         "is_amphibious": true,
@@ -130,7 +130,7 @@
       },
       "minecraft:spawn_egg_interaction": {},
       "minecraft:horse.jump_strength": {
-        "value": 0.8
+        "value": 0.75
       },
       "minecraft:leashable": {
         "presets": [

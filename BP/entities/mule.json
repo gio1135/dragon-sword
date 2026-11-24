@@ -62,7 +62,7 @@
         },
         "minecraft:behavior.follow_parent": {
           "priority": 4,
-          "speed_multiplier": 0.5
+          "speed_multiplier": 1.0
         }
       },
       "minecraft:mule_adult": {
@@ -75,7 +75,7 @@
         "minecraft:leashable_to": {},
         "minecraft:behavior.run_around_like_crazy": {
           "priority": 1,
-          "speed_multiplier": 0.6
+          "speed_multiplier": 1.2
         }
       },
       "minecraft:mule_wild": {
@@ -96,7 +96,7 @@
         },
         "minecraft:behavior.mount_pathing": {
           "priority": 2,
-          "speed_multiplier": 0.75,
+          "speed_multiplier": 1.5,
           "target_dist": 0.0,
           "track_target": true
         },
@@ -403,8 +403,8 @@
       },
       "minecraft:health": {
         "value": {
-          "range_min": 30.0,
-          "range_max": 60.0
+          "range_min": 15,
+          "range_max": 30
         }
       },
       "minecraft:hurt_on_condition": {
@@ -420,7 +420,10 @@
         ]
       },
       "minecraft:movement": {
-        "value": 0.35
+        "value": {
+          "range_min": 0.16,
+          "range_max": 0.4
+        }
       },
       "minecraft:navigation.walk": {
         "can_path_over_water": true,
@@ -438,7 +441,10 @@
       },
       "minecraft:spawn_egg_interaction": {},
       "minecraft:horse.jump_strength": {
-        "value": 0.75
+        "value": {
+          "range_min": 0.6,
+          "range_max": 0.95
+        }
       },
       "minecraft:leashable": {
         "presets": [
@@ -511,11 +517,11 @@
       },
       "minecraft:behavior.panic": {
         "priority": 1,
-        "speed_multiplier": 0.6
+        "speed_multiplier": 1.2
       },
       "minecraft:behavior.tempt": {
         "priority": 5,
-        "speed_multiplier": 0.6,
+        "speed_multiplier": 1.2,
         "items": [
           "golden_apple",
           "appleEnchanted",
@@ -524,7 +530,7 @@
       },
       "minecraft:behavior.random_stroll": {
         "priority": 6,
-        "speed_multiplier": 0.35
+        "speed_multiplier": 0.7
       },
       "minecraft:behavior.look_at_player": {
         "priority": 7,
@@ -564,7 +570,15 @@
         ]
       },
       "minecraft:pushable_by_block": {},
-      "minecraft:conditional_bandwidth_optimization": {}
+      "minecraft:conditional_bandwidth_optimization": {},
+      "minecraft:damage_sensor": {
+        "triggers": [
+          {
+            "cause": "fall",
+            "deals_damage": "no"
+          }
+        ]
+      }
     },
     "events": {
       "minecraft:entity_spawned": {

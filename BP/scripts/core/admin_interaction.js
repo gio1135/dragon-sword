@@ -8,7 +8,7 @@ const debounceSet = new Set()
 function handleAdminTool(player, itemStack, cancelCallback, isLookingAtLodestone) {
   if (!itemStack || itemStack.typeId !== ADMIN_TOOL) return
   if (player.isGliding) return
-  
+
   if (debounceSet.has(player.id)) return
   debounceSet.add(player.id)
   system.run(() => debounceSet.delete(player.id))

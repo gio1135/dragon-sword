@@ -1,8 +1,15 @@
-import { world, system, BlockPermutation } from '@minecraft/server';
+import { world, system, BlockPermutation, BlockTypes, BlockVolume } from '@minecraft/server';
 
-let currentPlayerIndex = 0;
+let filter;
 
-console.warn('[Glass Migration] Module loaded - Intelligent mapping mode');
+function orphanFilter() {
+  filter ??= { excludeTypes: BlockTypes.getAll().map((type) => type.id) };
+  return filter;
+}
+
+function isOrphan(typeId) {
+  return !BlockTypes.get(typeId);
+}
 
 const COLORS = [
   'white',
@@ -20,7 +27,7 @@ const COLORS = [
   'brown',
   'green',
   'red',
-  'black',
+  'black'
 ];
 
 function getVanillaEquivalent(id) {
@@ -38,64 +45,100 @@ function getVanillaEquivalent(id) {
   return `minecraft:${type}`;
 }
 
-function* scanArea(player) {
-  const loc = player.location;
-  const dim = player.dimension;
-  let blocksProcessed = 0;
-
-  for (let x = -16; x <= 16; x++) {
-    for (let y = -8; y <= 8; y++) {
-      for (let z = -16; z <= 16; z++) {
-        const blockLoc = {
-          x: Math.floor(loc.x + x),
-          y: Math.floor(loc.y + y),
-          z: Math.floor(loc.z + z),
-        };
-
-        try {
-          const block = dim.getBlock(blockLoc);
-          if (block) {
-            const id = block.typeId;
-
-            if (
-              id === 'minecraft:info_update' ||
-              id === 'minecraft:info_update2' ||
-              id.includes('32k:connected_') ||
-              id.includes('kwz:') ||
-              id.includes('connected_glass') ||
-              id === 'minecraft:unknown'
-            ) {
-              const targetId = getVanillaEquivalent(id);
-              block.setPermutation(BlockPermutation.resolve(targetId));
-              console.warn(
-                `[Glass Migration] SUCCESS: Converted ${id} -> ${targetId} at ${blockLoc.x}, ${blockLoc.y}, ${blockLoc.z}`,
-              );
-            }
-          }
-        } catch (e) {}
-        
-        blocksProcessed++;
-        if (blocksProcessed >= 500) {
-          blocksProcessed = 0;
-          yield;
-        }
-      }
-    }
-  }
+function shouldMigrate(id) {
+  return (
+    id === 'minecraft:info_update' ||
+    id === 'minecraft:info_update2' ||
+    id === 'minecraft:unknown' ||
+    id.includes('connected_glass') ||
+    id.includes('32k:connected_') ||
+    id.includes('kwz:') ||
+    isOrphan(id)
+  );
 }
 
+function boxAround(dimension, center, radius) {
+  const { min, max } = dimension.heightRange;
+  const x = Math.floor(center.x);
+  const y = Math.floor(center.y);
+  const z = Math.floor(center.z);
+  const bottom = Math.max(min, y - radius);
+  const top = Math.min(max - 1, y + radius);
+  if (bottom > top) return undefined;
+  return new BlockVolume(
+    { x: x - radius, y: bottom, z: z - radius },
+    { x: x + radius, y: top, z: z + radius }
+  );
+}
+
+function scanAndMigrate(dimension, center, radius = 16) {
+  const volume = boxAround(dimension, center, radius);
+  if (!volume) return 0;
+
+  let converted = 0;
+  try {
+    const list = dimension.getBlocks(volume, orphanFilter(), true);
+    for (const loc of list.getBlockLocationIterator()) {
+      try {
+        const block = dimension.getBlock(loc);
+        if (!block) continue;
+        const id = block.typeId;
+        if (shouldMigrate(id)) {
+          const targetId = getVanillaEquivalent(id);
+          block.setPermutation(BlockPermutation.resolve(targetId));
+          converted++;
+        }
+      } catch (e) {}
+    }
+  } catch (e) {}
+  return converted;
+}
+
+const lastPlayerChunk = new Map();
+
 system.runInterval(() => {
-  const players = world.getAllPlayers();
-  if (players.length === 0) return;
+  for (const player of world.getAllPlayers()) {
+    if (!player.isValid) continue;
 
-  if (currentPlayerIndex >= players.length) {
-    currentPlayerIndex = 0;
+    const cx = Math.floor(player.location.x / 16);
+    const cz = Math.floor(player.location.z / 16);
+    const key = `${player.dimension.id}:${cx},${cz}`;
+
+    if (lastPlayerChunk.get(player.id) === key) continue;
+    lastPlayerChunk.set(player.id, key);
+
+    scanAndMigrate(player.dimension, player.location, 16);
   }
+}, 100);
 
-  const player = players[currentPlayerIndex];
-  currentPlayerIndex++;
+world.afterEvents.playerLeave.subscribe(({ playerId }) => {
+  lastPlayerChunk.delete(playerId);
+});
 
-  if (!player || !player.isValid) return;
+world.beforeEvents.playerBreakBlock.subscribe((ev) => {
+  const { block, player, dimension } = ev;
+  const id = block.typeId;
 
-  system.runJob(scanArea(player));
-}, 200);
+  if (shouldMigrate(id)) {
+    ev.cancel = true;
+
+    const targetId = getVanillaEquivalent(id);
+    const centerLoc = { x: block.location.x, y: block.location.y, z: block.location.z };
+
+    system.run(() => {
+      try {
+        const currentBlock = dimension.getBlock(centerLoc);
+        if (currentBlock) {
+          currentBlock.setPermutation(BlockPermutation.resolve(targetId));
+        }
+
+        const count = scanAndMigrate(dimension, centerLoc, 24);
+        if (player.isValid) {
+          const total = count + 1;
+          player.onScreenDisplay.setActionBar(`Converted ${total} glass block${total === 1 ? '' : 's'}`);
+          player.playSound('random.orb');
+        }
+      } catch (e) {}
+    });
+  }
+});

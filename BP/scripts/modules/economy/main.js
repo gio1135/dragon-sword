@@ -27,12 +27,12 @@ system.runInterval(() => {
                 player.sendMessage("§cFishing Claim lost: You left the dimension.");
                 continue;
             }
-            
+
             const dx = player.location.x - claim.x;
             const dy = player.location.y - claim.y;
             const dz = player.location.z - claim.z;
             const distSqr = (dx*dx) + (dy*dy) + (dz*dz);
-            
+
             if (distSqr > FISHING_RADIUS_SQR) {
                 player.removeTag('active_fishing_claim');
                 activeClaims.delete(player.id);

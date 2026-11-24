@@ -11,10 +11,14 @@
             "id": "87e29f446ed5e7b2",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "iron_farm.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "iron_farm"
             }
           }
         ]
@@ -185,6 +189,7 @@
   },
   "active": "87e29f446ed5e7b2",
   "lastOpenFiles": [
+    "gold_farm.md",
     "Economy/Resource flow.md",
     "Economy/Loot tables.md",
     "Economy/Loot Sources/gameplay/entities/sniffer_seeds.md",
@@ -198,7 +203,6 @@
     "witch_farm.md",
     "slime_farm.md",
     "iron_farm.md",
-    "gold_farm.md",
     "drowned_farm.md",
     "creeper_farm.md",
     "Economy/Loot Sources/entities/creeper.md",

@@ -1,174 +1,372 @@
 {
-   "format_version": "1.1.0",
-   "ancient_debris": {
-      "blockshape": "block"
-   },
-   "basalt": {
-      "blockshape": "block"
-   },
-   "blackstone": {
-      "blockshape": "block"
-   },
-   "calcite": {
-      "blockshape": "block"
-   },
-   "cinnabar": {
-      "blockshape": "block"
-   },
-   "clay": {
-      "blockshape": "block"
-   },
-   "coal_ore": {
-      "blockshape": "block"
-   },
-   "copper_ore": {
-      "blockshape": "block"
-   },
-   "crimson_nylium": {
-      "blockshape": "block"
-   },
-   "deepslate": {
-      "blockshape": "block"
-   },
-   "deepslate_coal_ore": {
-      "blockshape": "block"
-   },
-   "deepslate_copper_ore": {
-      "blockshape": "block"
-   },
-   "deepslate_diamond_ore": {
-      "blockshape": "block"
-   },
-   "deepslate_emerald_ore": {
-      "blockshape": "block"
-   },
-   "deepslate_gold_ore": {
-      "blockshape": "block"
-   },
-   "deepslate_iron_ore": {
-      "blockshape": "block"
-   },
-   "deepslate_lapis_ore": {
-      "blockshape": "block"
-   },
-   "deepslate_redstone_ore": {
-      "blockshape": "block"
-   },
-   "diamond_ore": {
-      "blockshape": "block"
-   },
-   "dirt": {
-      "blockshape": "block"
-   },
-   "dirt_with_roots": {
-      "blockshape": "block"
-   },
-   "dripstone_block": {
-      "blockshape": "block"
-   },
-   "emerald_ore": {
-      "blockshape": "block"
-   },
-   "end_stone": {
-      "blockshape": "block"
-   },
-   "flowing_lava": {
-      "blockshape": "water"
-   },
-   "flowing_water": {
-      "blockshape": "water"
-   },
-   "gilded_blackstone": {
-      "blockshape": "block"
-   },
-   "gold_ore": {
-      "blockshape": "block"
-   },
-   "gravel": {
-      "blockshape": "block"
-   },
-   "infested_deepslate": {
-      "blockshape": "block"
-   },
-   "iron_ore": {
-      "blockshape": "block"
-   },
-   "lapis_ore": {
-      "blockshape": "block"
-   },
-   "lava": {
-      "blockshape": "water"
-   },
-   "lit_deepslate_redstone_ore": {
-      "blockshape": "block"
-   },
-   "lit_redstone_ore": {
-      "blockshape": "block"
-   },
-   "magma": {
-      "blockshape": "block"
-   },
-   "monster_egg": {
-      "blockshape": "block"
-   },
-   "moss_block": {
-      "blockshape": "block"
-   },
-   "moss_carpet": {
-      "blockshape": "block"
-   },
-   "nether_gold_ore": {
-      "blockshape": "block"
-   },
-   "netherrack": {
-      "blockshape": "block"
-   },
-   "obsidian": {
-      "blockshape": "block"
-   },
-   "polished_basalt": {
-      "blockshape": "block"
-   },
-   "potent_sulfur": {
-      "blockshape": "block"
-   },
-   "quartz_ore": {
-      "blockshape": "block"
-   },
-   "redstone_ore": {
-      "blockshape": "block"
-   },
-   "sand": {
-      "blockshape": "block"
-   },
-   "sandstone": {
-      "blockshape": "block"
-   },
-   "sculk": {
-      "blockshape": "block"
-   },
-   "smooth_basalt": {
-      "blockshape": "block"
-   },
-   "soul_sand": {
-      "blockshape": "block"
-   },
-   "soul_soil": {
-      "blockshape": "block"
-   },
-   "stone": {
-      "blockshape": "block"
-   },
-   "sulfur": {
-      "blockshape": "block"
-   },
-   "tuff": {
-      "blockshape": "block"
-   },
-   "warped_nylium": {
-      "blockshape": "block"
-   },
-   "water": {
-      "blockshape": "water"
-   }
+  "format_version": "1.21.40",
+  "acacia_sapling": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "allium": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "ancient_debris": {
+    "blockshape": "block"
+  },
+  "azure_bluet": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "bamboo_sapling": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "basalt": {
+    "blockshape": "block"
+  },
+  "beetroot": {
+    "blockshape": "doublesided_rows"
+  },
+  "birch_sapling": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "blackstone": {
+    "blockshape": "block"
+  },
+  "blue_orchid": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "brown_mushroom": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "bush": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "cactus_flower": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "calcite": {
+    "blockshape": "block"
+  },
+  "carrots": {
+    "blockshape": "doublesided_rows"
+  },
+  "cherry_sapling": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "cinnabar": {
+    "blockshape": "block"
+  },
+  "clay": {
+    "blockshape": "block"
+  },
+  "coal_ore": {
+    "blockshape": "block"
+  },
+  "copper_ore": {
+    "blockshape": "block"
+  },
+  "cornflower": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "crimson_fungus": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "crimson_hyphae": {
+    "blockshape": "block"
+  },
+  "crimson_nylium": {
+    "blockshape": "block"
+  },
+  "crimson_roots": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "dandelion": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "dark_oak_sapling": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "deadbush": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "deepslate": {
+    "blockshape": "block"
+  },
+  "deepslate_coal_ore": {
+    "blockshape": "block"
+  },
+  "deepslate_copper_ore": {
+    "blockshape": "block"
+  },
+  "deepslate_diamond_ore": {
+    "blockshape": "block"
+  },
+  "deepslate_emerald_ore": {
+    "blockshape": "block"
+  },
+  "deepslate_gold_ore": {
+    "blockshape": "block"
+  },
+  "deepslate_iron_ore": {
+    "blockshape": "block"
+  },
+  "deepslate_lapis_ore": {
+    "blockshape": "block"
+  },
+  "deepslate_redstone_ore": {
+    "blockshape": "block"
+  },
+  "diamond_ore": {
+    "blockshape": "block"
+  },
+  "dirt": {
+    "blockshape": "block"
+  },
+  "dirt_with_roots": {
+    "blockshape": "block"
+  },
+  "dripstone_block": {
+    "blockshape": "block"
+  },
+  "emerald_ore": {
+    "blockshape": "block"
+  },
+  "end_stone": {
+    "blockshape": "block"
+  },
+  "fern": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "firefly_bush": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "flowing_lava": {
+    "blockshape": "water"
+  },
+  "flowing_water": {
+    "blockshape": "water"
+  },
+  "gilded_blackstone": {
+    "blockshape": "block"
+  },
+  "gold_ore": {
+    "blockshape": "block"
+  },
+  "golden_dandelion": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "grass": {
+    "blockshape": "block"
+  },
+  "gravel": {
+    "blockshape": "block"
+  },
+  "hanging_roots": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "hardened_clay": {
+    "blockshape": "block"
+  },
+  "infested_deepslate": {
+    "blockshape": "block"
+  },
+  "iron_ore": {
+    "blockshape": "block"
+  },
+  "jungle_sapling": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "lapis_ore": {
+    "blockshape": "block"
+  },
+  "large_fern": {
+    "blockshape": "doublesided_double_plant"
+  },
+  "lava": {
+    "blockshape": "water"
+  },
+  "lilac": {
+    "blockshape": "doublesided_double_plant"
+  },
+  "lily_of_the_valley": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "lit_deepslate_redstone_ore": {
+    "blockshape": "block"
+  },
+  "lit_redstone_ore": {
+    "blockshape": "block"
+  },
+  "magma": {
+    "blockshape": "block"
+  },
+  "mangrove_propagule": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "mangrove_roots": {
+    "blockshape": "block"
+  },
+  "melon_stem": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "moss_block": {
+    "blockshape": "block"
+  },
+  "mud": {
+    "blockshape": "block"
+  },
+  "muddy_mangrove_roots": {
+    "blockshape": "block"
+  },
+  "mushroom_stem": {
+    "blockshape": "block"
+  },
+  "mycelium": {
+    "blockshape": "block"
+  },
+  "nether_gold_ore": {
+    "blockshape": "block"
+  },
+  "nether_sprouts": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "nether_wart": {
+    "blockshape": "doublesided_rows"
+  },
+  "netherrack": {
+    "blockshape": "block"
+  },
+  "oak_sapling": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "obsidian": {
+    "blockshape": "block"
+  },
+  "orange_tulip": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "oxeye_daisy": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "pale_oak_sapling": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "peony": {
+    "blockshape": "doublesided_double_plant"
+  },
+  "pink_tulip": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "pitcher_plant": {
+    "blockshape": "doublesided_double_plant"
+  },
+  "polished_basalt": {
+    "blockshape": "block"
+  },
+  "poplar_sapling": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "poppy": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "potatoes": {
+    "blockshape": "doublesided_rows"
+  },
+  "potent_sulfur": {
+    "blockshape": "block"
+  },
+  "pumpkin_stem": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "quartz_ore": {
+    "blockshape": "block"
+  },
+  "red_mushroom": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "red_tulip": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "redstone_ore": {
+    "blockshape": "block"
+  },
+  "reeds": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "rose_bush": {
+    "blockshape": "doublesided_double_plant"
+  },
+  "sand": {
+    "blockshape": "block"
+  },
+  "sandstone": {
+    "blockshape": "block"
+  },
+  "sculk": {
+    "blockshape": "block"
+  },
+  "short_dry_grass": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "short_grass": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "smooth_basalt": {
+    "blockshape": "block"
+  },
+  "soul_sand": {
+    "blockshape": "block"
+  },
+  "soul_soil": {
+    "blockshape": "block"
+  },
+  "spruce_sapling": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "stone": {
+    "blockshape": "block"
+  },
+  "sulfur": {
+    "blockshape": "block"
+  },
+  "sunflower": {
+    "blockshape": "doublesided_double_plant"
+  },
+  "sweet_berry_bush": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "tall_dry_grass": {
+    "blockshape": "doublesided_double_plant"
+  },
+  "tall_grass": {
+    "blockshape": "doublesided_double_plant"
+  },
+  "torchflower": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "torchflower_crop": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "tuff": {
+    "blockshape": "block"
+  },
+  "warped_fungus": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "warped_nylium": {
+    "blockshape": "block"
+  },
+  "warped_roots": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "water": {
+    "blockshape": "water"
+  },
+  "wheat": {
+    "blockshape": "doublesided_rows"
+  },
+  "white_tulip": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "wither_rose": {
+    "blockshape": "doublesided_cross_texture"
+  },
+  "yellow_flower": {
+    "blockshape": "doublesided_cross_texture"
+  }
 }

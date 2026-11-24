@@ -5,22 +5,23 @@
   },
   "header": {
     "name": "Dragon sword",
-    "description": "Dragon sword rp v9.0.12",
+    "description": "Dragon sword rp v11.3.0",
     "min_engine_version": [ 1, 26, 50 ],
     "uuid": "877901f7-e59d-4a03-acf8-b71b32238fa8",
-    "version": [ 9, 0, 12 ]
+    "version": [ 11, 3, 0 ]
   },
+  "capabilities": ["pbr"],
   "modules": [
     {
       "type": "resources",
       "uuid": "8bb667df-02fd-42a3-8454-c7e4b0b7ee54",
-      "version": [ 9, 0, 12 ]
+      "version": [ 11, 3, 0 ]
     }
   ],
   "dependencies": [
     {
       "uuid": "acdd5b56-7b7d-405b-bcdf-13e85e2beaaf",
-      "version": [ 9, 0, 12 ]
+      "version": [ 11, 3, 0 ]
     }
   ]
 }

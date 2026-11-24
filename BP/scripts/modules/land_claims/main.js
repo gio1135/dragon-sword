@@ -107,7 +107,7 @@ if (itemStack?.typeId === SHOVEL_ID) {
 }
 });
 
-function handleShovelInteraction(player, location) {
+export function handleShovelInteraction(player, location) {
 const pd = ClaimManager.getOrCreatePlayer(player);
 
 if (!pd.firstPoint) {

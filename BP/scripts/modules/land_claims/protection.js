@@ -6,6 +6,25 @@ import { FeatureFlags } from '../../core/feature_flags.js';
 
 const SHOVEL_ID = 'minecraft:golden_shovel';
 
+const UTILITY_ITEMS = [
+  'minecraft:armor_stand',
+  'minecraft:painting',
+  'minecraft:end_crystal',
+  'minecraft:minecart',
+  'minecraft:chest_minecart',
+  'minecraft:hopper_minecart',
+  'minecraft:tnt_minecart',
+  'minecraft:furnace_minecart',
+  'minecraft:command_block_minecart'
+];
+
+const MODIFICATION_TOOLS = [
+  'minecraft:shears',
+  'minecraft:flint_and_steel',
+  'minecraft:fire_charge',
+  'minecraft:bone_meal'
+];
+
 const COOLDOWNS = new Map();
 function notify(player, message) {
   const last = COOLDOWNS.get(player.id) ?? 0;
@@ -17,6 +36,92 @@ function notify(player, message) {
     });
     COOLDOWNS.set(player.id, now);
   }
+}
+
+function wouldBucketAffectProtectedClaims(bucketLocation, player) {
+  const radius = 8;
+  const minChunkX = Math.floor((bucketLocation.x - radius) / 16);
+  const maxChunkX = Math.floor((bucketLocation.x + radius) / 16);
+  const minChunkZ = Math.floor((bucketLocation.z - radius) / 16);
+  const maxChunkZ = Math.floor((bucketLocation.z + radius) / 16);
+
+  const checkedClaims = new Set();
+  for (let cx = minChunkX; cx <= maxChunkX; cx++) {
+    for (let cz = minChunkZ; cz <= maxChunkZ; cz++) {
+      const claims = ClaimManager.spatialCache.get(`${cx},${cz}`);
+      if (!claims) continue;
+      for (const claim of claims) {
+        if (checkedClaims.has(claim)) continue;
+        checkedClaims.add(claim);
+
+        const minX = Math.min(claim.start.x, claim.end.x);
+        const maxX = Math.max(claim.start.x, claim.end.x);
+        const minZ = Math.min(claim.start.z, claim.end.z);
+        const maxZ = Math.max(claim.start.z, claim.end.z);
+
+        const clampedX = Math.max(minX, Math.min(bucketLocation.x, maxX));
+        const clampedZ = Math.max(minZ, Math.min(bucketLocation.z, maxZ));
+        const dx = bucketLocation.x - clampedX;
+        const dz = bucketLocation.z - clampedZ;
+
+        if (dx * dx + dz * dz <= radius * radius) {
+          if (
+            !claim.hasPermission(
+              PermissionTypes.USE_ITEMS_ON_BLOCKS,
+              player,
+              ClaimManager.database,
+            )
+          ) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
+function wouldExplosionAffectProtectedClaims(explosionLocation, sourcePlayer) {
+  const radius = 8;
+  const minChunkX = Math.floor((explosionLocation.x - radius) / 16);
+  const maxChunkX = Math.floor((explosionLocation.x + radius) / 16);
+  const minChunkZ = Math.floor((explosionLocation.z - radius) / 16);
+  const maxChunkZ = Math.floor((explosionLocation.z + radius) / 16);
+
+  const checkedClaims = new Set();
+  for (let cx = minChunkX; cx <= maxChunkX; cx++) {
+    for (let cz = minChunkZ; cz <= maxChunkZ; cz++) {
+      const claims = ClaimManager.spatialCache.get(`${cx},${cz}`);
+      if (!claims) continue;
+      for (const claim of claims) {
+        if (checkedClaims.has(claim)) continue;
+        checkedClaims.add(claim);
+
+        const minX = Math.min(claim.start.x, claim.end.x);
+        const maxX = Math.max(claim.start.x, claim.end.x);
+        const minZ = Math.min(claim.start.z, claim.end.z);
+        const maxZ = Math.max(claim.start.z, claim.end.z);
+
+        const clampedX = Math.max(minX, Math.min(explosionLocation.x, maxX));
+        const clampedZ = Math.max(minZ, Math.min(explosionLocation.z, maxZ));
+        const dx = explosionLocation.x - clampedX;
+        const dz = explosionLocation.z - clampedZ;
+
+        if (dx * dx + dz * dz <= radius * radius) {
+          if (
+            !claim.hasPermission(
+              PermissionTypes.ALLOW_TNT,
+              sourcePlayer,
+              ClaimManager.database,
+            )
+          ) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
 }
 
 world.beforeEvents.playerBreakBlock.subscribe((ev) => {
@@ -61,6 +166,18 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
       notify(player, '');
       return;
     }
+
+    if (
+      itemStack.typeId === 'minecraft:water_bucket' ||
+      itemStack.typeId === 'minecraft:lava_bucket' ||
+      itemStack.typeId === 'minecraft:powder_snow_bucket'
+    ) {
+      if (wouldBucketAffectProtectedClaims(block.location, player)) {
+        ev.cancel = true;
+        notify(player, "You don't have permission to place fluids near claims");
+        return;
+      }
+    }
   }
 
   let isBlockPlacement = false;
@@ -80,9 +197,7 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
     const id = block.typeId;
     const isTryingToPlace = player.isSneaking && isBlockPlacement;
 
-    if (
-      (id.includes('door') || id.includes('fence_gate'))
-    ) {
+    if (id.includes('door') || id.includes('fence_gate')) {
       if (!isTryingToPlace) {
         if (
           !claim.hasPermission(
@@ -97,11 +212,16 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
         continue;
       }
     }
+
     if (
-      (id.includes('button') ||
-        id.includes('lever') ||
-        id.includes('repeater') ||
-        id.includes('comparator'))
+      id.includes('button') ||
+      id.includes('lever') ||
+      id.includes('repeater') ||
+      id.includes('comparator') ||
+      id.includes('daylight_detector') ||
+      id === 'minecraft:tripwire_hook' ||
+      id === 'minecraft:bell' ||
+      id.includes('pressure_plate')
     ) {
       if (!isTryingToPlace) {
         if (
@@ -117,6 +237,7 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
         continue;
       }
     }
+
     if (id.includes('bed') || id.includes('cushion')) {
       if (!isTryingToPlace) {
         if (
@@ -132,6 +253,7 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
         continue;
       }
     }
+
     if (id.includes('sign')) {
       if (!isTryingToPlace) {
         if (
@@ -147,18 +269,20 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
         continue;
       }
     }
-    if (id === 'minecraft:frame' || id === 'minecraft:glow_frame') {
+
+    if (id === 'minecraft:frame' || id === 'minecraft:glow_frame' || id.includes('frame')) {
       if (!isTryingToPlace) {
         const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_UTILITY_ENTITIES);
         const ownerData = claim.getOwnerData(ClaimManager.database);
         const isOwner = ownerData && ownerData.id === player.id;
         if (!allowAttack && !isOwner) {
           cancelled = true;
-          notify(player, "Utility entities are protected in this claim");
+          notify(player, 'Utility entities are protected in this claim');
         }
         continue;
       }
     }
+
     if (id === 'minecraft:tnt') {
       if (
         itemStack?.typeId === 'minecraft:flint_and_steel' ||
@@ -177,11 +301,27 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
       }
       continue;
     }
+
     const isContainer =
       block.getComponent('minecraft:inventory') ||
       id.includes('chest') ||
       id.includes('barrel') ||
-      id.includes('shulker');
+      id.includes('shulker') ||
+      id.includes('bookshelf') ||
+      id.includes('decorated_pot') ||
+      id.includes('pot') ||
+      id.includes('shelf') ||
+      id.includes('anvil') ||
+      id.includes('table') ||
+      id.includes('loom') ||
+      id.includes('grindstone') ||
+      id.includes('stonecutter') ||
+      id.includes('crafter') ||
+      id.includes('brewing_stand') ||
+      id.includes('beacon') ||
+      id.includes('composter') ||
+      id.includes('respawn_anchor');
+
     if (isContainer) {
       if (!isTryingToPlace) {
         if (
@@ -228,6 +368,47 @@ world.beforeEvents.playerInteractWithBlock.subscribe((ev) => {
       }
     } else if (itemStack) {
       const id = itemStack.typeId;
+
+      const isUtilityItem =
+        UTILITY_ITEMS.includes(id) ||
+        id.includes('boat') ||
+        id.includes('raft') ||
+        id.includes('_spawn_egg') ||
+        id === 'minecraft:spawn_egg';
+
+      if (isUtilityItem) {
+        if (
+          !claim.hasPermission(
+            PermissionTypes.BREAK_BLOCKS,
+            player,
+            ClaimManager.database,
+          )
+        ) {
+          cancelled = true;
+          notify(player, "You don't have permission to place entities");
+        }
+        continue;
+      }
+
+      const isTool =
+        MODIFICATION_TOOLS.includes(id) ||
+        id.includes('_hoe') ||
+        (id.includes('_shovel') && id !== SHOVEL_ID) ||
+        id.includes('_axe');
+
+      if (isTool) {
+        if (
+          !claim.hasPermission(
+            PermissionTypes.BREAK_BLOCKS,
+            player,
+            ClaimManager.database,
+          )
+        ) {
+          cancelled = true;
+          notify(player, "You don't have permission to modify blocks");
+        }
+        continue;
+      }
 
       if (id === 'minecraft:fishing_rod') {
         if (
@@ -386,7 +567,7 @@ world.beforeEvents.itemUse.subscribe((ev) => {
 
 world.beforeEvents.playerInteractWithEntity.subscribe((ev) => {
   if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.LAND_CLAIMS)) return;
-  const { player, target } = ev;
+  const { player, target, itemStack } = ev;
   if (player.dimension.id !== 'minecraft:overworld') return;
 
   const claims = ClaimManager.getClaimsAt(target.location);
@@ -405,13 +586,37 @@ world.beforeEvents.playerInteractWithEntity.subscribe((ev) => {
     'minecraft:chest_minecart',
     'minecraft:hopper_minecart',
     'minecraft:tnt_minecart',
+    'minecraft:furnace_minecart',
+    'minecraft:command_block_minecart'
   ];
 
-  if (utilityTypes.includes(target.typeId) || target.typeId.includes('boat')) {
-    const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_UTILITY_ENTITIES);
-    if (!allowAttack && !isOwner) {
+  if (utilityTypes.includes(target.typeId) || target.typeId.includes('boat') || target.typeId.includes('minecart')) {
+    if (target.typeId.includes('chest') || target.typeId.includes('hopper')) {
+      if (!claim.hasPermission(PermissionTypes.OPEN_CONTAINERS, player, ClaimManager.database)) {
+        cancelled = true;
+        notify(player, "You don't have permission to open containers");
+      }
+    } else {
+      const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_UTILITY_ENTITIES);
+      if (!allowAttack && !isOwner) {
+        cancelled = true;
+        notify(player, 'Utility entities are protected in this claim');
+      }
+    }
+  } else if (target.typeId === 'minecraft:sheep') {
+    const allowPassive = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_PASSIVE_MOBS);
+    if (!allowPassive && !isOwner) {
       cancelled = true;
-      notify(player, "Utility entities are protected in this claim");
+      notify(player, 'Passive mobs are protected in this claim');
+    }
+  } else {
+    const itemId = itemStack?.typeId;
+    if (itemId === 'minecraft:shears' || itemId === 'minecraft:lead' || itemId === 'minecraft:name_tag' || itemId?.includes('dye')) {
+      const allowPassive = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_PASSIVE_MOBS);
+      if (!allowPassive && !isOwner) {
+        cancelled = true;
+        notify(player, 'Entities are protected in this claim');
+      }
     }
   }
 
@@ -422,16 +627,23 @@ world.beforeEvents.playerInteractWithEntity.subscribe((ev) => {
 
 world.beforeEvents.explosion.subscribe((ev) => {
   if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.LAND_CLAIMS)) return;
+  if (ev.dimension.id !== 'minecraft:overworld') return;
+
+  let origin = null;
+  if (ev.source?.location) {
+    origin = ev.source.location;
+  }
+  const sourcePlayer = ev.source?.typeId === 'minecraft:player' ? ev.source : null;
+
+  if (origin && wouldExplosionAffectProtectedClaims(origin, sourcePlayer)) {
+    ev.cancel = true;
+    return;
+  }
+
   const affectedBlocks = ev.getImpactedBlocks();
   if (affectedBlocks.length === 0) return;
 
-  DS.debug(
-    `Explosion at ${ev.source?.location?.x},${ev.source?.location?.z} affecting ${affectedBlocks.length} blocks.`,
-    'ExplosionDebug',
-  );
-
   const safeBlocks = [];
-
   for (const block of affectedBlocks) {
     let protectedBlock = false;
     const claims = ClaimManager.getClaimsAt(block.location);
@@ -439,14 +651,9 @@ world.beforeEvents.explosion.subscribe((ev) => {
       if (protectedBlock) break;
       const allowed = claim.hasPermission(
         PermissionTypes.ALLOW_TNT,
-        null,
+        sourcePlayer,
         ClaimManager.database,
       );
-      DS.debug(
-        `Block at ${block.location.x},${block.location.z} in claim '${claim.name}'. Allowed: ${allowed}`,
-        'ExplosionDebug',
-      );
-
       if (!allowed) {
         protectedBlock = true;
       }
@@ -454,24 +661,16 @@ world.beforeEvents.explosion.subscribe((ev) => {
 
     if (!protectedBlock) {
       safeBlocks.push(block);
-    } else {
-      DS.debug(
-        `Protected block at ${block.location.x},${block.location.z}`,
-        'ExplosionDebug',
-      );
     }
   }
 
   if (safeBlocks.length !== affectedBlocks.length) {
-    DS.debug(
-      `Preventing damage to ${affectedBlocks.length - safeBlocks.length} blocks.`,
-      'ExplosionDebug',
-    );
     ev.setImpactedBlocks(safeBlocks);
   }
 });
 
 const PLAYER_POSITIONS = new Map();
+const LAST_BLOCK_POSITIONS = new Map();
 
 system.runInterval(() => {
   if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.LAND_CLAIMS)) return;
@@ -480,6 +679,14 @@ system.runInterval(() => {
     if (player.dimension.id !== 'minecraft:overworld') continue;
 
     const currentPos = player.location;
+    const bx = Math.floor(currentPos.x);
+    const by = Math.floor(currentPos.y);
+    const bz = Math.floor(currentPos.z);
+    const blockKey = `${bx},${by},${bz}`;
+    const lastBlockKey = LAST_BLOCK_POSITIONS.get(player.id);
+    if (blockKey === lastBlockKey) continue;
+    LAST_BLOCK_POSITIONS.set(player.id, blockKey);
+
     const overlapping = ClaimManager.getClaimsAt(currentPos);
     let insideClaim = overlapping.length > 0 ? overlapping[0] : null;
 
@@ -492,7 +699,7 @@ system.runInterval(() => {
 
       const ownerData = insideClaim.getOwnerData(ClaimManager.database);
       const ownerName = ownerData ? ownerData.name : 'Unknown';
-      
+
       let infoString = '';
       if (insideClaim.showTitle !== false || (ownerData && ownerData.id === player.id)) {
         infoString = `${insideClaim.name}§r - ${ownerName}`;
@@ -502,27 +709,37 @@ system.runInterval(() => {
         const safePos = PLAYER_POSITIONS.get(player.id);
         if (safePos && !insideClaim.isOverlap(safePos)) {
           player.teleport(safePos, { dimension: player.dimension });
+          LAST_BLOCK_POSITIONS.set(
+            player.id,
+            `${Math.floor(safePos.x)},${Math.floor(safePos.y)},${Math.floor(safePos.z)}`,
+          );
           if (infoString) player.onScreenDisplay.setActionBar(infoString);
         } else {
           if (infoString) player.onScreenDisplay.setActionBar(infoString);
           notify(player, "You don't have permission to enter this claim");
         }
       } else {
-        if (infoString) player.onScreenDisplay.setActionBar(infoString);
-
         const lastClaimId = player.getDynamicProperty('32k:last_claim_id');
         const currentSig = insideClaim.name + insideClaim.start.x;
 
         if (lastClaimId !== currentSig) {
           player.setDynamicProperty('32k:last_claim_id', currentSig);
+          if (infoString && !player.getDynamicProperty('32k:has_holoprint')) player.onScreenDisplay.setActionBar(infoString);
         }
         PLAYER_POSITIONS.set(player.id, currentPos);
       }
     } else {
+      player.setDynamicProperty('32k:last_claim_id', undefined);
       PLAYER_POSITIONS.set(player.id, currentPos);
     }
   }
 }, 10);
+
+world.afterEvents.playerLeave.subscribe((ev) => {
+  PLAYER_POSITIONS.delete(ev.playerId);
+  LAST_BLOCK_POSITIONS.delete(ev.playerId);
+  COOLDOWNS.delete(ev.playerId);
+});
 
 world.afterEvents.pistonActivate.subscribe((ev) => {
   if (!FeatureFlags.isEnabled(FeatureFlags.FEATURES.LAND_CLAIMS)) return;
@@ -648,7 +865,7 @@ world.beforeEvents.entityHurt.subscribe((ev) => {
     const allowPvp = claim.permissions.get(PermissionTypes.ALLOW_PLAYER_COMBAT);
     if (!allowPvp) {
       cancelled = true;
-      notify(damager, "Player combat is disabled in this claim");
+      notify(damager, 'Player combat is disabled in this claim');
     }
   } else {
     const utilityTypes = [
@@ -669,49 +886,44 @@ world.beforeEvents.entityHurt.subscribe((ev) => {
       const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_UTILITY_ENTITIES);
       if (!allowAttack && !isOwner) {
         cancelled = true;
-        notify(damager, "Utility entities are protected in this claim");
+        notify(damager, 'Utility entities are protected in this claim');
       }
     } else {
-      const isTameableComp = hurtEntity.getComponent('minecraft:tameable');
-      const isTamed = isTameableComp ? isTameableComp.tamedToPlayer : false;
-      const isLeashedComp = hurtEntity.getComponent('minecraft:leashable');
-      const isLeashed = isLeashedComp ? isLeashedComp.isLeashed : false;
+      const tameComponent = hurtEntity.getComponent('minecraft:tameable');
+      const hasTameData = tameComponent && tameComponent.tamedToPlayer;
       const familyComp = hurtEntity.getComponent('minecraft:type_family');
       const isMonster = familyComp ? familyComp.hasTypeFamily('monster') : false;
       const isMob = familyComp ? familyComp.hasTypeFamily('mob') : false;
-      
-      const tameComponent = hurtEntity.getComponent('minecraft:tameable');
-      const hasTameData = tameComponent && tameComponent.tamedToPlayer;
-      
+
       if (hasTameData || hurtEntity.typeId === 'minecraft:wolf' || hurtEntity.typeId === 'minecraft:cat' || hurtEntity.typeId === 'minecraft:parrot' || hurtEntity.typeId === 'minecraft:horse') {
         const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_PETS);
         if (!allowAttack && !isOwner) {
           cancelled = true;
-          notify(damager, "Pets are protected in this claim");
+          notify(damager, 'Pets are protected in this claim');
         }
       } else if (isMonster) {
         const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_HOSTILE_MOBS);
         if (!allowAttack && !isOwner) {
           cancelled = true;
-          notify(damager, "Hostile mobs are protected in this claim");
+          notify(damager, 'Hostile mobs are protected in this claim');
         }
       } else if (hurtEntity.typeId === 'minecraft:bee' || hurtEntity.typeId === 'minecraft:iron_golem' || hurtEntity.typeId === 'minecraft:snow_golem' || hurtEntity.typeId === 'minecraft:polar_bear' || hurtEntity.typeId === 'minecraft:llama' || hurtEntity.typeId === 'minecraft:panda') {
         const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_NEUTRAL_MOBS);
         if (!allowAttack && !isOwner) {
           cancelled = true;
-          notify(damager, "Neutral mobs are protected in this claim");
+          notify(damager, 'Neutral mobs are protected in this claim');
         }
       } else if (isMob) {
         const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_PASSIVE_MOBS);
         if (!allowAttack && !isOwner) {
           cancelled = true;
-          notify(damager, "Passive mobs are protected in this claim");
+          notify(damager, 'Passive mobs are protected in this claim');
         }
       } else {
         const allowAttack = claim.permissions.get(PermissionTypes.ALLOW_ATTACKING_PASSIVE_MOBS);
         if (!allowAttack && !isOwner) {
           cancelled = true;
-          notify(damager, "Entities are protected in this claim");
+          notify(damager, 'Entities are protected in this claim');
         }
       }
     }

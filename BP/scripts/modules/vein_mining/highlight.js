@@ -5,7 +5,7 @@ import {
   IsBlockAllowed,
 } from "./requirements.js";
 import { GetPattern } from "./modes.js";
-import { GetLocId, DisplayActionBar, CONNECTION_OFFSETS } from "./utils.js";
+import { GetLocId, IdToPos, DisplayActionBar, CONNECTION_OFFSETS } from "./utils.js";
 import {
   OUTLINE_STYLES,
   LIQUIDS,
@@ -251,7 +251,9 @@ class HighlightManager {
     if (!player) return;
     const session = this.sessions.get(player.id);
     if (session) {
-      player.onScreenDisplay.setActionBar("");
+      try {
+        player.onScreenDisplay.setActionBar("");
+      } catch (e) {}
       if (session.lightsMap) {
         session.lightsMap.forEach((ent) => {
           if (ent && ent.isValid) {
@@ -260,6 +262,7 @@ class HighlightManager {
             } catch (e) {}
           }
         });
+        session.lightsMap.clear();
       }
       if (session.blockCache) {
         session.blockCache.clear();
@@ -398,19 +401,38 @@ class HighlightManager {
     const currentLocId = currentBlock ? GetLocId(currentBlock.location) : null;
 
     if (session && !session.isMining) {
-      if (
-        !currentBlock ||
-        currentBlock.typeId === "minecraft:air" ||
-        !session.blockSet.has(currentLocId)
-      ) {
-        const currentBlock = player.dimension.getBlock(session.origin);
-        if (
-          !session.isMining &&
-          (!currentBlock || currentBlock.typeId !== session.blockType)
-        ) {
-          this.sessions.delete(player.id);
+      let changed = false;
+      for (const locId of session.blockSet) {
+        const pos = IdToPos(locId);
+        try {
+          const b = player.dimension.getBlock(pos);
+          if (!b || b.typeId !== session.blockType) {
+            this.removeBlockHighlight(player.id, locId);
+            changed = true;
+          }
+        } catch (e) {
+          this.removeBlockHighlight(player.id, locId);
+          changed = true;
+        }
+      }
+
+      if (session.blockSet.size === 0) {
+        this.clearHighlights(player);
+        session = null;
+      } else if (changed) {
+        session.faceMap = this.buildFaceMap(session.blockSet);
+        if (enableVisual) {
+          this.syncEntities(player, session);
+        }
+      }
+    }
+
+    if (session && !session.isMining) {
+      if (!currentBlock || currentBlock.typeId === "minecraft:air" || !session.blockSet.has(currentLocId)) {
+        session.switchTimer = (session.switchTimer || 0) + 1;
+        if (session.switchTimer >= 3) {
           this.clearHighlights(player);
-          return;
+          session = null;
         }
       } else {
         session.switchTimer = 0;
@@ -711,18 +733,15 @@ class HighlightManager {
       }
     }
 
-    const now = Date.now();
-    if (now - this.lastHeavyCleanup < 300000) return;
-    this.lastHeavyCleanup = now;
-
     const allEntityTypes = OUTLINE_STYLES.map((s) => s.entity);
     for (const player of world.getAllPlayers()) {
+      if (!player.isValid) continue;
       try {
         for (const typeId of allEntityTypes) {
           const nearby = player.dimension.getEntities({
             type: typeId,
             location: player.location,
-            maxDistance: 8 + 10,
+            maxDistance: 32,
           });
           for (const entity of nearby) {
             if (!validIds.has(entity.id)) {

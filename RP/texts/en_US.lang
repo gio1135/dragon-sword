@@ -154,3 +154,7 @@ item.frame=Item Frame
 item.flower_pot=Flower Pot
 
 item.written_book=Written Book
+entity.ds:soul_allay.name=Soul allay
+entity.32k:soul_allay.name=Soul allay
+action.interact.ds.collect=Collect items
+action.interact.32k.collect=Collect items

@@ -19,8 +19,12 @@ REGULAR_RP_DIR = os.path.join(MOJANG_DIR, "resource_packs", "Dragon sword")
 def read_manifest(path):
   if not os.path.exists(path):
     return None
-  with open(path, 'r', encoding='utf-8') as f:
-    return json.load(f)
+  try:
+    with open(path, 'r', encoding='utf-8') as f:
+      content = strip_json_comments(f.read())
+      return json.loads(content, strict=False)
+  except Exception:
+    return None
 
 def format_json_compact(obj, indent=0):
   sp = '  ' * indent
@@ -47,7 +51,7 @@ def format_json_compact(obj, indent=0):
 
 def write_manifest(path, data):
   with open(path, 'w', encoding='utf-8') as f:
-    f.write(format_json_compact(data) + '\n')
+    f.write(format_json_compact(data))
 
 def bump_version(version_array, bump_type):
   if bump_type == 'major':
@@ -111,16 +115,11 @@ def strip_json_comments(text):
 
 def build_mounts():
   print("Building mounts from local bedrock-samples...")
-  mounts = ['horse.json', 'camel.json', 'camel_husk.json', 'donkey.json', 'mule.json']
+  mounts = ['horse.json', 'camel.json', 'camel_husk.json', 'donkey.json', 'mule.json', 'zombie_horse.json']
   samples_dir = os.path.join(PROJECT_DIR, "Docs", "bedrock-samples-v1.26.50.4-full", "behavior_pack", "entities")
 
-  speed_mult = 2.0
-  jump_mult = 1.5
-  health_mult = 2.0
-  ai_mult = 0.5
-
   for mount in mounts:
-    source_path = os.path.join(samples_dir, mount)
+    source_path = os.path.join(samples_dir, 'horse.json' if mount == 'zombie_horse.json' else mount)
     try:
       if not os.path.exists(source_path):
         print(f"  Skipped {mount}: not found in local samples")
@@ -135,37 +134,8 @@ def build_mounts():
       components = entity.get("components", {})
       component_groups = entity.get("component_groups", {})
 
-      def modify_range(obj, prop, multiplier):
-        if prop in obj:
-          val = obj[prop]
-          if isinstance(val, dict) and "value" in val:
-            v = val["value"]
-            if isinstance(v, dict) and "range_min" in v and "range_max" in v:
-              v["range_min"] *= multiplier
-              v["range_max"] *= multiplier
-            elif isinstance(v, (int, float)):
-              val["value"] *= multiplier
-          elif isinstance(val, (int, float)):
-            obj[prop] *= multiplier
-
-      modify_range(components, "minecraft:movement", speed_mult)
-      modify_range(components, "minecraft:horse.jump_strength", jump_mult)
-      modify_range(components, "minecraft:health", health_mult)
-
-      for cg_name, cg in component_groups.items():
-        modify_range(cg, "minecraft:movement", speed_mult)
-        modify_range(cg, "minecraft:horse.jump_strength", jump_mult)
-        modify_range(cg, "minecraft:health", health_mult)
-
-      def scale_ai_speed(obj):
-        for k, v in obj.items():
-          if k.startswith("minecraft:behavior") and isinstance(v, dict):
-            if "speed_multiplier" in v:
-              v["speed_multiplier"] *= ai_mult
-
-      scale_ai_speed(components)
-      for cg_name, cg in component_groups.items():
-        scale_ai_speed(cg)
+      if mount == 'zombie_horse.json':
+        entity.get('description', {})['identifier'] = 'minecraft:zombie_horse'
 
       def update_float(obj):
         for k, v in obj.items():
@@ -176,61 +146,25 @@ def build_mounts():
       for cg_name, cg in component_groups.items():
         update_float(cg)
 
-      if mount == "horse.json":
-        if "minecraft:damage_sensor" not in components:
-          components["minecraft:damage_sensor"] = {"triggers": []}
-        triggers = components["minecraft:damage_sensor"].get("triggers", [])
-        if isinstance(triggers, dict):
-          triggers = [triggers]
-          components["minecraft:damage_sensor"]["triggers"] = triggers
-        triggers.append({
-          "cause": "fall",
-          "deals_damage": False,
-          "on_damage": {
-            "filters": {
-              "test": "has_equipment",
-              "domain": "any",
-              "subject": "self",
-              "value": "horsearmorleather"
-            }
-          }
-        })
-        triggers.append({
-          "cause": "fall",
-          "deals_damage": False,
-          "on_damage": {
-            "filters": {
-              "test": "has_equipment",
-              "domain": "any",
-              "subject": "self",
-              "value": "horsearmoriron"
-            }
-          }
-        })
-        triggers.append({
-          "cause": "fall",
-          "deals_damage": False,
-          "on_damage": {
-            "filters": {
-              "test": "has_equipment",
-              "domain": "any",
-              "subject": "self",
-              "value": "horsearmorgold"
-            }
-          }
-        })
-        triggers.append({
-          "cause": "fall",
-          "deals_damage": False,
-          "on_damage": {
-            "filters": {
-              "test": "has_equipment",
-              "domain": "any",
-              "subject": "self",
-              "value": "horsearmordiamond"
-            }
-          }
-        })
+      if mount in ['horse.json', 'zombie_horse.json']:
+        components['minecraft:movement'] = {'value': {'range_min': 0.12, 'range_max': 0.25}}
+        components['minecraft:horse.jump_strength'] = {'value': {'range_min': 0.6, 'range_max': 0.95}}
+        if mount == 'zombie_horse.json':
+          components['minecraft:health'] = {'value': 25, 'max': 25}
+        components['minecraft:damage_sensor'] = {'triggers': [{'cause': 'fall', 'deals_damage': 'no'}]}
+      elif mount == 'mule.json':
+        components['minecraft:movement'] = {'value': {'range_min': 0.16, 'range_max': 0.4}}
+        components['minecraft:horse.jump_strength'] = {'value': {'range_min': 0.6, 'range_max': 0.95}}
+        components['minecraft:damage_sensor'] = {'triggers': [{'cause': 'fall', 'deals_damage': 'no'}]}
+      elif mount == 'donkey.json':
+        components['minecraft:movement'] = {'value': {'range_min': 0.16, 'range_max': 0.4}}
+        components['minecraft:horse.jump_strength'] = {'value': {'range_min': 0.3, 'range_max': 0.5}}
+      elif mount in ['camel.json', 'camel_husk.json']:
+        for cg_name, cg in component_groups.items():
+          if 'minecraft:dash_action' in cg:
+            cg['minecraft:dash_action']['horizontal_momentum'] = 12.0
+        if 'minecraft:dash_action' in components:
+          components['minecraft:dash_action']['horizontal_momentum'] = 12.0
 
       out_path = os.path.join(BP_DIR, "entities", mount)
       os.makedirs(os.path.dirname(out_path), exist_ok=True)
@@ -241,12 +175,135 @@ def build_mounts():
     except Exception as e:
       print(f"  Failed to process {mount}: {e}")
 
+def deploy_external_packs():
+  source_roots = [
+    os.path.join(PROJECT_DIR, '32k packs'),
+    os.path.join(PROJECT_DIR, 'External packs')
+  ]
+
+  source_packs = []
+  seen_uuids = set()
+
+  for root_dir in source_roots:
+    if not os.path.exists(root_dir):
+      continue
+    for pack_name in os.listdir(root_dir):
+      pack_path = os.path.join(root_dir, pack_name)
+      if not os.path.isdir(pack_path):
+        continue
+      for sub in os.listdir(pack_path):
+        sub_path = os.path.join(pack_path, sub)
+        manifest_path = os.path.join(sub_path, 'manifest.json')
+        if os.path.isdir(sub_path) and os.path.exists(manifest_path):
+          m = read_manifest(manifest_path)
+          if m and 'header' in m and 'uuid' in m['header']:
+            uuid = m['header']['uuid']
+            if uuid in seen_uuids:
+              continue
+            seen_uuids.add(uuid)
+            pack_type = 'behavior' if any(mod.get('type') in ['data', 'script'] for mod in m.get('modules', [])) else 'resource'
+            source_packs.append({
+              'name': m['header'].get('name', sub),
+              'uuid': uuid,
+              'type': pack_type,
+              'path': sub_path
+            })
+
+  for p_path, p_type in [(BP_DIR, 'behavior'), (RP_DIR, 'resource')]:
+    manifest_path = os.path.join(p_path, 'manifest.json')
+    if os.path.exists(manifest_path):
+      m = read_manifest(manifest_path)
+      if m and 'header' in m and 'uuid' in m['header']:
+        uuid = m['header']['uuid']
+        if uuid not in seen_uuids:
+          seen_uuids.add(uuid)
+          source_packs.append({
+            'name': m['header'].get('name', os.path.basename(p_path)),
+            'uuid': uuid,
+            'type': p_type,
+            'path': p_path
+          })
+
+  users_dir = os.path.abspath(os.path.join(MOJANG_DIR, '..', '..', '..'))
+  search_dirs = []
+  if os.path.exists(users_dir):
+    for user in os.listdir(users_dir):
+      user_mojang = os.path.join(users_dir, user, 'games', 'com.mojang')
+      if not os.path.isdir(user_mojang):
+        continue
+      search_dirs.append(('behavior', os.path.join(user_mojang, 'development_behavior_packs')))
+      search_dirs.append(('behavior', os.path.join(user_mojang, 'behavior_packs')))
+      search_dirs.append(('resource', os.path.join(user_mojang, 'development_resource_packs')))
+      search_dirs.append(('resource', os.path.join(user_mojang, 'resource_packs')))
+      worlds_dir = os.path.join(user_mojang, 'minecraftWorlds')
+      if os.path.isdir(worlds_dir):
+        for world in os.listdir(worlds_dir):
+          world_dir = os.path.join(worlds_dir, world)
+          if os.path.isdir(world_dir):
+            search_dirs.append(('behavior', os.path.join(world_dir, 'behavior_packs')))
+            search_dirs.append(('resource', os.path.join(world_dir, 'resource_packs')))
+
+  clean_keywords = ['actualplay', 'playerhead']
+  for _, bdir in search_dirs:
+    if os.path.exists(bdir) and ('development_' not in bdir):
+      for it in os.listdir(bdir):
+        if any(kw in it.lower() for kw in clean_keywords):
+          ip = os.path.join(bdir, it)
+          if os.path.isdir(ip):
+            shutil.rmtree(ip)
+          elif os.path.isfile(ip):
+            os.remove(ip)
+
+  for sp in source_packs:
+    deployed = False
+    for p_type, base_dir in search_dirs:
+      if p_type != sp['type'] or not os.path.exists(base_dir):
+        continue
+      for existing in os.listdir(base_dir):
+        existing_path = os.path.join(base_dir, existing)
+        existing_manifest = os.path.join(existing_path, 'manifest.json')
+        if os.path.isdir(existing_path) and os.path.exists(existing_manifest):
+          em = read_manifest(existing_manifest)
+          if em and em.get('header', {}).get('uuid') == sp['uuid']:
+            shutil.rmtree(existing_path)
+            dest_target = os.path.join(base_dir, sp['name'])
+            if os.path.exists(dest_target):
+              shutil.rmtree(dest_target)
+            shutil.copytree(sp['path'], dest_target, ignore=shutil.ignore_patterns('*.zip', '*.mcaddon'))
+            print(f"Deployed {sp['name']} to {dest_target}")
+            deployed = True
+
+    if not deployed:
+      dest_parent = os.path.join(MOJANG_DIR, 'development_behavior_packs' if sp['type'] == 'behavior' else 'development_resource_packs')
+      os.makedirs(dest_parent, exist_ok=True)
+      dest_path = os.path.join(dest_parent, sp['name'])
+      if os.path.exists(dest_path):
+        shutil.rmtree(dest_path)
+      shutil.copytree(sp['path'], dest_path, ignore=shutil.ignore_patterns('*.zip', '*.mcaddon'))
+      print(f"Deployed {sp['name']} to {dest_path}")
+
+def update_external_packs():
+  print('Updating external packs...')
+  import patch_external_packs
+  patch_external_packs.patch_all()
+  deploy_external_packs()
+  print('External packs updated and deployed successfully')
+
 def main():
-  if len(sys.argv) < 2 or sys.argv[1] not in ['major', 'minor', 'patch', 'dev']:
-    print("Usage: python update.py [major|minor|patch|dev]")
+  if len(sys.argv) < 2 or sys.argv[1] not in ['major', 'minor', 'patch', 'dev', 'external', 'heads']:
+    print("Usage: python update.py [major|minor|patch|dev|external|heads]")
     sys.exit(1)
 
   bump_type = sys.argv[1]
+
+  if bump_type == 'external':
+    update_external_packs()
+    sys.exit(0)
+
+  if bump_type == 'heads':
+    from Tools import update_heads
+    update_heads.update_workflow()
+    sys.exit(0)
 
   build_mounts()
   build_items()
@@ -347,6 +404,7 @@ def main():
       write_manifest(manifest_path, data)
 
   print("Deployed updated BP and RP to Minecraft development folders")
+  update_external_packs()
 
 
 
@@ -372,20 +430,38 @@ def build_items():
     with open(out_path, "w", encoding="utf-8") as f: json.dump(data, f, indent=2)
 def build_other_entities():
   print("Building other entities...")
-  ents = ["skeleton_horse.json", "strider.json"]
+  ents = ["skeleton_horse.json", "strider.json", "pig.json", "wolf.json"]
   for ent in ents:
     source_path = os.path.join(PROJECT_DIR, "Docs", "bedrock-samples-v1.26.50.4-full", "behavior_pack", "entities", ent)
     if not os.path.exists(source_path): continue
     with open(source_path, "r", encoding="utf-8") as f: content = strip_json_comments(f.read())
     data = json.loads(content)
     comps = data.get("minecraft:entity", {}).get("components", {})
+    cgs = data.get("minecraft:entity", {}).get("component_groups", {})
     if ent == "skeleton_horse.json":
       comps["minecraft:underwater_mount_breathing"] = {}
       comps["minecraft:mob_effect"] = {"mob_effect": "breath_of_the_nautilus", "ambient": True, "effect_range": 1.6, "effect_time": 2, "entity_filter": {"all_of": [{"test": "is_family", "subject": "other", "value": "player"}, {"test": "is_riding_self", "subject": "other"}]}}
-      if "minecraft:movement" in comps: comps["minecraft:movement"]["value"] = 0.1
-      if "minecraft:horse.jump_strength" in comps: comps["minecraft:horse.jump_strength"]["value"] = 0.8
+      comps["minecraft:movement"] = {"value": 0.28}
+      comps["minecraft:underwater_movement"] = {"value": 0.12}
+      comps["minecraft:horse.jump_strength"] = {"value": 0.75}
+      if "minecraft:behavior.float" in comps:
+        comps["minecraft:behavior.float"]["time_under_water_to_dismount_passengers"] = 999999.0
     elif ent == "strider.json":
       comps["minecraft:mob_effect"] = {"mob_effect": "fire_resistance", "ambient": True, "effect_range": 1.6, "effect_time": 2, "entity_filter": {"all_of": [{"test": "is_family", "subject": "other", "value": "player"}, {"test": "is_riding_self", "subject": "other"}]}}
+    elif ent == "pig.json":
+      if "minecraft:pig_saddled" in cgs:
+        cgs["minecraft:pig_saddled"]["minecraft:movement"] = {"value": 0.35}
+        if "minecraft:boostable" in cgs["minecraft:pig_saddled"]:
+          cgs["minecraft:pig_saddled"]["minecraft:boostable"]["speed_multiplier"] = 1.7
+          cgs["minecraft:pig_saddled"]["minecraft:boostable"]["duration"] = 5.0
+    elif ent == "wolf.json":
+      desc = data.get("minecraft:entity", {}).get("description", {})
+      if "animations" not in desc: desc["animations"] = {}
+      desc["animations"]["sitting_tracker"] = "controller.animation.wolf.sitting_tracker"
+      if "scripts" not in desc: desc["scripts"] = {}
+      if "animate" not in desc["scripts"]: desc["scripts"]["animate"] = []
+      if "sitting_tracker" not in desc["scripts"]["animate"]:
+        desc["scripts"]["animate"].append("sitting_tracker")
     out_path = os.path.join(BP_DIR, "entities", ent)
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f: json.dump(data, f, indent=2)

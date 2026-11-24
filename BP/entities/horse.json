@@ -62,7 +62,7 @@
         },
         "minecraft:behavior.follow_parent": {
           "priority": 4,
-          "speed_multiplier": 0.5
+          "speed_multiplier": 1.0
         },
         "minecraft:collision_box": {
           "width": 1.96,
@@ -82,11 +82,11 @@
         },
         "minecraft:behavior.run_around_like_crazy": {
           "priority": 1,
-          "speed_multiplier": 0.6
+          "speed_multiplier": 1.2
         },
         "minecraft:behavior.breed": {
           "priority": 2,
-          "speed_multiplier": 0.5
+          "speed_multiplier": 1.0
         }
       },
       "minecraft:horse_wild": {
@@ -107,7 +107,7 @@
         },
         "minecraft:behavior.mount_pathing": {
           "priority": 2,
-          "speed_multiplier": 0.75,
+          "speed_multiplier": 1.5,
           "target_dist": 0.0,
           "track_target": true
         },
@@ -477,8 +477,8 @@
       },
       "minecraft:health": {
         "value": {
-          "range_min": 30.0,
-          "range_max": 60.0
+          "range_min": 15,
+          "range_max": 30
         }
       },
       "minecraft:hurt_on_condition": {
@@ -495,8 +495,8 @@
       },
       "minecraft:movement": {
         "value": {
-          "range_min": 0.225,
-          "range_max": 0.675
+          "range_min": 0.12,
+          "range_max": 0.25
         }
       },
       "minecraft:navigation.walk": {
@@ -536,8 +536,8 @@
       "minecraft:spawn_egg_interaction": {},
       "minecraft:horse.jump_strength": {
         "value": {
-          "range_min": 0.6000000000000001,
-          "range_max": 1.5
+          "range_min": 0.6,
+          "range_max": 0.95
         }
       },
       "minecraft:leashable": {
@@ -612,11 +612,11 @@
       },
       "minecraft:behavior.panic": {
         "priority": 3,
-        "speed_multiplier": 0.6
+        "speed_multiplier": 1.2
       },
       "minecraft:behavior.tempt": {
         "priority": 5,
-        "speed_multiplier": 0.6,
+        "speed_multiplier": 1.2,
         "items": [
           "golden_apple",
           "appleEnchanted",
@@ -625,7 +625,7 @@
       },
       "minecraft:behavior.random_stroll": {
         "priority": 6,
-        "speed_multiplier": 0.35
+        "speed_multiplier": 0.7
       },
       "minecraft:behavior.look_at_player": {
         "priority": 7,
@@ -670,51 +670,7 @@
         "triggers": [
           {
             "cause": "fall",
-            "deals_damage": false,
-            "on_damage": {
-              "filters": {
-                "test": "has_equipment",
-                "domain": "any",
-                "subject": "self",
-                "value": "horsearmorleather"
-              }
-            }
-          },
-          {
-            "cause": "fall",
-            "deals_damage": false,
-            "on_damage": {
-              "filters": {
-                "test": "has_equipment",
-                "domain": "any",
-                "subject": "self",
-                "value": "horsearmoriron"
-              }
-            }
-          },
-          {
-            "cause": "fall",
-            "deals_damage": false,
-            "on_damage": {
-              "filters": {
-                "test": "has_equipment",
-                "domain": "any",
-                "subject": "self",
-                "value": "horsearmorgold"
-              }
-            }
-          },
-          {
-            "cause": "fall",
-            "deals_damage": false,
-            "on_damage": {
-              "filters": {
-                "test": "has_equipment",
-                "domain": "any",
-                "subject": "self",
-                "value": "horsearmordiamond"
-              }
-            }
+            "deals_damage": "no"
           }
         ]
       }

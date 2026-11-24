@@ -154,9 +154,11 @@ export function SpawnSphereBurst(player, centerPos, onFinish) {
       if (radius <= 0) {
         system.clearRun(task);
         dimension.spawnParticle('minecraft:huge_explosion_emitter', centerPos);
-        dimension.runCommandAsync(
-          `playsound random.explode @a ${centerPos.x} ${centerPos.y} ${centerPos.z} 1 1`,
-        );
+        try {
+          dimension.runCommand(
+            `playsound random.explode @a ${centerPos.x} ${centerPos.y} ${centerPos.z} 1 1`,
+          );
+        } catch {}
         if (onFinish) onFinish();
       }
     }

@@ -41,6 +41,7 @@ export const PermissionTypes = {
   ENTER_CLAIM: 'enterClaim',
   BREAK_BLOCKS: 'breakBlocks',
   USE_ITEMS_ON_BLOCKS: 'useItemsOnBlocks',
+  ALLOW_PLACING_BUILDS: 'allowPlacingBuilds',
   USE_DOORS: 'useDoors',
   USE_SWITCHES: 'useSwitches',
   OPEN_CONTAINERS: 'openContainers',

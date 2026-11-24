@@ -4,6 +4,7 @@ import './core/config.js';
 import './core/events.js';
 import './core/ui.js';
 import './core/admin_interaction.js';
+import './core/commands.js';
 import './modules/index.js';
 
 DS.init();

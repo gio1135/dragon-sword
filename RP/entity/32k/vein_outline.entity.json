@@ -54,7 +54,7 @@
         ],
         "animate": ["offset"]
       },
-      "render_controllers": ["controller.render.ds.vein_outline"]
+      "render_controllers": ["controller.render.32k.vein_outline"]
     }
   }
 }

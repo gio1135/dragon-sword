@@ -5,23 +5,23 @@
   },
   "header": {
     "name": "Dragon sword",
-    "description": "Dragon sword bp v9.0.12",
+    "description": "Dragon sword bp v11.3.0",
     "min_engine_version": [ 1, 26, 50 ],
     "uuid": "acdd5b56-7b7d-405b-bcdf-13e85e2beaaf",
-    "version": [ 9, 0, 12 ]
+    "version": [ 11, 3, 0 ]
   },
   "modules": [
     {
       "type": "data",
       "uuid": "b03e4b0d-3888-4ad8-b44e-5de0a39802d9",
-      "version": [ 9, 0, 12 ]
+      "version": [ 11, 3, 0 ]
     },
     {
       "type": "script",
       "language": "javascript",
       "uuid": "497ce0f6-6b3e-45b1-b4b3-f4529febec18",
       "entry": "scripts/main.js",
-      "version": [ 9, 0, 12 ]
+      "version": [ 11, 3, 0 ]
     }
   ],
   "dependencies": [
@@ -35,7 +35,7 @@
     },
     {
       "uuid": "877901f7-e59d-4a03-acf8-b71b32238fa8",
-      "version": [ 9, 0, 12 ]
+      "version": [ 11, 3, 0 ]
     }
   ]
 }

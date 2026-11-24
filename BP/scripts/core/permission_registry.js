@@ -28,6 +28,7 @@ export class PermissionRegistry {
 PermissionRegistry.register('enterClaim', 'Allow entering claim', true);
 PermissionRegistry.register('breakBlocks', 'Allow breaking blocks', false);
 PermissionRegistry.register('useItemsOnBlocks', 'Allow using items on blocks', false);
+PermissionRegistry.register('allowPlacingBuilds', 'Allow placing builds', false);
 PermissionRegistry.register('useDoors', 'Allow doors and gates', true);
 PermissionRegistry.register('useSwitches', 'Allow toggle redstone', false);
 PermissionRegistry.register('openContainers', 'Allow opening containers', false);
