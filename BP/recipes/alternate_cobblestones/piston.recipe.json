@@ -1,0 +1,41 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "minecraft:piston"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "priority": -2,
+    "pattern": [
+      "AAA",
+      "BCB",
+      "BDB"
+    ],
+    "key": {
+      "A": {
+        "tag": "minecraft:planks"
+      },
+      "B": {
+        "tag": "minecraft:stone_crafting_materials"
+      },
+      "C": {
+        "item": "minecraft:iron_ingot"
+      },
+      "D": {
+        "item": "minecraft:redstone"
+      }
+    },
+    "unlock": [
+      {
+        "item": "minecraft:redstone"
+      }
+    ],
+    "result": {
+      "item": "minecraft:piston",
+      "count": 1,
+      "data": 1
+    }
+  }
+}

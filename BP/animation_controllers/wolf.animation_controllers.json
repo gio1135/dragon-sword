@@ -1,0 +1,30 @@
+{
+  "format_version": "1.10.0",
+  "animation_controllers": {
+    "controller.animation.wolf.sitting_tracker": {
+      "initial_state": "default",
+      "states": {
+        "default": {
+          "on_entry": [
+            "/tag @s remove 32k:sitting"
+          ],
+          "transitions": [
+            {
+              "sitting": "query.is_sitting"
+            }
+          ]
+        },
+        "sitting": {
+          "on_entry": [
+            "/tag @s add 32k:sitting"
+          ],
+          "transitions": [
+            {
+              "default": "!query.is_sitting"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

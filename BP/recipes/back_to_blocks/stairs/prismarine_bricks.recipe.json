@@ -1,0 +1,31 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "bt:bb.stairs.prismarine_bricks"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "group": "stairs_to_blocks",
+    "priority": -1,
+    "pattern": [
+      "##",
+      "##"
+    ],
+    "key": {
+      "#": {
+        "item": "minecraft:prismarine_bricks_stairs"
+      }
+    },
+    "unlock": [
+      {
+        "item": "minecraft:prismarine_bricks_stairs"
+      }
+    ],
+    "result": {
+      "item": "minecraft:prismarine_bricks",
+      "count": 3
+    }
+  }
+}
